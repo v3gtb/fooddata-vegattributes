@@ -200,12 +200,9 @@ class Food:
 
 
 def select_n_random(items, n, criterion=None):
-  from tqdm import tqdm
-  t = tqdm()
   indices_todo = list(range(len(items)))
   selected = []
   while len(selected) < n:
-    t.update()
     if not indices_todo:
       if criterion is not None:
         error_msg = (
