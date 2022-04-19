@@ -3,6 +3,7 @@ from enum import Enum, auto
 from functools import cached_property
 import json
 from monotable import mono
+from pathlib import Path
 import random
 import re
 
@@ -193,10 +194,24 @@ def categorize(description) -> Category:
 @dataclass(frozen=True)
 class Food:
   description: str
+  fdc_id: int
 
   @cached_property
   def category(self):
     return categorize(self.description)
+
+  @classmethod
+  def from_fdc_food_dict(cls, d: dict):
+    description = d["description"]
+    fdc_id = d["fdcId"]
+    return cls(description=description, fdc_id=fdc_id)
+
+  def as_fdc_like_dict(self):
+    return {
+      "description": self.description,
+      "fdcId": self.fdc_id,
+      "vegCategory": self.category.name
+    }
 
 
 def select_n_random(items, n, criterion=None):
@@ -221,15 +236,15 @@ def select_n_random(items, n, criterion=None):
 
 
 def main():
-  with open("FoodData_Central_survey_food_json_2021-10-28.json") as f:
+  input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json")
+  with input_path.open() as f:
     d = json.load(f)
 
   food_ds = d["SurveyFoods"]
   foods = []
 
   for food_d in food_ds:
-    description = food_d["description"]
-    food = Food(description=description)
+    food = Food.from_fdc_food_dict(food_d)
     foods.append(food)
 
   # go through all foods and assign categories
@@ -245,6 +260,12 @@ def main():
     n_foods = len(foods_in_categories[category])
     print(f"{n_foods} {category.name}.")
 
+  # export
+  output_path = input_path.parent/f"VegAttributes_for_{input_path.name}"
+  with output_path.open("w") as f:
+    json.dump([food.as_fdc_like_dict() for food in foods], f)
+
+  # output sample
   n_samples = 10
   category_samples = {
     category: select_n_random(foods_in_categories[category], n_samples)
