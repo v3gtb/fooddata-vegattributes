@@ -242,11 +242,8 @@ def main():
     d = json.load(f)
 
   food_ds = d["SurveyFoods"]
-  foods = []
 
-  for food_d in food_ds:
-    food = Food.from_fdc_food_dict(food_d)
-    foods.append(food)
+  foods = [Food.from_fdc_food_dict(food_d) for food_d in food_ds]
 
   # go through all foods and assign categories
   foods_in_categories = {
@@ -276,6 +273,7 @@ def main():
       )
 
   # output sample
+  print("sample:")
   n_samples = 10
   category_samples = {
     category: select_n_random(foods_in_categories[category], n_samples)
