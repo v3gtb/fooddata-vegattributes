@@ -1,21 +1,22 @@
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, auto
 from functools import cached_property
 import json
 from tabulate import tabulate
-from textwrap import dedent
 import random
 import re
 
-class Estimation(Enum):
-  ALMOST_DEFINITELY = "ALMOST_DEFINITELY"
-  COULD_BE_EITHER = "COULD_BE_EITHER"
-  ALMOST_DEFINITELY_NOT = "ALMOST_DEFINITELY_NOT"
-  UNCATEGORIZED = "UNCATEGORIZED"
+class AutoStrEnum(Enum):
+  def _generate_next_value_(name, start, count, last_values):
+    return name
 
-  def __bool__(self):
-    return self == self.ALMOST_DEFINITELY
-
+class Category(AutoStrEnum):
+  VEGAN = auto()
+  VEGAN_OR_VEGETARIAN = auto()
+  VEGETARIAN = auto()
+  VEGAN_VEGETARIAN_OR_OMNI = auto()
+  OMNI = auto()
+  UNCATEGORIZED = auto()
 
 vegan_tokens = {
   'agave', 'almond', 'almond milk', 'amaranth',
@@ -62,70 +63,81 @@ vegan_tokens = {
   'zucchini', 'zwieback',
 }
 
-non_vegan_tokens = {
-  'adobo', 'anchovy', 'animal',
-  'bacon', 'baklava', 'banana split', 'barracuda', 'bass',
-  'bear', 'beaver', 'beef',
-  'biscuit', 'bison', 'bologna', 'borscht', 'brain', 'burger', 'butter',
-  'cake', 'cappuccino', 'caramel', 'caribou', 'carp', 'casserole',
-  'chicken', 'chocolate', 'chorizo', 'cheese',
-  'clam', 'cobbler', 'cod', 'cookie',
-  'crab', 'cream', 'creme', 'crepe', 'croaker', 'croissant', 'custard',
-  'deer', 'dog', 'dove', 'duck',
-  'egg', 'eel',
-  'fish', 'frost', 'flounder', 'french toast', 'frog', 'fudge',
-  'gelatin', 'gelato', 'gizzard', 'goat', 'goulash', 'gravy', 'ground hog',
-  'haddock', 'halibut', 'herring', 'ham', 'honey',
-  'icing',
-  'jerky',
-  'kefir', 'kidney',
-  'lamb', 'latte', 'lard', 'liver', 'lobster',
-  'macchiato', 'mackerel', 'marshmallow', 'matzo', 'mayonnaise',
-  'meat', 'meringue', 'milk',
-  'mocha', 'moose', 'mortadella', 'mousse', 'mozzarella',
-  'muffin', 'mullet', 'mussel',
-  'nacho',
-  'octopus', 'okra', 'opossum', 'ostrich', 'oyster', 'ox',
-  'pad thai', 'pastrami', 'pastry', 'pepperoni', 'pepperpot', 'perch',
-  'pie', 'pig', 'pike', 'pizza', 'pheasant',
-  'porgy', 'pork', 'pot roast', 'potato skins', 'praline', 'pudding',
-  'quail',
-  'rabbit', 'raccoon', 'ranch', 'ray', 'roe',
-  'salami', 'salmon', 'sardine', 'sausage', 'scallop', 'seafood',
-  'shark', 'shrimp', 'snail', 'souffle', 'squid', 'squirrel',
-  'steak', 'sturgeon',
-  'thuringer', 'tilapia', 'tiramisu',
-  'toffee', 'tongue', 'trifle', 'tripe', 'trout',
-  'tuna', 'turkey', 'turtle', 'tzatziki',
-  'veal', 'venison',
-  'waffle', 'whey', 'whipped', 'white russian', 'wurst',
-  'yogurt'
-}
-
-could_be_either_tokens = {
+vegan_or_vegetarian_tokens = {
   'bar',
   'candy, nfs', 'chutney', 'cocktail, nfs', 'cracker', 'crouton',
   'dip',
+  'formula',
+  'nougat',
+  'pesto', 'pop', 'porridge',
+  'scone', 'strudel',
+}
+
+vegetarian_tokens = {
+  'baklava', 'banana split', 'biscuit', 'borscht', 'butter',
+  'cake', 'cappuccino', 'caramel', 'chocolate', 'cheese', 'cookie',
+  'cream', 'creme', 'crepe', 'croissant', 'custard',
+  'egg',
+  'frost', 'french toast', 'fudge',
+  'gelato',
+  'honey',
+  'icing',
+  'kefir',
+  'latte',
+  'macchiato', 'mayonnaise', 'milk', 'mocha', 'mousse', 'mozzarella', 'muffin',
+  'pastry', 'pie', 'pizza', 'praline', 'pudding',
+  'ranch',
+  'tiramisu', 'toffee', 'trifle', 'tzatziki',
+  'waffle', 'whey', 'whipped', 'white russian',
+  'yogurt',
+
+}
+
+vegan_vegetarian_or_omni_tokens = {
   'dumpling',
   'fat, nfs',
-  'formula',
   'jelly',
   'kimchi',
-  'nougat',
-  'pesto',
-  'pop',
-  'porridge',
   'ravioli, ns',
-  'scone', 'strudel',
-  'sandwich, nfs',
-  'soup, nfs',
-  'stew, nfs',
-  'sushi, nfs',
+  'sandwich, nfs', 'soup, nfs', 'stew, nfs', 'sushi, nfs',
   'wine',
 }
 
+omni_tokens = {
+  'adobo', 'anchovy', 'animal',
+  'bacon', 'barracuda', 'bass', 'bear', 'beaver', 'beef',
+  'bison', 'bologna', 'brain', 'burger',
+  'caribou', 'carp', 'casserole', 'chicken', 'chorizo', 'clam',
+  'cobbler', 'cod', 'crab', 'croaker',
+  'deer', 'dog', 'dove', 'duck',
+  'eel',
+  'fish', 'flounder', 'frog',
+  'gelatin', 'gizzard', 'goat', 'goulash', 'gravy', 'ground hog',
+  'haddock', 'halibut', 'herring', 'ham', 'jerky',
+  'kidney',
+  'lamb', 'lard', 'liver', 'lobster',
+  'mackerel', 'marshmallow', 'matzo', 'meat', 'meringue',
+  'moose', 'mortadella', 'mullet', 'mussel',
+  'nacho',
+  'octopus', 'okra', 'opossum', 'ostrich', 'oyster', 'ox',
+  'pad thai', 'pastrami', 'pepperoni', 'pepperpot', 'perch',
+  'pig', 'pike', 'pheasant', 'porgy', 'pork', 'pot roast', 'potato skins',
+  'quail',
+  'rabbit', 'raccoon', 'ray', 'roe',
+  'salami', 'salmon', 'sardine', 'sausage', 'scallop', 'seafood',
+  'shark', 'shrimp', 'snail', 'souffle', 'squid', 'squirrel',
+  'steak', 'sturgeon',
+  'thuringer', 'tilapia', 'tongue', 'tripe', 'trout',
+  'tuna', 'turkey', 'turtle',
+  'veal', 'venison',
+  'wurst',
+}
 
-all_tokens = vegan_tokens | non_vegan_tokens | could_be_either_tokens
+
+all_tokens = (
+  vegan_tokens | vegan_or_vegetarian_tokens | vegetarian_tokens |
+  vegan_vegetarian_or_omni_tokens | omni_tokens
+)
 
 
 class MaxiMunchTokenFinder:
@@ -147,34 +159,44 @@ class MaxiMunchTokenFinder:
 all_tokens_finder = MaxiMunchTokenFinder(all_tokens)
 
 
-def sounds_vegan(description) -> Estimation:
+def categorize(description) -> Category:
   names_in_desc = all_tokens_finder.find_all(description.lower())
 
   contains_vegan_tokens = any(
     name in vegan_tokens for name in names_in_desc
   )
-  contains_non_vegan_tokens = any(
-    name in non_vegan_tokens for name in names_in_desc
+  contains_vegan_or_vegetarian_tokens = any(
+    name in vegan_or_vegetarian_tokens for name in names_in_desc
   )
-  contains_could_be_either_tokens = any(
-    name in could_be_either_tokens for name in names_in_desc
+  contains_vegetarian_tokens = any(
+    name in vegetarian_tokens for name in names_in_desc
+  )
+  contains_vegan_vegetarian_or_omni_tokens = any(
+    name in vegan_vegetarian_or_omni_tokens for name in names_in_desc
+  )
+  contains_omni_tokens = any(
+    name in omni_tokens for name in names_in_desc
   )
 
-  if contains_non_vegan_tokens:
-    return Estimation.ALMOST_DEFINITELY_NOT
-  elif contains_could_be_either_tokens:
-    return Estimation.COULD_BE_EITHER
+  if contains_omni_tokens:
+    return Category.OMNI
+  elif contains_vegan_vegetarian_or_omni_tokens:
+    return Category.VEGAN_VEGETARIAN_OR_OMNI
+  elif contains_vegetarian_tokens:
+    return Category.VEGETARIAN
+  elif contains_vegan_or_vegetarian_tokens:
+    return Category.VEGAN_OR_VEGETARIAN
   elif contains_vegan_tokens:
-    return Estimation.ALMOST_DEFINITELY
-  return Estimation.UNCATEGORIZED
+    return Category.VEGAN
+  return Category.UNCATEGORIZED
 
 @dataclass(frozen=True)
 class Food:
   description: str
 
   @cached_property
-  def sounds_vegan(self):
-    return sounds_vegan(self.description)
+  def category(self):
+    return categorize(self.description)
 
 
 def select_n_random(items, n, criterion=None):
@@ -214,39 +236,32 @@ def main():
     foods.append(food)
 
   # go through all foods and assign categories
-  vegan_foods = []
-  uncategorized_foods = []
-  could_be_either_foods = []
-  non_vegan_foods = []
+  foods_in_categories = {
+    category: [] for category in Category
+  }
   for food in foods:
-    if food.sounds_vegan == Estimation.ALMOST_DEFINITELY:
-      vegan_foods.append(food)
-    elif food.sounds_vegan == Estimation.COULD_BE_EITHER:
-      could_be_either_foods.append(food)
-    elif food.sounds_vegan == Estimation.ALMOST_DEFINITELY_NOT:
-      non_vegan_foods.append(food)
-    elif food.sounds_vegan == Estimation.UNCATEGORIZED:
-      uncategorized_foods.append(food)
+    foods_in_categories[food.category].append(food)
 
   # stats
-  print(dedent(f"""\
-  numbers:
-  {len(vegan_foods)} vegan.
-  {len(non_vegan_foods)} non-vegan.
-  {len(could_be_either_foods)} could be either.
-  {len(uncategorized_foods)} uncategorized.
-  """).strip())
+  print("numbers:")
+  for category in Category:
+    n_foods = len(foods_in_categories[category])
+    print(f"{n_foods} {category.name}.")
 
-  n_samples = 100
-  vegan_sample = select_n_random(vegan_foods, n_samples)
-  could_be_either_sample = select_n_random(could_be_either_foods, n_samples)
-  non_vegan_sample = select_n_random(non_vegan_foods, n_samples)
-  uncategorized_sample = select_n_random(uncategorized_foods, n_samples)
+  n_samples = 20
+  category_samples = {
+    category: select_n_random(foods_in_categories[category], n_samples)
+    for category in Category
+  }
 
-  print(tabulate([
-    [vf.description[:30], uf.description[:30], cbef.description[:30], nvf.description[:30]]
-    for vf, uf, cbef, nvf in zip(vegan_sample, uncategorized_sample, could_be_either_sample, non_vegan_sample)
-  ]))
+  col_width = 20
+  print(tabulate(
+    [
+      [desc.description[:col_width] for desc in descs]
+      for descs in zip(*(category_samples[category] for category in Category))
+    ],
+    headers=[category.name[:col_width] for category in Category]
+  ))
 
 
 if __name__ == "__main__":
