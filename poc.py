@@ -91,7 +91,6 @@ vegetarian_tokens = {
   'tiramisu', 'toffee', 'trifle', 'tzatziki',
   'waffle', 'whey', 'whipped', 'white russian',
   'yogurt',
-
 }
 
 vegan_vegetarian_or_omni_tokens = {
@@ -206,9 +205,11 @@ class Food:
     fdc_id = d["fdcId"]
     return cls(description=description, fdc_id=fdc_id)
 
-  def as_fdc_like_dict(self):
+  def as_fdc_like_dict(self, include_description=False):
     return {
-      "description": self.description,
+      **({
+        "description": self.description
+      } if include_description else {} ),
       "fdcId": self.fdc_id,
       "vegCategory": self.category.name
     }
@@ -261,9 +262,18 @@ def main():
     print(f"{n_foods} {category.name}.")
 
   # export
-  output_path = input_path.parent/f"VegAttributes_for_{input_path.name}"
-  with output_path.open("w") as f:
-    json.dump([food.as_fdc_like_dict() for food in foods], f)
+  for debug in ['debug_', '']:
+    output_path = (
+      input_path.parent/f"{debug}VegAttributes_for_{input_path.name}"
+    )
+    with output_path.open("w") as f:
+      json.dump(
+        [
+          food.as_fdc_like_dict(include_description=bool(debug))
+          for food in foods
+        ],
+        f
+      )
 
   # output sample
   n_samples = 10
