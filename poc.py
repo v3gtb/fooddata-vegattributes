@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cached_property
 import json
-from tabulate import tabulate
+from monotable import mono
 import random
 import re
 
@@ -245,19 +245,32 @@ def main():
     n_foods = len(foods_in_categories[category])
     print(f"{n_foods} {category.name}.")
 
-  n_samples = 20
+  n_samples = 10
   category_samples = {
     category: select_n_random(foods_in_categories[category], n_samples)
     for category in Category
   }
 
-  col_width = 20
-  print(tabulate(
+  print(mono(
+    [category.name.replace("_", " ") for category in Category],
+    ['(width=20;wrap)' for category in Category],
     [
-      [desc.description[:col_width] for desc in descs]
-      for descs in zip(*(category_samples[category] for category in Category))
-    ],
-    headers=[category.name[:col_width] for category in Category]
+      # alternate food item description rows and empty rows
+      x for y in
+      zip(
+        # food item description row
+        [
+          [desc.description for desc in descs]
+          for descs
+          in zip(*(category_samples[category] for category in Category))
+        ],
+        # empty row
+        [
+          [ '' for category in Category ] for _ in range(n_samples)
+        ]
+      )
+      for x in y
+    ]
   ))
 
 
