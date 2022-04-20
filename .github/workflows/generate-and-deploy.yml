@@ -1,0 +1,42 @@
+name: Generate and deploy
+
+on: [push]
+
+env:
+  FOODDATA_ZIP_URL: 'https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_json_2021-10-28.zip'
+  FOODDATA_ZIP_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.zip'
+  FOODDATA_JSON_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.json'
+  FOODDATA_DIR: fooddata
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load USDA FDC FoodData from cache
+        id: download
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.FOODDATA_DIR }}
+          key: ${{ env.FOODDATA_ZIP_URL }}
+      - name: Download USDA FDC FoodData
+        if: steps.download.outputs.cache-hit != 'true'
+        run: >
+          (
+            mkdir -p "$FOODDATA_DIR" &&
+            cd "$FOODDATA_DIR" &&
+            if [ ! -f "$FOODDATA_ZIP_FILENAME" ]; then
+              curl "$FOODDATA_ZIP_URL" -o "$FOODDATA_ZIP_FILENAME" &&
+              unzip "$FOODDATA_ZIP_FILENAME";
+            fi
+          )
+      - name: Set up symlinks for input files
+        run: ln -s "$FOODDATA_DIR/$FOODDATA_JSON_FILENAME"
+      - name: Install dependencies
+        run: pip install monotable
+      - name: Generate VegAttributes JSON
+        run: python generate.py
+      - name: Write file name of generated JSON to env
+        run: >
+          echo
+          "GENERATED_JSON_FILENAME=VegAttributes_for_$FOODDATA_JSON_FILENAME"
+          >> $GITHUB_ENV
