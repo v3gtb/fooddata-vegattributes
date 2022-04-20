@@ -12,7 +12,8 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repo
+        uses: actions/checkout@v3
       - name: Load USDA FDC FoodData from cache
         id: download
         uses: actions/cache@v3
@@ -41,3 +42,8 @@ jobs:
           echo
           "GENERATED_JSON_FILENAME=VegAttributes_for_$FOODDATA_JSON_FILENAME"
           >> $GITHUB_ENV
+      - name: Upload generated JSON as GitHub artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: VegAttributes JSON
+          path: ${{ env.GENERATED_JSON_FILENAME }}
