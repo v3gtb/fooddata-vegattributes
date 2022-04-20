@@ -1,0 +1,32 @@
+variables:
+  FOODDATA_ZIP_URL: 'https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_json_2021-10-28.zip'
+  FOODDATA_ZIP_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.zip'
+  FOODDATA_JSON_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.json'
+  FOODDATA_DIR: fooddata
+  GENERATED_JSON_FILENAME: "VegAttributes_for_$FOODDATA_JSON_FILENAME"
+
+default:
+  image: python:3.10
+
+build-json:
+  stage: build
+  script:
+    - >
+      (
+        mkdir -p "$FOODDATA_DIR" &&
+        cd "$FOODDATA_DIR" &&
+        if [ ! -f "$FOODDATA_ZIP_FILENAME" ]; then
+          curl "$FOODDATA_ZIP_URL" -o "$FOODDATA_ZIP_FILENAME" &&
+          unzip "$FOODDATA_ZIP_FILENAME";
+        fi
+      )
+    - ln -s "$FOODDATA_DIR/$FOODDATA_JSON_FILENAME"
+    - pip install monotable
+    - python generate.py
+  cache:
+    - paths:
+        - $FOODDATA_DIR
+      key: "$FOODDATA_ZIP_URL"
+  artifacts:
+    paths:
+      - $GENERATED_JSON_FILENAME
