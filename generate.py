@@ -258,7 +258,7 @@ def main():
     n_foods = len(foods_in_categories[category])
     print(f"{n_foods} {category.name}.")
 
-  # export
+  # export JSON
   for debug in ['debug_', '']:
     output_path = (
       input_path.parent/f"{debug}VegAttributes_for_{input_path.name}"
@@ -271,6 +271,17 @@ def main():
         ],
         f
       )
+
+  # export markdown for easy inspection
+  markdown_output_dir = Path("markdown-export")
+  markdown_output_dir.mkdir(exist_ok=True)
+  for category, foods in foods_in_categories.items():
+    markdown_output_path = (
+      markdown_output_dir/category.name.lower().replace("_", "-")
+    ).with_suffix(".md")
+    with markdown_output_path.open("w") as f:
+      for food in sorted(foods, key=lambda x: x.description):
+        f.write(f"- {food.description} (fdcId: {food.fdc_id})\n")
 
   # output sample
   print("sample:")
