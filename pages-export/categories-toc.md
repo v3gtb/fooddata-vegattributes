@@ -1,6 +1,0 @@
-- [VEGAN](category-lists/vegan) (2146 entries)
-- [VEGAN_OR_VEGETARIAN](category-lists/vegan-or-vegetarian) (322 entries)
-- [VEGETARIAN](category-lists/vegetarian) (1637 entries)
-- [VEGAN_VEGETARIAN_OR_OMNI](category-lists/vegan-vegetarian-or-omni) (69 entries)
-- [OMNI](category-lists/omni) (2646 entries)
-- [UNCATEGORIZED](category-lists/uncategorized) (263 entries)
