@@ -2,4 +2,4 @@
 
 Categories:
 
-{% relative_include categories-toc.md %}
+{% include_relative categories-toc.md %}
