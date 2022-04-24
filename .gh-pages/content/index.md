@@ -1,4 +1,6 @@
-# Hello!
+---
+layout: home
+---
 
 Categories:
 
