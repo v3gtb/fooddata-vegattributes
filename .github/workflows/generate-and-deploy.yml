@@ -53,20 +53,32 @@ jobs:
         with:
           files: ${{ env.GENERATED_JSON_FILENAME }}
       - name: Generate GitHub Pages contents
+        run: PYTHONPATH="$PWD" python .gh-pages/generate-pages.py
+      - name: Copy GitHub Pages contents to temporary directory
         run: |
-          PYTHONPATH="$PWD" python .gh-pages/generate-pages.py
-          cp .gh-pages/index.md pages-export/
+          PAGES_TMPDIR="$(mktemp -d)"
+          cp -r .gh-pages/content/* "$PAGES_TMPDIR"/
+          echo "PAGES_TMPDIR=$PAGES_TMPDIR" >> "$GITHUB_ENV"
       - name: Check out GitHub Pages branch (gh-pages)
         uses: actions/checkout@v3
         with:
           ref: gh-pages
-          clean: false
-      - name: Copy pages-export folder contents over repo root for GitHub Pages
-        run: cp -r pages-export/* ./
+          clean: true
+      - name: Clear working tree and copy Pages contents over it
+        run: |
+          shopt -s dotglob
+          shopt -s extglob
+          git clean -xfd
+          git rm -rf !(..|.|.git|.gitignore)
+          cp -r "$PAGES_TMPDIR"/* ./
       - name: Commit and push changes for GitHub Pages
-        run: >
-          git config user.name 'github-actions-wf' &&
-          shopt -s globstar &&
-          git add *.md category-lists/*.md &&
-          git commit -m 'Update GH pages contents' &&
-          git push
+        run: |
+          git config user.name 'github-actions-wf'
+          shopt -s globstar
+          git add -A .
+          if git diff --cached --exit-code; then
+            echo "no updates to GH pages contents"
+          else
+            git commit -m 'Update GH pages contents'
+            git push
+          fi

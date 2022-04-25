@@ -1,7 +1,7 @@
 from collections import defaultdict
 import json
+from os import environ
 from pathlib import Path
-from shutil import copy
 
 from generate import Category
 
@@ -17,7 +17,7 @@ def main():
   for food_d in food_ds:
     food_ds_by_category[food_d["vegCategory"]].append(food_d)
 
-  output_dir = Path("pages-export")
+  output_dir = Path(environ.get("OUTPUT_DIR") or ".gh-pages/content")
   output_dir.mkdir(exist_ok=True)
   lists_output_dir = output_dir/"category-lists"
   lists_output_dir.mkdir(exist_ok=True)
