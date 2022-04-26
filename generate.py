@@ -130,7 +130,7 @@ omni_tokens = {
   'thuringer', 'tilapia', 'tongue', 'tripe', 'trout',
   'tuna', 'turkey', 'turtle',
   'veal', 'venison',
-  'wurst',
+  'whiting', 'wurst',
 }
 
 
