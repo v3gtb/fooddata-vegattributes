@@ -122,6 +122,7 @@ omni_tokens = {
   'octopus', 'okra', 'opossum', 'ostrich', 'oyster', 'ox',
   'pad thai', 'pastrami', 'pepperoni', 'pepperpot', 'perch',
   'pig', 'pike', 'pheasant', 'porgy', 'pork', 'pot roast', 'potato skins',
+  'poultry',
   'quail',
   'rabbit', 'raccoon', 'ray', 'roe',
   'salami', 'salmon', 'sardine', 'sausage', 'scallop', 'seafood',
