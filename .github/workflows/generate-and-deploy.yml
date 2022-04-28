@@ -47,6 +47,10 @@ jobs:
         with:
           name: VegAttributes JSON
           path: ${{ env.GENERATED_JSON_FILENAME }}
+      - name: Install test dependencies
+        run: pip install pytest
+      - name: Run tests
+        run: PYTHONPATH="$PWD" pytest
       - name: Publish generated JSON as GitHub release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
