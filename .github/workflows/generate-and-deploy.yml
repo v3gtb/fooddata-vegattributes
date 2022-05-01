@@ -18,8 +18,10 @@ jobs:
         id: download
         uses: actions/cache@v3
         with:
-          path: ${{ env.FOODDATA_DIR }}
-          key: ${{ env.FOODDATA_ZIP_URL }}
+          path: |
+            ${{ env.FOODDATA_DIR }}
+            indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz
+          key: v1-${{ env.FOODDATA_ZIP_URL }}
       - name: Download USDA FDC FoodData
         if: steps.download.outputs.cache-hit != 'true'
         run: >
