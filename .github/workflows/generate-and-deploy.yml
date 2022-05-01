@@ -9,7 +9,7 @@ env:
   FOODDATA_DIR: fooddata
 
 jobs:
-  generate:
+  generate-and-test-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
@@ -42,11 +42,13 @@ jobs:
           echo
           "GENERATED_JSON_FILENAME=VegAttributes_for_$FOODDATA_JSON_FILENAME"
           >> $GITHUB_ENV
-      - name: Upload generated JSON as GitHub artifact
+      - name: Upload generated JSON(s) as GitHub artifact
         uses: actions/upload-artifact@v3
         with:
-          name: VegAttributes JSON
-          path: ${{ env.GENERATED_JSON_FILENAME }}
+          name: generated-json
+          path: |
+            ${{ env.GENERATED_JSON_FILENAME }}
+            debug_${{ env.GENERATED_JSON_FILENAME }}
       - name: Install test dependencies
         run: pip install pytest
       - name: Run tests
@@ -56,6 +58,18 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ env.GENERATED_JSON_FILENAME }}
+  deploy-pages:
+    needs: generate-and-test-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: pip install monotable
+      - name: Download generated JSON(s) artifact from generate step
+        uses: actions/download-artifact@v3
+        with:
+          name: generated-json
       - name: Generate GitHub Pages contents
         run: PYTHONPATH="$PWD" python .gh-pages/generate-pages.py
       - name: Copy GitHub Pages contents to temporary directory
