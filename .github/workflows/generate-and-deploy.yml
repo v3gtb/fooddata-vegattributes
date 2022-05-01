@@ -71,7 +71,7 @@ jobs:
         with:
           name: generated-json
       - name: Generate GitHub Pages contents
-        run: PYTHONPATH="$PWD" python .gh-pages/generate-pages.py
+        run: python .gh-pages/generate-pages.py
       - name: Copy GitHub Pages contents to temporary directory
         run: |
           PAGES_TMPDIR="$(mktemp -d)"
