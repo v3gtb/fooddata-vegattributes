@@ -242,7 +242,10 @@ def one(sized):
   return list(sized)[0]
 
 def print_as_table(rows, column_width=None):
-  terminal_width = os.get_terminal_size().columns
+  try:
+    terminal_width = os.get_terminal_size().columns
+  except OSError:
+    terminal_width = 80
   n_columns_set = set(len(row) for row in rows)
   n_columns = one(n_columns_set)
   if column_width is None:
