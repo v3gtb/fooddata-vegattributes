@@ -3,7 +3,7 @@ import json
 from os import environ
 from pathlib import Path
 
-from generate import Category
+from fooddata_vegattributes.generate import Category
 
 json_path = (
   "debug_VegAttributes_for_FoodData_Central_survey_food_json_2021-10-28.json"

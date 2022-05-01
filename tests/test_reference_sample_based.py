@@ -12,7 +12,7 @@ from tarfile import (
 )
 from typing import Dict, List, Union
 
-from generate import Category, Food
+from fooddata_vegattributes.generate import Category, Food
 
 @dataclass
 class ReferenceSample:
