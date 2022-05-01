@@ -268,8 +268,6 @@ def print_as_table(rows, column_width=None):
       ))
     print("+".join("-"*column_width for _ in range(n_columns)))
 
-# print_as_table([["bla "*50, "foo "*50, "a"*40], ["hello "*20, "hiya "*30, "b"*70], ["wiu "*30, "failst "*45, "c"*40]])
-# exit()
 
 def main():
   input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json")
