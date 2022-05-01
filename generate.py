@@ -2,10 +2,11 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cached_property
 import json
-from monotable import mono
 from pathlib import Path
+import os
 import random
 import re
+from textwrap import wrap
 
 class AutoStrEnum(Enum):
   def _generate_next_value_(name, start, count, last_values):
@@ -236,6 +237,39 @@ def select_n_random(items, n, criterion=None):
       selected.append(item)
   return selected
 
+def one(sized):
+  assert len(sized) == 1, "argument must have exactly one element"
+  return list(sized)[0]
+
+def print_as_table(rows, column_width=None):
+  try:
+    terminal_width = os.get_terminal_size().columns
+  except OSError:
+    terminal_width = 80
+  n_columns_set = set(len(row) for row in rows)
+  n_columns = one(n_columns_set)
+  if column_width is None:
+    column_width = terminal_width // n_columns - 1
+  print("+".join("-"*column_width for _ in range(n_columns)))
+  for row in rows:
+    output_rows = []
+    for i, column in enumerate(row):
+      wrapped_rows = wrap(column, width=column_width)
+      for _ in range(max(0, len(wrapped_rows)-len(output_rows))):
+        output_rows.append(["" for _ in range(n_columns)])
+      for j, wrapped_row in enumerate(wrapped_rows):
+        output_rows[j][i] = wrapped_row
+    for output_row in output_rows:
+      print("|".join(
+        "{{output_cell:<{w}}}"
+        .format(w=column_width)
+        .format(output_cell=output_cell)
+        for output_cell in output_row
+      ))
+    print("+".join("-"*column_width for _ in range(n_columns)))
+
+# print_as_table([["bla "*50, "foo "*50, "a"*40], ["hello "*20, "hiya "*30, "b"*70], ["wiu "*30, "failst "*45, "c"*40]])
+# exit()
 
 def main():
   input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json")
@@ -281,9 +315,9 @@ def main():
     for category in Category
   }
 
-  print(mono(
-    [category.name.replace("_", " ") for category in Category],
-    ['(width=20;wrap)' for category in Category],
+  print_as_table(
+    [[category.name.replace("_", " ") for category in Category]]
+    +
     [
       # alternate food item description rows and empty rows
       x for y in
@@ -294,14 +328,10 @@ def main():
           for descs
           in zip(*(category_samples[category] for category in Category))
         ],
-        # empty row
-        [
-          [ '' for category in Category ] for _ in range(n_samples)
-        ]
       )
       for x in y
     ]
-  ))
+  )
 
 
 if __name__ == "__main__":

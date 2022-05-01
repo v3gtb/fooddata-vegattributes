@@ -35,8 +35,6 @@ jobs:
           )
       - name: Set up symlinks for input files
         run: ln -s "$FOODDATA_DIR/$FOODDATA_JSON_FILENAME"
-      - name: Install dependencies
-        run: pip install monotable
       - name: Generate VegAttributes JSON
         run: python generate.py
       - name: Write file name of generated JSON to env
@@ -66,8 +64,6 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
-      - name: Install dependencies
-        run: pip install monotable
       - name: Download generated JSON(s) artifact from generate step
         uses: actions/download-artifact@v3
         with:
