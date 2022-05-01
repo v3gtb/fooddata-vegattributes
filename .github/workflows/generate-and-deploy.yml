@@ -21,7 +21,7 @@ jobs:
           path: |
             ${{ env.FOODDATA_DIR }}
             indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz
-          key: ${{ env.FOODDATA_ZIP_URL }}
+          key: v1-${{ env.FOODDATA_ZIP_URL }}
       - name: Download USDA FDC FoodData
         if: steps.download.outputs.cache-hit != 'true'
         run: >
