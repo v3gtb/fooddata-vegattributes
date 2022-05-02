@@ -1,9 +1,9 @@
-fdc_id,expected_category,known_failure
-1103345,VEGAN,N
-1103346,VEGAN,N
-1103104,VEGAN,N
-1097511,VEGETARIAN,N
-1099432,OMNI,N
-1098175,OMNI,N
-1097549,VEGAN,Y
-1103502,VEGAN_OR_VEGETARIAN,Y
+fdc_id,expected_category,known_failure,description
+1103345,VEGAN,N,"Cauliflower, raw"
+1103346,VEGAN,N,"Celery, raw"
+1103104,VEGAN,N,"Dandelion greens, raw"
+1097511,VEGETARIAN,N,"Milk, NFS"
+1099432,OMNI,N,"Beef stew with potatoes and vegetables excluding carrots, broccoli, and dark-green leafy; gravy"
+1098175,OMNI,N,"Beef steak, fried, lean only eaten"
+1097549,VEGAN,Y,"Almond milk, sweetened, chocolate"
+1103502,VEGAN_OR_VEGETARIAN,Y,"Corn, fresh, cooked with butter or margarine"
