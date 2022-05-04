@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import auto
 from functools import cached_property
 
+from .fooddata import FoodDataDict
 from .utils.enum import AutoStrEnum
 from .utils.parsing import MaxiMunchTokenFinder
 
@@ -179,7 +180,7 @@ class Food:
     return categorize(self.description)
 
   @classmethod
-  def from_fdc_food_dict(cls, d: dict):
+  def from_fdc_food_dict(cls, d: FoodDataDict):
     description = d["description"]
     fdc_id = d["fdcId"]
     return cls(description=description, fdc_id=fdc_id)

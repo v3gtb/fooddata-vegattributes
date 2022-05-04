@@ -2,16 +2,14 @@ import json
 from pathlib import Path
 
 from .food import Category, Food
+from .fooddata import load_survey_fooddata_dicts
 from .utils.random import select_n_random
 from .utils.terminal_ui import print_as_table
 
 
 def main():
-  input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json")
-  with input_path.open() as f:
-    d = json.load(f)
-
-  food_ds = d["SurveyFoods"]
+  input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json") # TODO
+  food_ds = load_survey_fooddata_dicts()
 
   foods = [Food.from_fdc_food_dict(food_d) for food_d in food_ds]
 
