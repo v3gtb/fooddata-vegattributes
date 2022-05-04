@@ -7,9 +7,10 @@ from os import PathLike
 from pathlib import Path
 from tarfile import (
   open as tarfile_open, ReadError as TarFileReadError, TarFile, TarInfo
-
 )
-from typing import Dict, List, Union
+from typing import cast, List, Union
+
+from .fooddata import FoodDataDict, load_survey_fooddata_dicts
 
 logger = getLogger(__name__)
 
@@ -48,21 +49,26 @@ class CompressedIndexedFoodDataJson:
   def __exit__(self, *args, **kwargs):
     self.close()
 
-  def write_fooddata_dicts(self, ds: List[Dict]):
+  def write_fooddata_dicts(self, ds: List[FoodDataDict]):
     for d in ds:
       fdc_id_str = str(d["fdcId"])
       json_bytes = json.dumps(d).encode("utf-8")
       tar_info = TarInfo(name=fdc_id_str)
       tar_info.size = len(json_bytes)
-      tar_info.mtime = datetime.now().timestamp()
+      tar_info.mtime = int(datetime.now().timestamp())
       self.tarfile.addfile(tar_info, BytesIO(json_bytes))
 
-  def get_fooddata_dict_by_fdc_id(self, fdc_id: Union[int, str]):
+  def get_fooddata_dict_by_fdc_id(
+    self, fdc_id: Union[int, str]
+  ) -> FoodDataDict:
     fdc_id_str = str(fdc_id)
-    return json.load(self.tarfile.extractfile(fdc_id_str))
+    file_for_index = self.tarfile.extractfile(fdc_id_str)
+    if file_for_index is None:
+      raise KeyError(f"FDC ID {fdc_id} not in indexed JSON file")
+    return cast(FoodDataDict, json.load(file_for_index))
 
 @contextmanager
-def ensure_compressed_indexed_fooddata_json() -> CompressedIndexedFoodDataJson:
+def ensure_compressed_indexed_fooddata_json():
   compressed_indexed_json_path = Path(
     "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
   )
@@ -78,8 +84,7 @@ def ensure_compressed_indexed_fooddata_json() -> CompressedIndexedFoodDataJson:
       if attempt > 0:
         raise
       logger.info("indexed JSON archive missing or malformed, (re)generating")
-      with open("FoodData_Central_survey_food_json_2021-10-28.json") as f:
-        food_ds = json.load(f)["SurveyFoods"]
+      food_ds = load_survey_fooddata_dicts()
       with CompressedIndexedFoodDataJson.from_path(
         compressed_indexed_json_path, "w"
       ) as cifj:
