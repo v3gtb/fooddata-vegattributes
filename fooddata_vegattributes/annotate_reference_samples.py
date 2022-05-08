@@ -1,6 +1,5 @@
-import csv
-
-from .reference_samples import load_reference_samples, ReferenceSamplesCsv
+from .reference_samples_io import load_reference_samples
+from .reference_samples_csv import ReferenceSamplesCsv
 
 
 def main():
