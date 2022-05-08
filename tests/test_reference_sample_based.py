@@ -1,6 +1,6 @@
 import pytest
 
-from fooddata_vegattributes.reference_samples import load_reference_samples
+from fooddata_vegattributes.reference_samples_io import load_reference_samples
 
 def pytest_generate_tests(metafunc):
   reference_samples = load_reference_samples()
