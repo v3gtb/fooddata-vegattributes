@@ -3,13 +3,16 @@ import pytest
 from fooddata_vegattributes.csv_reference_sample_store import (
   CsvReferenceSampleStore
 )
-from fooddata_vegattributes.indexed_fooddata_food_store import (
-  IndexedFoodDataFoodStore
+from fooddata_vegattributes.auto_indexed_fooddata_food_store import (
+  auto_compressed_indexed_fooddata_food_store
 )
 
 def pytest_generate_tests(metafunc):
-  with IndexedFoodDataFoodStore.from_path(
-    "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
+  with auto_compressed_indexed_fooddata_food_store(
+    compressed_indexed_json_path=(
+      "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
+    ),
+    fooddata_json_path="FoodData_Central_survey_food_json_2021-10-28.json"
   ) as food_store, (
     CsvReferenceSampleStore.from_path_and_food_store(
       "reference_samples.csv",

@@ -1,18 +1,15 @@
-from contextlib import contextmanager, ExitStack
+from contextlib import ExitStack
 from io import BytesIO
 import json
 from datetime import datetime
-from logging import getLogger
 from os import PathLike
-from pathlib import Path
 from tarfile import (
-  open as tarfile_open, ReadError as TarFileReadError, TarFile, TarInfo
+  open as tarfile_open, TarFile, TarInfo
 )
 from typing import cast, List, Union
 
-from .fooddata import FoodDataDict, load_survey_fooddata_dicts
+from .fooddata import FoodDataDict
 
-logger = getLogger(__name__)
 
 class CompressedIndexedFoodDataJson:
   """
@@ -66,27 +63,3 @@ class CompressedIndexedFoodDataJson:
     if file_for_index is None:
       raise KeyError(f"FDC ID {fdc_id} not in indexed JSON file")
     return cast(FoodDataDict, json.load(file_for_index))
-
-@contextmanager
-def ensure_compressed_indexed_fooddata_json():
-  compressed_indexed_json_path = Path(
-    "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
-  )
-  for attempt in range(2):
-    try:
-      with CompressedIndexedFoodDataJson.from_path(
-        compressed_indexed_json_path
-      ) as cifj:
-        logger.info("indexed JSON archive found")
-        yield cifj
-      break
-    except (FileNotFoundError, KeyError, TarFileReadError):
-      if attempt > 0:
-        raise
-      logger.info("indexed JSON archive missing or malformed, (re)generating")
-      food_ds = load_survey_fooddata_dicts()
-      with CompressedIndexedFoodDataJson.from_path(
-        compressed_indexed_json_path, "w"
-      ) as cifj:
-        cifj.write_fooddata_dicts(food_ds)
-      logger.info("done writing indexed JSON, trying to load again")

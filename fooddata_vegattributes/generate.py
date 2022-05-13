@@ -8,8 +8,8 @@ from .utils.terminal_ui import print_as_table
 
 
 def main():
-  input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json") # TODO
-  food_ds = load_survey_fooddata_dicts()
+  input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json")
+  food_ds = load_survey_fooddata_dicts(input_path)
 
   foods = [Food.from_fdc_food_dict(food_d) for food_d in food_ds]
 

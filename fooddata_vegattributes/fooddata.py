@@ -1,5 +1,6 @@
 import json
-from typing import cast, List, TypedDict
+from os import PathLike
+from typing import cast, List, TypedDict, Union
 
 # NOTE that while the TypedDict PEP (PEP-589) and docs both suggest that extra
 # keys are not allowed, this is actually contentious because it contradicts
@@ -13,7 +14,9 @@ class FoodDataDict(TypedDict):
     fdcId: int
     description: str
 
-def load_survey_fooddata_dicts() -> List[FoodDataDict]:
-  with open("FoodData_Central_survey_food_json_2021-10-28.json") as f:
+def load_survey_fooddata_dicts(
+  path: Union[PathLike, str, bytes]
+) -> List[FoodDataDict]:
+  with open(path) as f:
     food_ds = json.load(f)["SurveyFoods"]
   return cast(List[FoodDataDict], food_ds)
