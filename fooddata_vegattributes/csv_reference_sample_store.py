@@ -1,6 +1,6 @@
 from contextlib import ExitStack
 from dataclasses import dataclass, field
-from typing import List
+from typing import Iterable, List
 
 from .abstract_food_store import AbstractFoodStore
 from .abstract_reference_sample_store import AbstractReferenceSampleStore
@@ -55,7 +55,7 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
       for fdc_id, food in fdc_ids_to_foods.items()
     ]
 
-  def reset_and_put_all(self, reference_samples: List[ReferenceSample]):
+  def reset_and_put_all(self, reference_samples: Iterable[ReferenceSample]):
     self.reference_samples_csv.reset_and_write_reference_sample_dicts(
       {
         "fdc_id": reference_sample.food.fdc_id,

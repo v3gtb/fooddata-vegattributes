@@ -6,7 +6,7 @@ from os import PathLike
 from tarfile import (
   open as tarfile_open, TarFile, TarInfo
 )
-from typing import cast, List, Union
+from typing import cast, Iterable, Union
 
 from .fooddata import FoodDataDict
 
@@ -46,7 +46,7 @@ class CompressedIndexedFoodDataJson:
   def __exit__(self, *args, **kwargs):
     self.close()
 
-  def write_fooddata_dicts(self, ds: List[FoodDataDict]):
+  def write_fooddata_dicts(self, ds: Iterable[FoodDataDict]):
     for d in ds:
       fdc_id_str = str(d["fdcId"])
       json_bytes = json.dumps(d).encode("utf-8")
