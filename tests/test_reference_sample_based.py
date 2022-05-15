@@ -1,22 +1,24 @@
 import pytest
 
-from fooddata_vegattributes.csv_reference_sample_store import (
-  CsvReferenceSampleStore
-)
 from fooddata_vegattributes.auto_indexed_fooddata_food_store import (
   auto_compressed_indexed_fooddata_food_store
 )
+from fooddata_vegattributes.csv_reference_sample_store import (
+  CsvReferenceSampleStore
+)
+from fooddata_vegattributes.default_paths import default_dir_paths
+
 
 def pytest_generate_tests(metafunc):
   with auto_compressed_indexed_fooddata_food_store(
     compressed_indexed_json_path=(
-      "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
+      default_dir_paths.compressed_indexed_fooddata_json
     ),
-    fooddata_json_path="FoodData_Central_survey_food_json_2021-10-28.json"
+    fooddata_json_path=default_dir_paths.survey_fooddata_json
   ) as food_store, (
     CsvReferenceSampleStore.from_path_and_food_store(
-      "reference_samples.csv",
-      food_store
+      default_dir_paths.reference_samples_csv,
+      food_store,
     )
   ) as reference_sample_store:
     reference_samples = reference_sample_store.get_all()

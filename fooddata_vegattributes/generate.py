@@ -1,6 +1,6 @@
 import json
-from pathlib import Path
 
+from .default_paths import default_dir_paths
 from .food import Category, Food
 from .fooddata import load_survey_fooddata_dicts
 from .utils.random import select_n_random
@@ -8,7 +8,7 @@ from .utils.terminal_ui import print_as_table
 
 
 def main():
-  input_path = Path("FoodData_Central_survey_food_json_2021-10-28.json")
+  input_path = default_dir_paths.survey_fooddata_json
   food_ds = load_survey_fooddata_dicts(input_path)
 
   foods = [Food.from_fdc_food_dict(food_d) for food_d in food_ds]
@@ -28,9 +28,8 @@ def main():
 
   # export JSON
   for debug in ['debug_', '']:
-    output_path = (
-      input_path.parent/f"{debug}VegAttributes_for_{input_path.name}"
-    )
+    o = default_dir_paths.generated_vegattributes_json
+    output_path = o.parent/(debug+o.name)
     with output_path.open("w") as f:
       json.dump(
         [

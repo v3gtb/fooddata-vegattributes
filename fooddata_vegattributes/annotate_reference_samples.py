@@ -1,14 +1,15 @@
 from .csv_reference_sample_store import CsvReferenceSampleStore
+from .default_paths import default_dir_paths
 from .indexed_fooddata_food_store import IndexedFoodDataFoodStore
 
 
 def main():
   with IndexedFoodDataFoodStore.from_path(
-    "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
+    default_dir_paths.compressed_indexed_fooddata_json
   ) as food_store, (
     CsvReferenceSampleStore.from_path_and_food_store(
-      "reference_samples.csv",
-      food_store
+      default_dir_paths.reference_samples_csv,
+      food_store,
     )
   ) as reference_sample_store:
     reference_samples = reference_sample_store.get_all()
