@@ -7,6 +7,10 @@ from .reference_sample import ReferenceSample
 
 class AbstractReferenceSampleStore(AbstractContextManager, metaclass=ABCMeta):
   @abstractmethod
+  def close(self):
+      pass
+
+  @abstractmethod
   def get_all(self) -> List[ReferenceSample]:
     pass
 
