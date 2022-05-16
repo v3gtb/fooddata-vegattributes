@@ -11,3 +11,7 @@ class AbstractFoodStore(AbstractContextManager, metaclass=ABCMeta):
     self, fdc_ids: Iterable[int]
   ) -> Mapping[int, Food]:
     pass
+
+  @abstractmethod
+  def get_all_fdc_ids(self) -> Iterable[int]:
+    pass

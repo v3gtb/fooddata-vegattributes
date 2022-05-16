@@ -63,3 +63,6 @@ class CompressedIndexedFoodDataJson:
     if file_for_index is None:
       raise KeyError(f"FDC ID {fdc_id} not in indexed JSON file")
     return cast(FoodDataDict, json.load(file_for_index))
+
+  def get_all_fdc_ids(self) -> Iterable[int]:
+    return [ int(x) for x in self.tarfile.getnames() ]
