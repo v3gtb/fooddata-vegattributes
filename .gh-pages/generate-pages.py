@@ -4,12 +4,10 @@ from os import environ
 from pathlib import Path
 
 from fooddata_vegattributes.generate import Category
+from fooddata_vegattributes.fdc_app import get_fdc_app_details_url
 
 json_path = (
   "debug_VegAttributes_for_FoodData_Central_survey_food_json_2021-10-28.json"
-)
-fdc_base_url = (
-  "https://fdc.nal.usda.gov/fdc-app.html#/food-details/"
 )
 
 def main():
@@ -35,9 +33,10 @@ def main():
       list_md_path = (lists_output_dir/md_name).with_suffix(".md")
       with list_md_path.open("w") as list_f:
         for food in sorted(foods, key=lambda x: x["description"]):
+          fdc_id, description = food["fdcId"], food["description"]
+          details_url = get_fdc_app_details_url(fdc_id)
           list_f.write(
-            f"- {food['description']} (fdcId: [{food['fdcId']}]"
-            f"({fdc_base_url}{food['fdcId']}))\n"
+            f"- {description} (fdcId: [{fdc_id}]({details_url}))\n"
           )
 
 

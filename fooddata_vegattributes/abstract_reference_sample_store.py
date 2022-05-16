@@ -17,3 +17,7 @@ class AbstractReferenceSampleStore(AbstractContextManager, metaclass=ABCMeta):
   @abstractmethod
   def reset_and_put_all(self, reference_samples: Iterable[ReferenceSample]):
     pass
+
+  @abstractmethod
+  def append(self, reference_sample: ReferenceSample):
+    pass

@@ -57,11 +57,19 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
 
   def reset_and_put_all(self, reference_samples: Iterable[ReferenceSample]):
     self.reference_samples_csv.reset_and_write_reference_sample_dicts(
-      {
-        "fdc_id": reference_sample.food.fdc_id,
-        "expected_category": reference_sample.expected_category.name,
-        "known_failure": reference_sample.known_failure,
-        "description": reference_sample.food.description,
-      }
+      _reference_sample_to_dict(reference_sample)
       for reference_sample in reference_samples
     )
+
+  def append(self, reference_sample: ReferenceSample):
+    self.reference_samples_csv.append_reference_sample_dict(
+      _reference_sample_to_dict(reference_sample)
+    )
+
+def _reference_sample_to_dict(reference_sample: ReferenceSample):
+  return {
+    "fdc_id": reference_sample.food.fdc_id,
+    "expected_category": reference_sample.expected_category.name,
+    "known_failure": reference_sample.known_failure,
+    "description": reference_sample.food.description,
+  }
