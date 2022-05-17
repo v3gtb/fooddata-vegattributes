@@ -17,6 +17,14 @@ class Category(AutoStrEnum):
   OMNI = auto()
   UNCATEGORIZED = auto()
 
+# the only purpose of these is to block false positives in actual categories,
+# e.g. fat which suggests animal or plant fat, whereas "fat free" doesn't tell
+# us anything about the category
+block_tokens = {
+  "fat free",
+  "nonfat"
+}
+
 vegan_tokens = {
   'agave', 'almond', 'almond milk', 'amaranth',
   'apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'avocado',
@@ -92,13 +100,13 @@ vegetarian_tokens = {
 }
 
 vegan_or_omni_tokens = {
-  'fat, nfs',
   'jelly',
   'wine',
 }
 
 vegan_vegetarian_or_omni_tokens = {
   'dumpling',
+  'fat',
   'kimchi',
   'ravioli, ns',
   'sandwich, nfs', 'soup, nfs', 'stew, nfs', 'sushi, nfs',
@@ -139,8 +147,8 @@ omni_tokens = {
 
 
 all_tokens = (
-  vegan_tokens | vegan_or_vegetarian_tokens | vegetarian_tokens |
-  vegan_or_omni_tokens | vegan_vegetarian_or_omni_tokens |
+  block_tokens | vegan_tokens | vegan_or_vegetarian_tokens |
+  vegetarian_tokens | vegan_or_omni_tokens | vegan_vegetarian_or_omni_tokens |
   vegetarian_or_omni_tokens | omni_tokens
 )
 
@@ -175,17 +183,23 @@ def categorize(description) -> Category:
 
   if contains_omni_tokens:
     return Category.OMNI
-  elif contains_vegetarian_or_omni_tokens:
+  if contains_vegetarian_or_omni_tokens:
     return Category.VEGETARIAN_OR_OMNI
-  elif contains_vegan_vegetarian_or_omni_tokens:
+  if contains_vegan_vegetarian_or_omni_tokens:
+    if contains_vegetarian_tokens:
+      return Category.VEGETARIAN_OR_OMNI
     return Category.VEGAN_VEGETARIAN_OR_OMNI
-  elif contains_vegan_or_omni_tokens:
+  if contains_vegan_or_omni_tokens:
+    if contains_vegetarian_tokens:
+      return Category.VEGETARIAN_OR_OMNI
     return Category.VEGAN_OR_OMNI
-  elif contains_vegetarian_tokens:
+  if contains_vegetarian_tokens:
     return Category.VEGETARIAN
-  elif contains_vegan_or_vegetarian_tokens:
+  if contains_vegan_or_vegetarian_tokens:
     return Category.VEGAN_OR_VEGETARIAN
-  elif contains_vegan_tokens:
+  if contains_vegetarian_tokens:
+    return Category.VEGETARIAN
+  if contains_vegan_tokens:
     return Category.VEGAN
   return Category.UNCATEGORIZED
 
