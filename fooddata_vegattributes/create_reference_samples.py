@@ -39,12 +39,15 @@ def main():
       for shortcut, category in shortcut_to_category.items():
         print(f"- {shortcut}: {category.name}")
       try:
-        inp = input("Input category or q/Ctrl-D to quit: ")
+        inp = input("Input category or s to skip, q/Ctrl-D to quit: ")
       except EOFError:
         print()
         return
       if inp.lower() == "q":
         return
+      elif inp.lower() == "s":
+        print()
+        continue
       category = shortcut_to_category[inp]
       print(category.name)
       reference_sample = ReferenceSample(
