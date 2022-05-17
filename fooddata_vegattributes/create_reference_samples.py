@@ -12,7 +12,9 @@ shortcut_to_category = {
   "veg": Category.VEGAN,
   "vov": Category.VEGAN_OR_VEGETARIAN,
   "vgt": Category.VEGETARIAN,
+  "vgo": Category.VEGAN_OR_OMNI,
   "vvo": Category.VEGAN_VEGETARIAN_OR_OMNI,
+  "vto": Category.VEGETARIAN_OR_OMNI,
   "o": Category.OMNI,
 }
 
