@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import auto
 from functools import cached_property
+from typing import Set
 
 from .fooddata import FoodDataDict
 from .utils.enum import AutoStrEnum
@@ -10,7 +11,9 @@ class Category(AutoStrEnum):
   VEGAN = auto()
   VEGAN_OR_VEGETARIAN = auto()
   VEGETARIAN = auto()
+  VEGAN_OR_OMNI = auto()
   VEGAN_VEGETARIAN_OR_OMNI = auto()
+  VEGETARIAN_OR_OMNI = auto()
   OMNI = auto()
   UNCATEGORIZED = auto()
 
@@ -88,15 +91,20 @@ vegetarian_tokens = {
   'yogurt',
 }
 
-vegan_vegetarian_or_omni_tokens = {
-  'dumpling',
+vegan_or_omni_tokens = {
   'fat, nfs',
   'jelly',
+  'wine',
+}
+
+vegan_vegetarian_or_omni_tokens = {
+  'dumpling',
   'kimchi',
   'ravioli, ns',
   'sandwich, nfs', 'soup, nfs', 'stew, nfs', 'sushi, nfs',
-  'wine',
 }
+
+vegetarian_or_omni_tokens: Set[str] = set()
 
 omni_tokens = {
   'adobo', 'anchovy', 'animal',
@@ -132,7 +140,8 @@ omni_tokens = {
 
 all_tokens = (
   vegan_tokens | vegan_or_vegetarian_tokens | vegetarian_tokens |
-  vegan_vegetarian_or_omni_tokens | omni_tokens
+  vegan_or_omni_tokens | vegan_vegetarian_or_omni_tokens |
+  vegetarian_or_omni_tokens | omni_tokens
 )
 
 
@@ -151,8 +160,14 @@ def categorize(description) -> Category:
   contains_vegetarian_tokens = any(
     name in vegetarian_tokens for name in names_in_desc
   )
+  contains_vegan_or_omni_tokens = any(
+    name in vegan_or_omni_tokens for name in names_in_desc
+  )
   contains_vegan_vegetarian_or_omni_tokens = any(
     name in vegan_vegetarian_or_omni_tokens for name in names_in_desc
+  )
+  contains_vegetarian_or_omni_tokens = any(
+    name in vegetarian_or_omni_tokens for name in names_in_desc
   )
   contains_omni_tokens = any(
     name in omni_tokens for name in names_in_desc
@@ -160,8 +175,12 @@ def categorize(description) -> Category:
 
   if contains_omni_tokens:
     return Category.OMNI
+  elif contains_vegetarian_or_omni_tokens:
+    return Category.VEGETARIAN_OR_OMNI
   elif contains_vegan_vegetarian_or_omni_tokens:
     return Category.VEGAN_VEGETARIAN_OR_OMNI
+  elif contains_vegan_or_omni_tokens:
+    return Category.VEGAN_OR_OMNI
   elif contains_vegetarian_tokens:
     return Category.VEGETARIAN
   elif contains_vegan_or_vegetarian_tokens:
