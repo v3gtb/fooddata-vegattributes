@@ -38,7 +38,7 @@ jobs:
       - name: Set up symlinks for input files
         run: ln -s "$FOODDATA_DIR/$FOODDATA_JSON_FILENAME"
       - name: Generate VegAttributes JSON
-        run: fooddata-vegattributes-generate
+        run: fooddata-vegattributes generate
       - name: Write file name of generated JSON to env
         run: >
           echo
