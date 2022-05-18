@@ -22,6 +22,9 @@ class Category(AutoStrEnum):
 # us anything about the category
 block_tokens = {
   "fat free",
+  "low fat",
+  "no added fat",
+  "no fat added",
   "nonfat"
 }
 
@@ -75,6 +78,7 @@ vegan_or_vegetarian_tokens = {
   'candy, nfs', 'chutney', 'cocktail, nfs', 'cracker', 'crouton',
   'dip',
   'formula',
+  'meatless',
   'nougat',
   'pesto', 'pop', 'porridge',
   'scone', 'strudel',
@@ -82,7 +86,7 @@ vegan_or_vegetarian_tokens = {
 
 vegetarian_tokens = {
   'baklava', 'banana split', 'biscuit', 'borscht', 'butter',
-  'cake', 'cappuccino', 'caramel', 'chocolate', 'cheese', 'cookie',
+  'cake', 'cappuccino', 'caramel', 'chocolate', 'cheese', 'cobbler', 'cookie',
   'cream', 'creme', 'crepe', 'croissant', 'custard',
   'egg',
   'frost', 'french toast', 'fudge',
@@ -119,7 +123,7 @@ omni_tokens = {
   'bacon', 'barracuda', 'bass', 'bear', 'beaver', 'beef',
   'bison', 'bologna', 'brain', 'burger',
   'caribou', 'carp', 'casserole', 'chicken', 'chorizo', 'clam',
-  'cobbler', 'cod', 'crab', 'croaker',
+  'cod', 'crab', 'croaker',
   'deer', 'dog', 'dove', 'duck',
   'eel',
   'fish', 'flounder', 'frog',
