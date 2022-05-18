@@ -151,7 +151,11 @@ categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
   },
 }
 
-all_tokens = reduce(lambda x, y: x | y, categories_to_tokens.values(), set())
+all_tokens: Set[str] = reduce(
+  lambda x, y: x | y,
+  categories_to_tokens.values(),
+  set()
+)
 
 all_tokens_finder = MaxiMunchTokenFinder(all_tokens)
 
