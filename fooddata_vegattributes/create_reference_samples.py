@@ -27,9 +27,17 @@ def main():
       food_store,
     )
   ) as reference_sample_store:
-    all_fdc_ids = food_store.get_all_fdc_ids()
+    fdc_ids_with_ref = {
+      reference_sample.food.fdc_id
+      for reference_sample in reference_sample_store.get_all()
+    }
+    fdc_ids_without_ref = [
+      fdc_id for fdc_id in
+      food_store.get_all_fdc_ids()
+      if fdc_id not in fdc_ids_with_ref
+    ]
     while True:
-      fdc_id = random.choice(all_fdc_ids)
+      fdc_id = random.choice(fdc_ids_without_ref)
       foods = food_store.get_mapped_by_fdc_ids([fdc_id])
       food = foods[fdc_id]
       print(f"FDC ID: {food.fdc_id}")
@@ -57,6 +65,8 @@ def main():
       )
       print("Appending...", end="")
       reference_sample_store.append(reference_sample)
+      fdc_ids_with_ref.add(fdc_id)
+      fdc_ids_without_ref.remove(fdc_id)
       print("\n")
 
 
