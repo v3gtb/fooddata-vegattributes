@@ -6,7 +6,7 @@ from .abstract_food_store import AbstractFoodStore
 from .abstract_reference_sample_store import AbstractReferenceSampleStore
 from .food import Category
 from .reference_sample import ReferenceSample
-from .reference_samples_csv import ReferenceSamplesCsv
+from .reference_samples_csv import ReferenceSamplesCsv, ReferenceSampleDict
 
 
 @dataclass
@@ -35,11 +35,8 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
     self.close()
 
   def get_all(self) -> List[ReferenceSample]:
-    reference_sample_ds = (
-      self.reference_samples_csv.read_all_reference_sample_dicts()
-    )
     fdc_ids_to_ds = {
-      d["fdc_id"]: d for d in reference_sample_ds
+      d["fdc_id"]: d for d in self._read_all_reference_sample_dicts()
     }
     fdc_ids_to_foods = (
       self.food_store.get_mapped_by_fdc_ids(fdc_ids_to_ds.keys())
@@ -55,6 +52,11 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
       for fdc_id, food in fdc_ids_to_foods.items()
     ]
 
+  def iter_all_fdc_ids(self) -> Iterable[int]:
+    return (
+      d["fdc_id"] for d in self._read_all_reference_sample_dicts()
+    )
+
   def reset_and_put_all(self, reference_samples: Iterable[ReferenceSample]):
     self.reference_samples_csv.reset_and_write_reference_sample_dicts(
       _reference_sample_to_dict(reference_sample)
@@ -65,6 +67,10 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
     self.reference_samples_csv.append_reference_sample_dict(
       _reference_sample_to_dict(reference_sample)
     )
+
+  def _read_all_reference_sample_dicts(self) -> Iterable[ReferenceSampleDict]:
+    "Convenience/shortcut method"
+    return self.reference_samples_csv.read_all_reference_sample_dicts()
 
 def _reference_sample_to_dict(reference_sample: ReferenceSample):
   return {
