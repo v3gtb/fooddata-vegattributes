@@ -2,14 +2,14 @@ from argparse import ArgumentParser
 
 from .annotate_reference_samples import main as annotate_ref_main
 from .generate import main as generate_main
-from .create_reference_samples import main as create_ref_main
+from .input_reference_samples import main as input_ref_main
 
 
 def annotate_ref():
   return annotate_ref_main()
 
-def create_ref():
-  return create_ref_main()
+def input_ref():
+  return input_ref_main()
 
 def generate():
   return generate_main()
@@ -25,12 +25,12 @@ def main():
   )
   generate_parser.set_defaults(func=generate)
 
-  # "create-ref" subcommand
-  create_ref_parser = subparsers.add_parser(
-    "create-ref",
-    help="create reference data"
+  # "input-ref" subcommand
+  input_ref_parser = subparsers.add_parser(
+    "input-ref",
+    help="interactively input reference data"
   )
-  create_ref_parser.set_defaults(func=create_ref)
+  input_ref_parser.set_defaults(func=input_ref)
 
   # "annotate-ref" subcommand
   annotate_ref_parser = subparsers.add_parser(
