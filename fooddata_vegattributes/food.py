@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import auto
 from functools import cached_property, reduce
-from typing import Dict, Set, Union
+from typing import Dict, Set
 
 from .fooddata import FoodDataDict
 from .utils.enum import AutoStrEnum
@@ -17,11 +17,27 @@ class Category(AutoStrEnum):
   OMNI = auto()
   UNCATEGORIZED = auto()
 
-categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
+class TokenCategory(AutoStrEnum):
+  # "dummy" to block false positives, see below
+  BLOCK = auto()
+
+  # tokens that have precedence over the suggestions below
+  NULLIFIES_OMNI = auto()
+
+  # tokens that suggest certain categories
+  SUGGESTS_VEGAN = auto()
+  SUGGESTS_VEGAN_OR_VEGETARIAN = auto()
+  SUGGESTS_VEGETARIAN = auto()
+  SUGGESTS_VEGAN_OR_OMNI = auto()
+  SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI = auto()
+  SUGGESTS_VEGETARIAN_OR_OMNI = auto()
+  SUGGESTS_OMNI = auto()
+
+categories_to_tokens: Dict[TokenCategory, Set[str]] = {
   # the only purpose of these is to block false positives in actual categories,
   # e.g. fat which suggests animal or plant fat, whereas "fat free" doesn't tell
   # us anything about the category
-  "block": {
+  TokenCategory.BLOCK: {
     "fat free",
     "low fat",
     "no added fat",
@@ -29,7 +45,12 @@ categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
     "nonfat"
   },
 
-  Category.VEGAN: {
+  TokenCategory.NULLIFIES_OMNI: {
+    'meatless',
+    'vegetarian'
+  },
+
+  TokenCategory.SUGGESTS_VEGAN: {
     'agave', 'almond', 'almond milk', 'amaranth',
     'apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'avocado',
     'banana', 'barley', 'basil', 'bean', 'beet',
@@ -74,7 +95,7 @@ categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
     'zucchini', 'zwieback',
   },
 
-  Category.VEGAN_OR_VEGETARIAN: {
+  TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN: {
     'bar',
     'candy, nfs', 'chutney', 'cocktail, nfs', 'cracker', 'crouton',
     'dip',
@@ -85,7 +106,7 @@ categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
     'scone', 'strudel',
   },
 
-  Category.VEGETARIAN: {
+  TokenCategory.SUGGESTS_VEGETARIAN: {
     'baklava', 'banana split', 'biscuit', 'borscht', 'butter',
     'cake', 'cappuccino', 'caramel', 'chocolate', 'cheese', 'cobbler', 'cookie',
     'cream', 'creme', 'crepe', 'croissant', 'custard',
@@ -104,12 +125,12 @@ categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
     'yogurt',
   },
 
-  Category.VEGAN_OR_OMNI: {
+  TokenCategory.SUGGESTS_VEGAN_OR_OMNI: {
     'jelly',
     'wine',
   },
 
-  Category.VEGAN_VEGETARIAN_OR_OMNI: {
+  TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI: {
     'dumpling',
     'fat',
     'kimchi',
@@ -117,9 +138,9 @@ categories_to_tokens: Dict[Union[Category, str], Set[str]] = {
     'sandwich, nfs', 'soup, nfs', 'stew, nfs', 'sushi, nfs',
   },
 
-  Category.VEGETARIAN_OR_OMNI: set(),
+  TokenCategory.SUGGESTS_VEGETARIAN_OR_OMNI: set(),
 
-  Category.OMNI: {
+  TokenCategory.SUGGESTS_OMNI: {
     'adobo', 'anchovy', 'animal',
     'bacon', 'barracuda', 'bass', 'bear', 'beaver', 'beef',
     'bison', 'bologna', 'brain', 'burger',
@@ -162,30 +183,30 @@ all_tokens_finder = MaxiMunchTokenFinder(all_tokens)
 def categorize(description) -> Category:
   names_in_desc = all_tokens_finder.find_all(description.lower())
 
-  contained_token_categories = {
+  found_token_categories = {
     category for category, tokens in categories_to_tokens.items()
     if any(name in tokens for name in names_in_desc)
   }
 
-  if Category.OMNI in contained_token_categories:
+  if TokenCategory.SUGGESTS_OMNI in found_token_categories:
     return Category.OMNI
-  if Category.VEGETARIAN_OR_OMNI in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGETARIAN_OR_OMNI in found_token_categories:
     return Category.VEGETARIAN_OR_OMNI
-  if Category.VEGAN_VEGETARIAN_OR_OMNI in contained_token_categories:
-    if Category.VEGETARIAN in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI in found_token_categories:
+    if TokenCategory.SUGGESTS_VEGETARIAN in found_token_categories:
       return Category.VEGETARIAN_OR_OMNI
     return Category.VEGAN_VEGETARIAN_OR_OMNI
-  if Category.VEGAN_OR_OMNI in contained_token_categories:
-    if Category.VEGETARIAN in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGAN_OR_OMNI in found_token_categories:
+    if TokenCategory.SUGGESTS_VEGETARIAN in found_token_categories:
       return Category.VEGETARIAN_OR_OMNI
     return Category.VEGAN_OR_OMNI
-  if Category.VEGETARIAN in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGETARIAN in found_token_categories:
     return Category.VEGETARIAN
-  if Category.VEGAN_OR_VEGETARIAN in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN in found_token_categories:
     return Category.VEGAN_OR_VEGETARIAN
-  if Category.VEGETARIAN in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGETARIAN in found_token_categories:
     return Category.VEGETARIAN
-  if Category.VEGAN in contained_token_categories:
+  if TokenCategory.SUGGESTS_VEGAN in found_token_categories:
     return Category.VEGAN
   return Category.UNCATEGORIZED
 
