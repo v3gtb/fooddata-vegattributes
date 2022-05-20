@@ -36,7 +36,7 @@ fdc_id,expected_category,known_failure,description
 1098434,OMNI,N,"Chicken, NS as to part, grilled with sauce, skin eaten"
 1100393,OMNI,N,Pinto beans with meat
 1100139,OMNI,N,"Chicken or turkey soup, cream of, canned, reduced sodium, made with milk"
-1100019,OMNI,N,"Frankfurter or hot dog sandwich, with meatless chili, on multigrain bun"
+1100019,OMNI,Y,"Frankfurter or hot dog sandwich, with meatless chili, on multigrain bun"
 1101194,VEGAN_OR_VEGETARIAN,Y,"Pastry, puff"
 1099800,OMNI,N,"Hamburger, on wheat bun, 1 small patty"
 1104575,VEGAN,N,"Broccoli, cooked, as ingredient"
@@ -66,7 +66,6 @@ fdc_id,expected_category,known_failure,description
 1099477,OMNI,N,"Pork, potatoes, and vegetables including carrots, broccoli, and/or dark-green leafy; no sauce"
 1098331,OMNI,N,"Pork ears, tail, head, snout, miscellaneous parts, cooked"
 1098091,VEGETARIAN,Y,Welsh rarebit
-1099497,OMNI,N,"Lamb or mutton stew with potatoes and vegetables including carrots, broccoli, and/or dark-green leafy; gravy"
 1102101,VEGETARIAN,N,"Cheese quiche, meatless"
 1099865,OMNI,N,"Chicken fillet sandwich, from school cafeteria"
 1103324,OMNI,N,"Tomato beef rice soup, prepared with water"
@@ -87,4 +86,4 @@ fdc_id,expected_category,known_failure,description
 1104177,VEGETARIAN,N,"Coffee, Cafe Mocha, decaffeinated, with non-dairy milk"
 1102671,VEGAN,N,"Mango, canned"
 1103119,VEGAN,N,"Kale, canned, cooked, no added fat"
-1098354,OMNI,N,"Lamb, roast, cooked, NS as to fat eaten"
+1100495,VEGETARIAN,N,"Vegetarian burger or patty, meatless, no bun"
