@@ -23,6 +23,7 @@ class TokenCategory(AutoStrEnum):
 
   # tokens that have precedence over the suggestions below
   NULLIFIES_OMNI = auto()
+  NULLIFIES_OMNI_AND_VEGETARIAN = auto()
 
   # tokens that suggest certain categories
   SUGGESTS_VEGAN = auto()
@@ -47,10 +48,13 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
 
   TokenCategory.NULLIFIES_OMNI: {
     'meatless',
+    'vegetarian',
+  },
+
+  TokenCategory.NULLIFIES_OMNI_AND_VEGETARIAN: {
     'plant based',
     'plant-based',
     'vegan',
-    'vegetarian',
   },
 
   TokenCategory.SUGGESTS_VEGAN: {
@@ -176,6 +180,23 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
   },
 }
 
+nullification_mappings = {
+  TokenCategory.NULLIFIES_OMNI: {
+    TokenCategory.SUGGESTS_OMNI: TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN,
+    TokenCategory.SUGGESTS_VEGAN_OR_OMNI: TokenCategory.SUGGESTS_VEGAN,
+    TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI: (
+      TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN
+    ),
+    TokenCategory.SUGGESTS_VEGETARIAN_OR_OMNI: (
+      TokenCategory.SUGGESTS_VEGETARIAN
+    ),
+  },
+  TokenCategory.NULLIFIES_OMNI_AND_VEGETARIAN: {
+    token_category: TokenCategory.SUGGESTS_VEGETARIAN
+    for token_category in categories_to_tokens.keys()
+  },
+}
+
 all_tokens: Set[str] = reduce(
   lambda x, y: x | y,
   categories_to_tokens.values(),
@@ -192,23 +213,18 @@ def categorize(description) -> Category:
     if any(name in tokens for name in names_in_desc)
   }
 
-  if TokenCategory.NULLIFIES_OMNI in found_token_categories:
-    omni_nullification_mapping = {
-      TokenCategory.SUGGESTS_OMNI: TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN,
-      TokenCategory.SUGGESTS_VEGAN_OR_OMNI: TokenCategory.SUGGESTS_VEGAN,
-      TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI: (
-        TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN
-      ),
-      TokenCategory.SUGGESTS_VEGETARIAN_OR_OMNI: (
-        TokenCategory.SUGGESTS_VEGETARIAN
-      ),
-    }
+  for nullification_category in [
+    TokenCategory.NULLIFIES_OMNI, TokenCategory.NULLIFIES_OMNI_AND_VEGETARIAN
+  ]:
+    if nullification_category not in found_token_categories:
+      continue
+    nullification_mapping = nullification_mappings[nullification_category]
     found_token_categories = {
         token_category for token_category in {
         (
           token_category
-          if token_category not in omni_nullification_mapping
-          else omni_nullification_mapping[token_category]
+          if token_category not in nullification_mapping
+          else nullification_mapping[token_category]
         ) for token_category in found_token_categories
       }
       if token_category is not None
