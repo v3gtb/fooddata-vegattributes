@@ -47,7 +47,10 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
 
   TokenCategory.NULLIFIES_OMNI: {
     'meatless',
-    'vegetarian'
+    'plant based',
+    'plant-based',
+    'vegan',
+    'vegetarian',
   },
 
   TokenCategory.SUGGESTS_VEGAN: {
@@ -89,7 +92,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'soda', 'soft drink', 'sports drink', 'sprout', 'squash', 'sugar', 'syrup',
     'tabbouleh', 'tahini', 'tamarind', 'tangerine', 'tannier', 'tea', 'tequila',
     'tempeh', 'tofu', 'tomato', 'tortilla', 'truffle', 'turnip',
-    'vegetable', 'vinegar', 'vodka',
+    'vegan', 'vegetable', 'vinegar', 'vodka',
     'wasabi', 'water', 'weed', 'wheat', 'whiskey',
     'yam', 'yeast',
     'zucchini', 'zwieback',
@@ -121,6 +124,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'paneer', 'pastry', 'pie', 'pizza', 'praline', 'pudding',
     'ranch',
     'tiramisu', 'toffee', 'trifle', 'tzatziki',
+    'vegetarian',
     'waffle', 'whey', 'whipped', 'white russian',
     'yogurt',
   },
@@ -187,6 +191,28 @@ def categorize(description) -> Category:
     category for category, tokens in categories_to_tokens.items()
     if any(name in tokens for name in names_in_desc)
   }
+
+  if TokenCategory.NULLIFIES_OMNI in found_token_categories:
+    omni_nullification_mapping = {
+      TokenCategory.SUGGESTS_OMNI: TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN,
+      TokenCategory.SUGGESTS_VEGAN_OR_OMNI: TokenCategory.SUGGESTS_VEGAN,
+      TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI: (
+        TokenCategory.SUGGESTS_VEGAN_OR_VEGETARIAN
+      ),
+      TokenCategory.SUGGESTS_VEGETARIAN_OR_OMNI: (
+        TokenCategory.SUGGESTS_VEGETARIAN
+      ),
+    }
+    found_token_categories = {
+        token_category for token_category in {
+        (
+          token_category
+          if token_category not in omni_nullification_mapping
+          else omni_nullification_mapping[token_category]
+        ) for token_category in found_token_categories
+      }
+      if token_category is not None
+    }
 
   if TokenCategory.SUGGESTS_OMNI in found_token_categories:
     return Category.OMNI
