@@ -27,10 +27,7 @@ def main():
       food_store,
     )
   ) as reference_sample_store:
-    fdc_ids_with_ref = {
-      reference_sample.food.fdc_id
-      for reference_sample in reference_sample_store.get_all()
-    }
+    fdc_ids_with_ref = set(reference_sample_store.iter_all_fdc_ids())
     fdc_ids_without_ref = [
       fdc_id for fdc_id in
       food_store.get_all_fdc_ids()

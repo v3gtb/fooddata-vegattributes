@@ -15,6 +15,10 @@ class AbstractReferenceSampleStore(AbstractContextManager, metaclass=ABCMeta):
     pass
 
   @abstractmethod
+  def iter_all_fdc_ids(self) -> Iterable[int]:
+    pass
+
+  @abstractmethod
   def reset_and_put_all(self, reference_samples: Iterable[ReferenceSample]):
     pass
 
