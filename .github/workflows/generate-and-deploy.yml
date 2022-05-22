@@ -53,8 +53,14 @@ jobs:
             debug_${{ env.GENERATED_JSON_FILENAME }}
       - name: Install test dependencies
         run: pip install -e .[test]
+      - name: Install codecov uploader
+        run: >
+          curl -Os https://uploader.codecov.io/latest/linux/codecov;
+          chmod +x codecov
       - name: Run tests
-        run: pytest
+        run: pytest --cov=./fooddata_vegattributes --cov-report=xml
+      - name: Upload coverage report
+        run: ./codecov
       - name: Typecheck
         run: mypy -p fooddata_vegattributes
       - name: Publish generated JSON as GitHub release
