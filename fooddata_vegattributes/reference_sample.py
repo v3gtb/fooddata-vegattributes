@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from .food import Category, Food
+from .category import Category
+from .food import Food
 
 @dataclass
 class ReferenceSample:
