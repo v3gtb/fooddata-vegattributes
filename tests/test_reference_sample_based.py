@@ -6,7 +6,7 @@ from fooddata_vegattributes.auto_indexed_fooddata_food_store import (
 from fooddata_vegattributes.csv_reference_sample_store import (
   CsvReferenceSampleStore
 )
-from fooddata_vegattributes.default_paths import default_dir_paths
+from fooddata_vegattributes.app.default_paths import default_dir_paths
 
 
 def pytest_generate_tests(metafunc):
