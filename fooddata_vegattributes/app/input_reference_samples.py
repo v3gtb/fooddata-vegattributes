@@ -1,12 +1,12 @@
 import random
 
-from .csv_reference_sample_store import CsvReferenceSampleStore
-from .default_paths import default_dir_paths
-from .food import Category
-from .fdc_app import get_fdc_app_details_url
-from .indexed_fooddata_food_store import IndexedFoodDataFoodStore
-from .reference_sample import ReferenceSample
+from ..csv_reference_sample_store import CsvReferenceSampleStore
+from ..food import Category
+from ..fdc_app import get_fdc_app_details_url
+from ..indexed_fooddata_food_store import IndexedFoodDataFoodStore
+from ..reference_sample import ReferenceSample
 
+from .default_paths import default_dir_paths
 
 shortcut_to_category = {
   "veg": Category.VEGAN,

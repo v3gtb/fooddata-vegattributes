@@ -1,10 +1,11 @@
 import json
 
+from ..food import Category, Food
+from ..fooddata import load_survey_fooddata_dicts
+from ..utils.random import select_n_random
+from ..utils.terminal_ui import print_as_table
+
 from .default_paths import default_dir_paths
-from .food import Category, Food
-from .fooddata import load_survey_fooddata_dicts
-from .utils.random import select_n_random
-from .utils.terminal_ui import print_as_table
 
 
 def main():

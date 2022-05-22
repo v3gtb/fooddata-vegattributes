@@ -1,6 +1,7 @@
-from .csv_reference_sample_store import CsvReferenceSampleStore
+from ..csv_reference_sample_store import CsvReferenceSampleStore
+from ..indexed_fooddata_food_store import IndexedFoodDataFoodStore
+
 from .default_paths import default_dir_paths
-from .indexed_fooddata_food_store import IndexedFoodDataFoodStore
 
 
 def main():
