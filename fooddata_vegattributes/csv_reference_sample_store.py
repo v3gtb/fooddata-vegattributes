@@ -4,7 +4,7 @@ from typing import Iterable, List
 
 from .abstract_food_store import AbstractFoodStore
 from .abstract_reference_sample_store import AbstractReferenceSampleStore
-from .food import Category
+from .category import Category
 from .reference_sample import ReferenceSample
 from .reference_samples_csv import ReferenceSamplesCsv, ReferenceSampleDict
 

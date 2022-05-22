@@ -1,7 +1,7 @@
 import random
 
 from ..csv_reference_sample_store import CsvReferenceSampleStore
-from ..food import Category
+from ..category import Category
 from ..fdc_app import get_fdc_app_details_url
 from ..indexed_fooddata_food_store import IndexedFoodDataFoodStore
 from ..reference_sample import ReferenceSample

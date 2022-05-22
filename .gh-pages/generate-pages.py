@@ -3,7 +3,7 @@ import json
 from os import environ
 from pathlib import Path
 
-from fooddata_vegattributes.food import Category
+from fooddata_vegattributes.category import Category
 from fooddata_vegattributes.fdc_app import get_fdc_app_details_url
 
 json_path = (

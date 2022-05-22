@@ -1,6 +1,7 @@
 import json
 
-from ..food import Category, Food
+from ..category import Category
+from ..food import Food
 from ..fooddata import load_survey_fooddata_dicts
 from ..utils.random import select_n_random
 from ..utils.terminal_ui import print_as_table
