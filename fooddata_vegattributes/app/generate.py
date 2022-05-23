@@ -45,7 +45,11 @@ def main():
   print("sample:")
   n_samples = 10
   category_samples = {
-    category: select_n_random(foods_in_categories[category], n_samples)
+    category: select_n_random(
+      foods_in_categories[category],
+      n_samples,
+      pad=lambda: Food(fdc_id=-1, description="")
+    )
     for category in Category
   }
 
