@@ -16,8 +16,11 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
   close_stack: ExitStack = field(init=False, default_factory=ExitStack)
 
   @classmethod
-  def from_path_and_food_store(cls, path, food_store):
-    reference_samples_csv = ReferenceSamplesCsv.from_path(path)
+  def from_path_and_food_store(cls, path, food_store, create=False):
+    mode = "a+" if create else "r+"
+    reference_samples_csv = ReferenceSamplesCsv.from_path(path, mode)
+    if create:
+      reference_samples_csv.write_header_if_empty()
     obj = cls(
       reference_samples_csv=reference_samples_csv,
       food_store=food_store

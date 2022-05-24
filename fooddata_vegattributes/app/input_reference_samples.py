@@ -1,9 +1,11 @@
 import random
 
+from ..auto_indexed_fooddata_food_store import (
+  auto_compressed_indexed_fooddata_food_store
+)
 from ..csv_reference_sample_store import CsvReferenceSampleStore
 from ..category import Category
 from ..fdc_app import get_fdc_app_details_url
-from ..indexed_fooddata_food_store import IndexedFoodDataFoodStore
 from ..reference_sample import ReferenceSample
 
 from .default_paths import default_dir_paths
@@ -19,12 +21,16 @@ shortcut_to_category = {
 }
 
 def main():
-  with IndexedFoodDataFoodStore.from_path(
-    default_dir_paths.compressed_indexed_fooddata_json
+  with auto_compressed_indexed_fooddata_food_store(
+    compressed_indexed_json_path=(
+      default_dir_paths.compressed_indexed_fooddata_json
+    ),
+    fooddata_json_path=default_dir_paths.survey_fooddata_json,
   ) as food_store, (
     CsvReferenceSampleStore.from_path_and_food_store(
       default_dir_paths.reference_samples_csv,
       food_store,
+      create=True,
     )
   ) as reference_sample_store:
     fdc_ids_with_ref = set(reference_sample_store.iter_all_fdc_ids())
@@ -33,7 +39,7 @@ def main():
       food_store.get_all_fdc_ids()
       if fdc_id not in fdc_ids_with_ref
     ]
-    while True:
+    while fdc_ids_without_ref:
       fdc_id = random.choice(fdc_ids_without_ref)
       foods = food_store.get_mapped_by_fdc_ids([fdc_id])
       food = foods[fdc_id]
@@ -65,6 +71,7 @@ def main():
       fdc_ids_with_ref.add(fdc_id)
       fdc_ids_without_ref.remove(fdc_id)
       print("\n")
+    print("no items without reference data remain")
 
 
 if __name__ == "__main__":
