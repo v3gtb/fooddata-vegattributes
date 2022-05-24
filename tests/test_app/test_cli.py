@@ -21,7 +21,7 @@ def test_cli_dispatch(command):
   with patch(
     "sys.argv", ["fooddata-vegattributes", command]
   ), patch(
-    f"fooddata_vegattributes.app.cli.{command.replace('-', '_')}",
+    f"fooddata_vegattributes.app.cli.{command.replace('-', '_')}_main",
     autospec=True
   ) as mock_command_handler:
     with pytest.raises(SystemExit) as exc_info:
