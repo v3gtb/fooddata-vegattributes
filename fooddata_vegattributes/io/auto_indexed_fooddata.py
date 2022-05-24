@@ -4,8 +4,9 @@ from os import PathLike
 from typing import Callable, Iterable, Union
 from tarfile import ReadError as TarFileReadError
 
+from ..io.indexed_fooddata import CompressedIndexedFoodDataJson
+
 from .fooddata import FoodDataDict
-from .indexed_fooddata import CompressedIndexedFoodDataJson
 
 
 logger = getLogger(__name__)

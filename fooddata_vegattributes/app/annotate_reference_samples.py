@@ -1,7 +1,7 @@
-from ..auto_indexed_fooddata_food_store import (
+from ..stores.auto_indexed_fooddata_food_store import (
   auto_compressed_indexed_fooddata_food_store
 )
-from ..csv_reference_sample_store import CsvReferenceSampleStore
+from ..stores.csv_reference_sample_store import CsvReferenceSampleStore
 
 from .default_paths import default_dir_paths
 

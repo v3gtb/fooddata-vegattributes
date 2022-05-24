@@ -5,7 +5,7 @@ import pytest
 from unittest.mock import patch
 from typing import List
 
-from fooddata_vegattributes.reference_samples_csv import (
+from fooddata_vegattributes.io.reference_samples_csv import (
   ReferenceSamplesCsv,
   ReferenceSampleDict,
 )

@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from contextlib import AbstractContextManager
 from typing import Iterable, List
 
-from .reference_sample import ReferenceSample
+from ..reference_sample import ReferenceSample
 
 
 class AbstractReferenceSampleStore(AbstractContextManager, metaclass=ABCMeta):

@@ -1,9 +1,9 @@
 import pytest
 
-from fooddata_vegattributes.auto_indexed_fooddata_food_store import (
+from fooddata_vegattributes.stores.auto_indexed_fooddata_food_store import (
   auto_compressed_indexed_fooddata_food_store
 )
-from fooddata_vegattributes.csv_reference_sample_store import (
+from fooddata_vegattributes.stores.csv_reference_sample_store import (
   CsvReferenceSampleStore
 )
 from fooddata_vegattributes.app.default_paths import default_dir_paths

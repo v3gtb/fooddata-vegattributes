@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from .description_based_heuristic import categorize
-from .fooddata import FoodDataDict
+from .io.fooddata import FoodDataDict
 
 
 @dataclass(frozen=True)

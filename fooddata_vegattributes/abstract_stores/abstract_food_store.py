@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from contextlib import AbstractContextManager
 from typing import Iterable, Mapping
 
-from .food import Food
+from ..food import Food
 
 
 class AbstractFoodStore(AbstractContextManager, metaclass=ABCMeta):
