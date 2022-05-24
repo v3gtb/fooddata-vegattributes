@@ -34,7 +34,7 @@ def test_input_reference_samples(
     tmp_path/"compressed_indexed_fooddata.json.tar.xz",
   ), patch(
     "fooddata_vegattributes.app.input_reference_samples.input",
-    side_effect=["veg", EOFError("end of stream reached")],
+    side_effect=["s", "veg", EOFError("end of stream reached")],
   ):
     # run annotate-ref app
     main()
