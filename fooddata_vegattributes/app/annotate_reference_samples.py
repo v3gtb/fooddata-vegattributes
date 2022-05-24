@@ -29,7 +29,3 @@ def main():
       }
       for reference_sample in reference_samples
     )
-
-
-if __name__ == "__main__":
-  main()

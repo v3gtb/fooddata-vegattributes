@@ -70,7 +70,3 @@ def main():
       for x in y
     ]
   )
-
-
-if __name__ == "__main__":
-  main()

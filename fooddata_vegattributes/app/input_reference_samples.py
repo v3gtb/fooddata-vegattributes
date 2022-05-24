@@ -72,7 +72,3 @@ def main():
       fdc_ids_without_ref.remove(fdc_id)
       print("\n")
     print("no items without reference data remain")
-
-
-if __name__ == "__main__":
-  main()
