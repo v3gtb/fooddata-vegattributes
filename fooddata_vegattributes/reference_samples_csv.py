@@ -66,12 +66,30 @@ class ReferenceSamplesCsv:
     self,
     ds: Iterable[ReferenceSampleDict]
   ):
+    self._reset_and_write_header()
+    for d in ds:
+      self.write_reference_sample_dict(d)
+
+  def write_header_if_empty(self):
+    if self._is_empty():
+      self._reset_and_write_header()
+
+  def _is_empty(self):
+    """Find out if file is empty with minimal cursor changes"""
+    is_empty = False
+    orig_pos = self.file.tell()
+    if not self.file.read(1):
+      self.file.seek(0)
+      if not self.file.read(1):
+        is_empty = True
+    self.file.seek(orig_pos)
+    return is_empty
+
+  def _reset_and_write_header(self):
     assert self.csv_writer is not None
     self.file.seek(0)
     self.file.truncate()
     self.csv_writer.writeheader()
-    for d in ds:
-      self.write_reference_sample_dict(d)
 
   def append_reference_sample_dict(self, d: ReferenceSampleDict):
     assert self.csv_writer is not None
