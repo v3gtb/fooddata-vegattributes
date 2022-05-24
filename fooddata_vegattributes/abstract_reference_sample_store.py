@@ -7,21 +7,18 @@ from .reference_sample import ReferenceSample
 
 class AbstractReferenceSampleStore(AbstractContextManager, metaclass=ABCMeta):
   @abstractmethod
-  def close(self):
-      pass
+  def close(self): ...
 
   @abstractmethod
-  def get_all(self) -> List[ReferenceSample]:
-    pass
+  def get_all(self) -> List[ReferenceSample]: ...
 
   @abstractmethod
-  def iter_all_fdc_ids(self) -> Iterable[int]:
-    pass
+  def iter_all_fdc_ids(self) -> Iterable[int]: ...
 
   @abstractmethod
-  def reset_and_put_all(self, reference_samples: Iterable[ReferenceSample]):
-    pass
+  def reset_and_put_all(
+    self, reference_samples: Iterable[ReferenceSample]
+  ): ...
 
   @abstractmethod
-  def append(self, reference_sample: ReferenceSample):
-    pass
+  def append(self, reference_sample: ReferenceSample): ...

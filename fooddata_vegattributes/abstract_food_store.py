@@ -9,9 +9,7 @@ class AbstractFoodStore(AbstractContextManager, metaclass=ABCMeta):
   @abstractmethod
   def get_mapped_by_fdc_ids(
     self, fdc_ids: Iterable[int]
-  ) -> Mapping[int, Food]:
-    pass
+  ) -> Mapping[int, Food]: ...
 
   @abstractmethod
-  def get_all_fdc_ids(self) -> Iterable[int]:
-    pass
+  def get_all_fdc_ids(self) -> Iterable[int]: ...
