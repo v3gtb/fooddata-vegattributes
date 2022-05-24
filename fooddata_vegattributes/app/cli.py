@@ -43,6 +43,3 @@ def main():
   args.func(**{k: v for k, v in vars(args).items() if k != "func"})
 
   parser.exit()
-
-if __name__ == "__main__":
-  main()
