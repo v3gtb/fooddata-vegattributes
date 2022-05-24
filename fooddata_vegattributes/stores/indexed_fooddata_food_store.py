@@ -3,9 +3,9 @@ from dataclasses import dataclass, field
 from os import PathLike
 from typing import Iterable, Mapping, Union
 
-from .abstract_food_store import AbstractFoodStore
-from .food import Food
-from .indexed_fooddata import CompressedIndexedFoodDataJson
+from ..abstract_stores.abstract_food_store import AbstractFoodStore
+from ..food import Food
+from ..io.indexed_fooddata import CompressedIndexedFoodDataJson
 
 
 @dataclass

@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from typing import List
 
-from fooddata_vegattributes.fooddata import FoodDataDict
+from fooddata_vegattributes.io.fooddata import FoodDataDict
 
 
 @dataclass

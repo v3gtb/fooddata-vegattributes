@@ -3,8 +3,9 @@ from functools import partial
 from os import PathLike
 from typing import Union
 
-from .auto_indexed_fooddata import auto_compressed_indexed_fooddata_json
-from .fooddata import load_survey_fooddata_dicts
+from ..io.auto_indexed_fooddata import auto_compressed_indexed_fooddata_json
+from ..io.fooddata import load_survey_fooddata_dicts
+
 from .indexed_fooddata_food_store import IndexedFoodDataFoodStore
 
 

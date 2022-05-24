@@ -4,7 +4,7 @@ import pytest
 from typing import Any
 from unittest.mock import patch
 
-from fooddata_vegattributes.reference_samples_csv import (
+from fooddata_vegattributes.io.reference_samples_csv import (
   ReferenceSamplesCsv,
   ReferenceSampleDict,
 )
