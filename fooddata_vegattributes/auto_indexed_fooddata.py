@@ -5,7 +5,7 @@ from typing import Callable, Iterable, Union
 from tarfile import ReadError as TarFileReadError
 
 from .fooddata import FoodDataDict
-from .indexed_fooddata import CompressedIndexedFoodDataJson
+from .compressed_indexed_fooddata import CompressedIndexedFoodDataJson
 
 
 logger = getLogger(__name__)

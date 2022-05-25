@@ -5,7 +5,7 @@ from typing import Iterable, Mapping, Union
 
 from .abstract_food_store import AbstractFoodStore
 from .food import Food
-from .indexed_fooddata import CompressedIndexedFoodDataJson
+from .compressed_indexed_fooddata import CompressedIndexedFoodDataJson
 
 
 @dataclass
