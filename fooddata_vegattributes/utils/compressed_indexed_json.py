@@ -6,7 +6,7 @@ from os import PathLike
 from tarfile import (
   open as tarfile_open, TarFile, TarInfo
 )
-from typing import cast, Dict, Generic, Iterable, Set, Tuple, Union
+from typing import cast, Generic, Iterable, Tuple, Union
 
 from .abstract_indexed_json import AbstractIndexedJson, T
 
@@ -46,9 +46,6 @@ class CompressedIndexedJson(AbstractIndexedJson, Generic[T]):
   def __exit__(self, *args, **kwargs):
     self.close()
 
-  def write_indexed_jsonables(self, indexed_jsonables: Dict[str, T]):
-    self.write_index_jsonable_tuples(indexed_jsonables.items())
-
   def write_index_jsonable_tuples(
     self, index_jsonable_tuples: Iterable[Tuple[str, T]]
   ):
@@ -64,9 +61,6 @@ class CompressedIndexedJson(AbstractIndexedJson, Generic[T]):
     if file_for_index is None:
       raise KeyError(f"Entry with key {index} not in indexed JSON file")
     return cast(T, json.load(file_for_index))
-
-  def get_all_indices(self) -> Set[str]:
-    return set(self.iter_all_indices())
 
   def iter_all_indices(self) -> Iterable[str]:
     return (x for x in self.tarfile.getnames())
