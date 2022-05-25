@@ -1,18 +1,14 @@
 from abc import ABCMeta, abstractmethod
 from typing import Generic, Iterable, Tuple, TypeVar
 
+from .close_on_exit import CloseOnExit
+
 
 T = TypeVar("T")
 
-class AbstractIndexedJson(Generic[T], metaclass=ABCMeta):
+class AbstractIndexedJson(Generic[T], CloseOnExit, metaclass=ABCMeta):
   @abstractmethod
   def close(self): ...
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
 
   @abstractmethod
   def write_index_jsonable_tuples(

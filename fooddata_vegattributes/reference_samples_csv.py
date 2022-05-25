@@ -1,7 +1,9 @@
-from contextlib import ExitStack
 import csv
 from os import PathLike
 from typing import Generator, Iterable, Optional, TypedDict, Union
+
+from .utils.close_on_exit import CloseOnExit
+from .utils.close_via_stack import CloseViaStack
 
 
 class ReferenceSampleDict(TypedDict):
@@ -10,7 +12,7 @@ class ReferenceSampleDict(TypedDict):
   known_failure: bool
   description: Optional[str]
 
-class ReferenceSamplesCsv:
+class ReferenceSamplesCsv(CloseViaStack, CloseOnExit):
   """
   CSV file containing reference samples.
 
@@ -25,7 +27,6 @@ class ReferenceSamplesCsv:
     csv_writer: Optional[csv.DictWriter]=None,
   ):
     self.file = file
-    self.close_stack = ExitStack()
     self.csv_reader = csv_reader
     self.csv_writer = csv_writer
 
@@ -52,15 +53,6 @@ class ReferenceSamplesCsv:
     obj = cls(file=file, csv_reader=csv_reader, csv_writer=csv_writer)
     obj.close_stack.enter_context(file)
     return obj
-
-  def close(self):
-    self.close_stack.close()
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
 
   def reset_and_write_reference_sample_dicts(
     self,

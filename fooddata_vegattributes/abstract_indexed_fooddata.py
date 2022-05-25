@@ -3,19 +3,14 @@ from typing import Iterable, Union
 
 from .fooddata import FoodDataDict
 from .utils.abstract_indexed_json import AbstractIndexedJson
+from .utils.close_on_exit import CloseOnExit
 
 
-class AbstractIndexedFoodDataJson(metaclass=ABCMeta):
+class AbstractIndexedFoodDataJson(CloseOnExit, metaclass=ABCMeta):
   indexed_json: AbstractIndexedJson
 
   @abstractmethod
   def close(self): ...
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
 
   def write_fooddata_dicts(self, ds: Iterable[FoodDataDict]):
     self.indexed_json.write_index_jsonable_tuples(

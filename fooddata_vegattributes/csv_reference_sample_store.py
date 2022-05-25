@@ -7,10 +7,11 @@ from .abstract_reference_sample_store import AbstractReferenceSampleStore
 from .category import Category
 from .reference_sample import ReferenceSample
 from .reference_samples_csv import ReferenceSamplesCsv, ReferenceSampleDict
+from .utils.close_on_exit import CloseOnExit
 
 
 @dataclass
-class CsvReferenceSampleStore(AbstractReferenceSampleStore):
+class CsvReferenceSampleStore(AbstractReferenceSampleStore, CloseOnExit):
   reference_samples_csv: ReferenceSamplesCsv
   food_store: AbstractFoodStore
   close_stack: ExitStack = field(init=False, default_factory=ExitStack)
@@ -30,12 +31,6 @@ class CsvReferenceSampleStore(AbstractReferenceSampleStore):
 
   def close(self):
     self.close_stack.close()
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
 
   def get_all(self) -> List[ReferenceSample]:
     fdc_ids_to_ds = {
