@@ -1,10 +1,12 @@
 import json
 
 from ..category import Category
+from ..categorization import categorize
 from ..food import Food
 from ..fooddata import load_survey_fooddata_dicts
 from ..utils.random import select_n_random
 from ..utils.terminal_ui import print_as_table
+from ..vegattributes_dict import vegattributes_dict_from_food
 
 from .default_paths import default_dir_paths
 
@@ -20,7 +22,8 @@ def main():
     category: [] for category in Category
   }
   for food in foods:
-    foods_in_categories[food.category].append(food)
+    category = categorize(food)
+    foods_in_categories[category].append(food)
 
   # stats
   print("numbers:")
@@ -35,7 +38,7 @@ def main():
     with output_path.open("w") as f:
       json.dump(
         [
-          food.as_fdc_like_dict(include_description=bool(debug))
+          vegattributes_dict_from_food(food, include_description=bool(debug))
           for food in foods
         ],
         f

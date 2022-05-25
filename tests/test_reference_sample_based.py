@@ -3,6 +3,7 @@ import pytest
 from fooddata_vegattributes.auto_indexed_fooddata_food_store import (
   auto_compressed_indexed_fooddata_food_store
 )
+from fooddata_vegattributes.categorization import categorize
 from fooddata_vegattributes.csv_reference_sample_store import (
   CsvReferenceSampleStore
 )
@@ -43,6 +44,6 @@ def pytest_generate_tests(metafunc):
       )
 
 def test_categorization(reference_sample):
-  category = reference_sample.food.category
+  category = categorize(reference_sample.food)
   expected_category = reference_sample.expected_category
   assert category == expected_category
