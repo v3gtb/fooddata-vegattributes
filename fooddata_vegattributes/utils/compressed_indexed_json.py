@@ -6,14 +6,14 @@ from os import PathLike
 from tarfile import (
   open as tarfile_open, TarFile, TarInfo
 )
-from typing import cast, Iterable, Union
+from typing import cast, Dict, Generic, Iterable, Set, Tuple, Union
 
-from .fooddata import FoodDataDict
+from .abstract_indexed_json import AbstractIndexedJson, T
 
 
-class CompressedIndexedFoodDataJson:
+class CompressedIndexedJson(AbstractIndexedJson, Generic[T]):
   """
-  Compressed, indexed (by FDC ID) FoodData JSON entries stored in a file.
+  Compressed, indexed JSON objects stored in a file.
   """
   def __init__(self, tarfile: TarFile):
     self.tarfile = tarfile
@@ -22,7 +22,7 @@ class CompressedIndexedFoodDataJson:
   @classmethod
   def from_path(
     cls, path: Union[PathLike, str, bytes], mode="r",
-  ) -> "CompressedIndexedFoodDataJson":
+  ) -> "CompressedIndexedJson":
     """
     Opens archive for reading or writing depending on the given mode.
 
@@ -46,23 +46,27 @@ class CompressedIndexedFoodDataJson:
   def __exit__(self, *args, **kwargs):
     self.close()
 
-  def write_fooddata_dicts(self, ds: Iterable[FoodDataDict]):
-    for d in ds:
-      fdc_id_str = str(d["fdcId"])
-      json_bytes = json.dumps(d).encode("utf-8")
-      tar_info = TarInfo(name=fdc_id_str)
+  def write_indexed_jsonables(self, indexed_jsonables: Dict[str, T]):
+    self.write_index_jsonable_tuples(indexed_jsonables.items())
+
+  def write_index_jsonable_tuples(
+    self, index_jsonable_tuples: Iterable[Tuple[str, T]]
+  ):
+    for index, jsonable in index_jsonable_tuples:
+      json_bytes = json.dumps(jsonable).encode("utf-8")
+      tar_info = TarInfo(name=index)
       tar_info.size = len(json_bytes)
       tar_info.mtime = int(datetime.now().timestamp())
       self.tarfile.addfile(tar_info, BytesIO(json_bytes))
 
-  def get_fooddata_dict_by_fdc_id(
-    self, fdc_id: Union[int, str]
-  ) -> FoodDataDict:
-    fdc_id_str = str(fdc_id)
-    file_for_index = self.tarfile.extractfile(fdc_id_str)
+  def get_jsonable_by_index(self, index: str) -> T:
+    file_for_index = self.tarfile.extractfile(index)
     if file_for_index is None:
-      raise KeyError(f"FDC ID {fdc_id} not in indexed JSON file")
-    return cast(FoodDataDict, json.load(file_for_index))
+      raise KeyError(f"Entry with key {index} not in indexed JSON file")
+    return cast(T, json.load(file_for_index))
 
-  def get_all_fdc_ids(self) -> Iterable[int]:
-    return [ int(x) for x in self.tarfile.getnames() ]
+  def get_all_indices(self) -> Set[str]:
+    return set(self.iter_all_indices())
+
+  def iter_all_indices(self) -> Iterable[str]:
+    return (x for x in self.tarfile.getnames())
