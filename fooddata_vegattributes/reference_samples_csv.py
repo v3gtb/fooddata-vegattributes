@@ -3,6 +3,8 @@ import csv
 from os import PathLike
 from typing import Generator, Iterable, Optional, TypedDict, Union
 
+from .utils.close_on_exit import CloseOnExit
+
 
 class ReferenceSampleDict(TypedDict):
   fdc_id: int
@@ -10,7 +12,7 @@ class ReferenceSampleDict(TypedDict):
   known_failure: bool
   description: Optional[str]
 
-class ReferenceSamplesCsv:
+class ReferenceSamplesCsv(CloseOnExit):
   """
   CSV file containing reference samples.
 
@@ -55,12 +57,6 @@ class ReferenceSamplesCsv:
 
   def close(self):
     self.close_stack.close()
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
 
   def reset_and_write_reference_sample_dicts(
     self,

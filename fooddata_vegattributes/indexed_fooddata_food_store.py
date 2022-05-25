@@ -6,10 +6,11 @@ from typing import Iterable, Mapping, Union
 from .abstract_food_store import AbstractFoodStore
 from .food import Food
 from .compressed_indexed_fooddata import CompressedIndexedFoodDataJson
+from .utils.close_on_exit import CloseOnExit
 
 
 @dataclass
-class IndexedFoodDataFoodStore(AbstractFoodStore):
+class IndexedFoodDataFoodStore(AbstractFoodStore, CloseOnExit):
   indexed_fooddata_json: CompressedIndexedFoodDataJson
   close_stack: ExitStack = field(init=False, default_factory=ExitStack)
 
@@ -24,12 +25,6 @@ class IndexedFoodDataFoodStore(AbstractFoodStore):
 
   def close(self):
     self.close_stack.close()
-
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
 
   def get_mapped_by_fdc_ids(
     self, fdc_ids: Iterable[int]
