@@ -1,13 +1,13 @@
-from contextlib import ExitStack
 from os import PathLike
 from typing import Union
 
 from .abstract_indexed_fooddata import AbstractIndexedFoodDataJson
 from .fooddata import FoodDataDict
 from .utils.compressed_indexed_json import CompressedIndexedJson
+from .utils.close_via_stack import CloseViaStack
 
 
-class CompressedIndexedFoodDataJson(AbstractIndexedFoodDataJson):
+class CompressedIndexedFoodDataJson(CloseViaStack, AbstractIndexedFoodDataJson):
   """
   Compressed, indexed (by FDC ID) FoodData JSON entries stored in a file.
   """
@@ -15,7 +15,6 @@ class CompressedIndexedFoodDataJson(AbstractIndexedFoodDataJson):
     self, compressed_indexed_json: CompressedIndexedJson[FoodDataDict]
   ):
     self.indexed_json = compressed_indexed_json
-    self.close_stack = ExitStack()
 
   @classmethod
   def from_path(
@@ -30,6 +29,3 @@ class CompressedIndexedFoodDataJson(AbstractIndexedFoodDataJson):
     obj = cls(compressed_indexed_json=compressed_indexed_json)
     obj.close_stack.enter_context(compressed_indexed_json)
     return obj
-
-  def close(self):
-    self.close_stack.close()

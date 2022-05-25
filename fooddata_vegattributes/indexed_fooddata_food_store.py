@@ -1,5 +1,4 @@
-from contextlib import ExitStack
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from os import PathLike
 from typing import Iterable, Mapping, Union
 
@@ -7,12 +6,12 @@ from .abstract_food_store import AbstractFoodStore
 from .food import Food
 from .compressed_indexed_fooddata import CompressedIndexedFoodDataJson
 from .utils.close_on_exit import CloseOnExit
+from .utils.close_via_stack import CloseViaStack
 
 
 @dataclass
-class IndexedFoodDataFoodStore(AbstractFoodStore, CloseOnExit):
+class IndexedFoodDataFoodStore(CloseViaStack, AbstractFoodStore, CloseOnExit):
   indexed_fooddata_json: CompressedIndexedFoodDataJson
-  close_stack: ExitStack = field(init=False, default_factory=ExitStack)
 
   @classmethod
   def from_path(
@@ -22,9 +21,6 @@ class IndexedFoodDataFoodStore(AbstractFoodStore, CloseOnExit):
     obj = cls(indexed_fooddata_json=indexed_fooddata_json)
     obj.close_stack.enter_context(indexed_fooddata_json)
     return obj
-
-  def close(self):
-    self.close_stack.close()
 
   def get_mapped_by_fdc_ids(
     self, fdc_ids: Iterable[int]

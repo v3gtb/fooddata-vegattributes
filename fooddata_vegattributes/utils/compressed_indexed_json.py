@@ -1,4 +1,3 @@
-from contextlib import ExitStack
 from io import BytesIO
 import json
 from datetime import datetime
@@ -9,15 +8,15 @@ from tarfile import (
 from typing import cast, Generic, Iterable, Tuple, Union
 
 from .abstract_indexed_json import AbstractIndexedJson, T
+from .close_via_stack import CloseViaStack
 
 
-class CompressedIndexedJson(AbstractIndexedJson, Generic[T]):
+class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
   """
   Compressed, indexed JSON objects stored in a file.
   """
   def __init__(self, tarfile: TarFile):
     self.tarfile = tarfile
-    self.close_stack = ExitStack()
 
   @classmethod
   def from_path(
@@ -36,9 +35,6 @@ class CompressedIndexedJson(AbstractIndexedJson, Generic[T]):
     obj = cls(tarfile=tarfile)
     obj.close_stack.enter_context(tarfile)
     return obj
-
-  def close(self):
-    self.close_stack.close()
 
   def write_index_jsonable_tuples(
     self, index_jsonable_tuples: Iterable[Tuple[str, T]]
