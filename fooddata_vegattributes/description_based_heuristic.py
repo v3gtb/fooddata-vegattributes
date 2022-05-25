@@ -195,7 +195,7 @@ all_tokens: Set[str] = reduce(
 
 all_tokens_finder = MaxiMunchTokenFinder(all_tokens)
 
-def categorize(description) -> Category:
+def categorize(description: str) -> Category:
   names_in_desc = all_tokens_finder.find_all(description.lower())
 
   found_token_categories = {
