@@ -40,12 +40,6 @@ class CompressedIndexedJson(AbstractIndexedJson, Generic[T]):
   def close(self):
     self.close_stack.close()
 
-  def __enter__(self):
-    return self
-
-  def __exit__(self, *args, **kwargs):
-    self.close()
-
   def write_index_jsonable_tuples(
     self, index_jsonable_tuples: Iterable[Tuple[str, T]]
   ):
