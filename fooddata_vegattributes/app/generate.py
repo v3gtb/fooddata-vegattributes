@@ -5,13 +5,16 @@ from ..auto_indexed_fooddata_food_store import (
   auto_compressed_indexed_fooddata_food_store
 )
 from ..category import Category
-from ..categorization import Categorizer
+from ..categorization import Categorization, Categorizer
 from ..csv_reference_sample_store import CsvReferenceSampleStore
 from ..food import Food
 from ..fooddata import load_survey_fooddata_dicts
 from ..utils.random import select_n_random
 from ..utils.terminal_ui import print_as_table
-from ..vegattributes_dict import vegattributes_dict_from_food
+from ..vegattributes_dict import (
+  vegattributes_dict_from_food,
+  verbose_vegattributes_dict_from_food,
+)
 
 from .default_paths import default_dir_paths
 
@@ -26,7 +29,7 @@ def main():
   foods_in_categories = {
     category: [] for category in Category
   }
-  food_categories: Dict[Food, Category] = {}
+  food_categorizations: Dict[Food, Categorization] = {}
   with auto_compressed_indexed_fooddata_food_store(
     compressed_indexed_json_path=(
       default_dir_paths.compressed_indexed_fooddata_json
@@ -40,9 +43,9 @@ def main():
   ) as reference_sample_store:
     categorizer = Categorizer(reference_sample_store=reference_sample_store)
     for food in foods:
-      category = categorizer.categorize(food)
-      foods_in_categories[category].append(food)
-      food_categories[food] = category
+      categorization = categorizer.categorize(food)
+      foods_in_categories[categorization.category].append(food)
+      food_categorizations[food] = categorization
 
   # stats
   print("numbers:")
@@ -52,15 +55,18 @@ def main():
 
   # export JSON
   for debug in ['debug_', '']:
+    dict_from_food_func = (
+      vegattributes_dict_from_food if not debug
+      else verbose_vegattributes_dict_from_food
+    )
     o = default_dir_paths.generated_vegattributes_json
     output_path = o.parent/(debug+o.name)
     with output_path.open("w") as f:
       json.dump(
         [
-          vegattributes_dict_from_food(
+          dict_from_food_func(
             food,
-            category=food_categories[food],
-            include_description=bool(debug),
+            categorization=food_categorizations[food],
           )
           for food in foods
         ],
