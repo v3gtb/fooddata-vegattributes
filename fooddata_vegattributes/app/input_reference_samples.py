@@ -64,7 +64,6 @@ def main():
       reference_sample = ReferenceSample(
         fdc_id=food.fdc_id,
         expected_category=category,
-        description=food.description
       )
       print("Appending...", end="")
       reference_sample_store.append(reference_sample)

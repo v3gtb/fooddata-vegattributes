@@ -18,19 +18,7 @@ def main():
       food_store=food_store,
     )
   ) as reference_sample_store:
-    reference_samples_by_fdc_id = (
-      reference_sample_store.get_all_mapped_by_fdc_ids()
-    )
-    foods_by_fdc_id = food_store.get_mapped_by_fdc_ids(
-      reference_samples_by_fdc_id.keys()
-    )
-    reference_sample_store.reference_samples_csv\
-    .reset_and_write_reference_sample_dicts(
-      {
-        "fdc_id": fdc_id,
-        "expected_category": reference_sample.expected_category.name,
-        "known_failure": reference_sample.known_failure,
-        "description": foods_by_fdc_id[fdc_id].description,
-      }
-      for fdc_id, reference_sample in reference_samples_by_fdc_id.items()
-    )
+    # simply read them out and write them back, the store automatically
+    # annotates with descriptions on write
+    reference_samples = list(reference_sample_store.iter_all())
+    reference_sample_store.reset_and_put_all(reference_samples)

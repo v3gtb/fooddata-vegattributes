@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from contextlib import AbstractContextManager
-from typing import Iterable, Mapping
+from typing import Iterable, Mapping, Sequence
 
 from .reference_sample import ReferenceSample
 
@@ -20,7 +20,7 @@ class AbstractReferenceSampleStore(AbstractContextManager, metaclass=ABCMeta):
 
   @abstractmethod
   def reset_and_put_all(
-    self, reference_samples: Iterable[ReferenceSample]
+    self, reference_samples: Sequence[ReferenceSample]
   ): ...
 
   @abstractmethod
