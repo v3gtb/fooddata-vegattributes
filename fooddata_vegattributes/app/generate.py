@@ -1,7 +1,12 @@
 import json
+from typing import Dict
 
+from ..auto_indexed_fooddata_food_store import (
+  auto_compressed_indexed_fooddata_food_store
+)
 from ..category import Category
-from ..categorization import categorize
+from ..categorization import Categorizer
+from ..csv_reference_sample_store import CsvReferenceSampleStore
 from ..food import Food
 from ..fooddata import load_survey_fooddata_dicts
 from ..utils.random import select_n_random
@@ -21,9 +26,23 @@ def main():
   foods_in_categories = {
     category: [] for category in Category
   }
-  for food in foods:
-    category = categorize(food)
-    foods_in_categories[category].append(food)
+  food_categories: Dict[Food, Category] = {}
+  with auto_compressed_indexed_fooddata_food_store(
+    compressed_indexed_json_path=(
+      default_dir_paths.compressed_indexed_fooddata_json
+    ),
+    fooddata_json_path=default_dir_paths.survey_fooddata_json,
+  ) as food_store, (
+    CsvReferenceSampleStore.from_path_and_food_store(
+      default_dir_paths.reference_samples_csv,
+      food_store,
+    )
+  ) as reference_sample_store:
+    categorizer = Categorizer(reference_sample_store=reference_sample_store)
+    for food in foods:
+      category = categorizer.categorize(food)
+      foods_in_categories[category].append(food)
+      food_categories[food] = category
 
   # stats
   print("numbers:")
@@ -38,7 +57,11 @@ def main():
     with output_path.open("w") as f:
       json.dump(
         [
-          vegattributes_dict_from_food(food, include_description=bool(debug))
+          vegattributes_dict_from_food(
+            food,
+            category=food_categories[food],
+            include_description=bool(debug),
+          )
           for food in foods
         ],
         f

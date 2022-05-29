@@ -15,17 +15,10 @@ def main():
   ) as food_store, (
     CsvReferenceSampleStore.from_path_and_food_store(
       default_dir_paths.reference_samples_csv,
-      food_store,
+      food_store=food_store,
     )
   ) as reference_sample_store:
-    reference_samples = reference_sample_store.get_all()
-    reference_sample_store.reference_samples_csv\
-    .reset_and_write_reference_sample_dicts(
-      {
-        "fdc_id": reference_sample.food.fdc_id,
-        "expected_category": reference_sample.expected_category.name,
-        "known_failure": reference_sample.known_failure,
-        "description": reference_sample.food.description,
-      }
-      for reference_sample in reference_samples
-    )
+    # simply read them out and write them back, the store automatically
+    # annotates with descriptions on write
+    reference_samples = list(reference_sample_store.iter_all())
+    reference_sample_store.reset_and_put_all(reference_samples)
