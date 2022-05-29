@@ -47,7 +47,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     try:
       with self.zipfile.open(index) as file_for_index:
         return cast(T, json.load(file_for_index))
-    except FileNotFoundError as e:
+    except KeyError as e:
       raise KeyError(f"Entry with key {index} not in indexed JSON file") from e
 
   def iter_all_indices(self) -> Iterable[str]:
