@@ -1163,6 +1163,7 @@
 - Frankfurter or hot dog sandwich, with chili, on whole grain white bun (fdcId: [1100008](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1100008))
 - Frankfurter or hot dog sandwich, with chili, on whole wheat bread (fdcId: [1100012](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1100012))
 - Frankfurter or hot dog sandwich, with chili, on whole wheat bun (fdcId: [1100007](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1100007))
+- Frankfurter or hot dog sandwich, with meatless chili, on multigrain bun (fdcId: [1100019](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1100019))
 - Frankfurter or hot dog, NFS (fdcId: [1098669](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1098669))
 - Frankfurter or hot dog, beef (fdcId: [1098671](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1098671))
 - Frankfurter or hot dog, beef and pork (fdcId: [1098672](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1098672))

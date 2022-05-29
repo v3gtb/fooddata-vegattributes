@@ -223,6 +223,7 @@
 - Rice, white, with vegetables, soy-based sauce, fat added (fdcId: [1102507](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1102507))
 - Rice, wild, 100%, cooked, NS as to fat (fdcId: [1101644](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101644))
 - Rice, wild, 100%, cooked, fat added (fdcId: [1101646](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101646))
+- Rutabaga, cooked (fdcId: [1103566](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103566))
 - Sandwich, NFS (fdcId: [1099753](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1099753))
 - Seaweed, cooked, fat added (fdcId: [1103576](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103576))
 - Snowpea, fresh, cooked, fat added (fdcId: [1103572](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103572))
