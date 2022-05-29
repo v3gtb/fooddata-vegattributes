@@ -1,19 +1,40 @@
 import json
 from pathlib import Path
+import pytest
+from typing import List
 from unittest.mock import patch
 
 from fooddata_vegattributes.app.generate import main
+from fooddata_vegattributes.fooddata import FoodDataDict
 
-from .conftest import FakeFoodDataJson
+from .conftest import FakeFoodDataJson, FakeReferenceSampleCsv
 
+
+@pytest.fixture
+def fake_food_data() -> List[FoodDataDict]:
+  return [
+    {"fdcId": 123456, "description": "Some food, unsalted"},
+    {"fdcId": 654321, "description": "Some m e a t y food, salted"},
+  ]
+
+@pytest.fixture
+def fake_reference_sample_dicts():
+  return [
+    dict(
+      fdc_id=654321,
+      expected_category="OMNI",
+      known_failure=False,
+      description=None
+    ),
+  ]
 
 def test_generate_vegattributes_json(
   fake_fooddata_json: FakeFoodDataJson,
+  fake_reference_samples_csv: FakeReferenceSampleCsv,
   tmp_path: Path,
 ):
   # shortcuts
   json_path = fake_fooddata_json.path
-  fooddata_dict = fake_fooddata_json.food_data_dicts[0]
 
   # patches
   with patch(
@@ -24,6 +45,10 @@ def test_generate_vegattributes_json(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".compressed_indexed_fooddata_json",
     tmp_path/"compressed_indexed_fooddata.json.tar.xz",
+  ), patch(
+    "fooddata_vegattributes.app.default_paths.default_dir_paths"
+    ".reference_samples_csv",
+    tmp_path/"reference_samples.csv",
   ), patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".generated_vegattributes_json",
@@ -37,10 +62,14 @@ def test_generate_vegattributes_json(
     generated_vegattributes_dicts = json.load(f)
 
   # checks
-  assert len(generated_vegattributes_dicts) == 1
+  assert len(generated_vegattributes_dicts) == 2
   assert generated_vegattributes_dicts == [
     {
-      "fdcId": fooddata_dict["fdcId"],
+      "fdcId": 123456,
       "vegCategory": "UNCATEGORIZED",
-    }
+    },
+    {
+      "fdcId": 654321,
+      "vegCategory": "OMNI",
+    },
   ]
