@@ -1,6 +1,6 @@
 from typing import cast, TypedDict
 
-from .categorization import categorize
+from .category import Category
 from .food import Food
 
 
@@ -10,6 +10,7 @@ class VegAttributesDict(TypedDict):
 
 def vegattributes_dict_from_food(
   food: Food,
+  category: Category,
   include_description=False
 ) -> VegAttributesDict:
   return cast(
@@ -19,6 +20,6 @@ def vegattributes_dict_from_food(
         "description": food.description
       } if include_description else {} ),
       "fdcId": food.fdc_id,
-      "vegCategory": categorize(food).name,
+      "vegCategory": category.name,
     },
   )

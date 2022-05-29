@@ -62,7 +62,7 @@ def main():
       category = shortcut_to_category[inp]
       print(category.name)
       reference_sample = ReferenceSample(
-        food=food,
+        fdc_id=food.fdc_id,
         expected_category=category,
         description=food.description
       )

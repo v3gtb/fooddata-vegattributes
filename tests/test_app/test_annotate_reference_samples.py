@@ -5,11 +5,11 @@ import pytest
 from unittest.mock import patch
 from typing import List
 
+from fooddata_vegattributes.app.annotate_reference_samples import main
 from fooddata_vegattributes.reference_samples_csv import (
   ReferenceSamplesCsv,
   ReferenceSampleDict,
 )
-from fooddata_vegattributes.app.annotate_reference_samples import main
 
 from .conftest import FakeFoodDataJson
 
