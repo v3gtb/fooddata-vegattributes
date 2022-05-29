@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from logging import getLogger
 from os import PathLike
 from typing import Callable, Iterable, Union
-from tarfile import ReadError as TarFileReadError
+from zipfile import BadZipFile
 
 from .fooddata import FoodDataDict
 from .compressed_indexed_fooddata import CompressedIndexedFoodDataJson
@@ -22,7 +22,7 @@ def auto_compressed_indexed_fooddata_json(
       )
       logger.info("indexed JSON archive found")
       break
-    except (FileNotFoundError, KeyError, TarFileReadError):
+    except (FileNotFoundError, BadZipFile):
       if attempt > 0:
         raise
       logger.info("indexed JSON archive missing or malformed, (re)generating")

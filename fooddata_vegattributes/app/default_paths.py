@@ -16,7 +16,7 @@ default_filenames = FileNames(
     "FoodData_Central_survey_food_json_2021-10-28.json"
   ),
   compressed_indexed_fooddata_json=(
-    "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz"
+    "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.zip"
   ),
   reference_samples_csv="reference_samples.csv",
   generated_vegattributes_json=(
