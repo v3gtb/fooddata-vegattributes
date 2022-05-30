@@ -22,11 +22,8 @@ improve the accuracy.
 
 ## Supported datasets
 
-Attributes are provided for foods in the FNDDS ("Survey") and SR Legacy
-datasets. Data for both datasets are provided together in one file as foods are
-uniquely identified by their FDC ID and the file size is small anyway. As of
-now there are no plans to extend this project to the other FDC datasets, but
-who knows.
+Attributes are provided for foods in the FNDDS ("Survey") dataset only. As of
+now there are no plans to extend this to the other datasets, but who knows.
 
 ## Download and file format
 
@@ -42,8 +39,7 @@ It is shipped as a JSON file containing a list of entries of the form
 }
 ```
 
-where `CATEGORY` is one of the categories listed in the section below and
-`fdcId` corresponds to the field of the same name in the FDC datasets.
+where `CATEGORY` is one of the categories listed in the section below.
 
 The script used to generate this data via the aforementioned heuristic can be
 found in the [GitHub

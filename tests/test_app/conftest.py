@@ -19,46 +19,19 @@ class FakeFoodDataJson:
   food_data_dicts: List[FoodDataDict]
   path: Path
 
-@dataclass
-class FakeFoodDataJsons:
-  survey: FakeFoodDataJson
-  sr_legacy: FakeFoodDataJson
-
 @pytest.fixture
 def fake_food_data():
   return [{ "fdcId": 123456, "description": "A fake food, salted" }]
 
 @pytest.fixture
-def fake_survey_fooddata_json(
-  tmp_path: Path, fake_food_data: List[FoodDataDict]
-):
-  json_path = tmp_path/"fake_survey_fooddata.json"
+def fake_fooddata_json(tmp_path: Path, fake_food_data: List[FoodDataDict]):
+  json_path = tmp_path/"fake_fooddata.json"
 
   with json_path.open("w") as f:
     json.dump({ "SurveyFoods": fake_food_data }, f)
 
   yield FakeFoodDataJson(food_data_dicts=fake_food_data, path=json_path)
 
-@pytest.fixture
-def fake_sr_legacy_fooddata_json(tmp_path: Path):
-  json_path = tmp_path/"fake_sr_legacy_fooddata.json"
-
-  # TODO make non-empty once randomness in input test has been taken care of
-  fake_food_data = []
-
-  with json_path.open("w") as f:
-    json.dump({ "SRLegacyFoods": fake_food_data }, f)
-
-  yield FakeFoodDataJson(food_data_dicts=fake_food_data, path=json_path)
-
-@pytest.fixture
-def fake_fooddata_jsons(
-  fake_survey_fooddata_json: FakeFoodDataJson,
-  fake_sr_legacy_fooddata_json: FakeFoodDataJson,
-):
-  return FakeFoodDataJsons(
-    survey=fake_survey_fooddata_json, sr_legacy=fake_sr_legacy_fooddata_json
-  )
 
 # reference samples
 

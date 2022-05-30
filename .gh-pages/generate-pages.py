@@ -3,12 +3,11 @@ import json
 from os import environ
 from pathlib import Path
 
-from fooddata_vegattributes.app.default_paths import default_dir_paths
 from fooddata_vegattributes.category import Category
 from fooddata_vegattributes.fdc_app import get_fdc_app_details_url
 
 json_path = (
-  f"debug_{default_dir_paths.generated_vegattributes_json}"
+  "debug_VegAttributes_for_FoodData_Central_survey_food_json_2021-10-28.json"
 )
 
 def main():

@@ -7,7 +7,6 @@ from typing import Generic, Type, TypeVar
 @dataclass
 class FileNames:
   survey_fooddata_json: str
-  sr_legacy_fooddata_json: str
   compressed_indexed_fooddata_json: str
   reference_samples_csv: str
   generated_vegattributes_json: str
@@ -16,17 +15,12 @@ default_filenames = FileNames(
   survey_fooddata_json=(
     "FoodData_Central_survey_food_json_2021-10-28.json"
   ),
-  sr_legacy_fooddata_json=(
-    "FoodData_Central_sr_legacy_food_json_2021-10-28.json"
-  ),
   compressed_indexed_fooddata_json=(
-    "indexed_FoodData_Central_survey_and_sr_legacy_food_json_2021-10-28"
-    ".jsons.zip"
+    "indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.zip"
   ),
   reference_samples_csv="reference_samples.csv",
   generated_vegattributes_json=(
-    "VegAttributes_for_FoodData_Central_survey_and_sr_legacy_food_json"
-    "_2021-10-28.json"
+    "VegAttributes_for_FoodData_Central_survey_food_json_2021-10-28.json"
   ),
 )
 
@@ -36,14 +30,12 @@ class DirRelativePaths:
   Paths relative to some kind of project/work/data/cache directory.
   """
   survey_fooddata_json: Path
-  sr_legacy_fooddata_json: Path
   compressed_indexed_fooddata_json: Path
   reference_samples_csv: Path
   generated_vegattributes_json: Path
 
 default_dir_relative_paths = DirRelativePaths(
   survey_fooddata_json=Path(default_filenames.survey_fooddata_json),
-  sr_legacy_fooddata_json=Path(default_filenames.sr_legacy_fooddata_json),
   compressed_indexed_fooddata_json=Path(
     default_filenames.compressed_indexed_fooddata_json
   ),
@@ -81,7 +73,6 @@ class DirPaths(AbstractDirPaths):
   dir_relative_paths: DirRelativePaths
 
   survey_fooddata_json = CombinedPath()
-  sr_legacy_fooddata_json = CombinedPath()
   compressed_indexed_fooddata_json = CombinedPath()
   reference_samples_csv = CombinedPath()
   generated_vegattributes_json = CombinedPath()

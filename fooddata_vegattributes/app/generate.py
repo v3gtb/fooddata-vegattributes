@@ -8,10 +8,7 @@ from ..category import Category
 from ..categorization import Categorization, Categorizer
 from ..csv_reference_sample_store import CsvReferenceSampleStore
 from ..food import Food
-from ..fooddata import (
-  load_survey_fooddata_dicts,
-  load_sr_legacy_fooddata_dicts,
-)
+from ..fooddata import load_survey_fooddata_dicts
 from ..utils.random import select_n_random
 from ..utils.terminal_ui import print_as_table
 from ..vegattributes_dict import (
@@ -23,10 +20,8 @@ from .default_paths import default_dir_paths
 
 
 def main():
-  food_ds = (
-    load_survey_fooddata_dicts(default_dir_paths.survey_fooddata_json) +
-    load_sr_legacy_fooddata_dicts(default_dir_paths.sr_legacy_fooddata_json)
-  )
+  input_path = default_dir_paths.survey_fooddata_json
+  food_ds = load_survey_fooddata_dicts(input_path)
 
   foods = [Food.from_fdc_food_dict(food_d) for food_d in food_ds]
 
@@ -39,8 +34,7 @@ def main():
     compressed_indexed_json_path=(
       default_dir_paths.compressed_indexed_fooddata_json
     ),
-    survey_fooddata_json_path=default_dir_paths.survey_fooddata_json,
-    sr_legacy_fooddata_json_path=default_dir_paths.sr_legacy_fooddata_json,
+    fooddata_json_path=default_dir_paths.survey_fooddata_json,
   ) as food_store, (
     CsvReferenceSampleStore.from_path_and_food_store(
       default_dir_paths.reference_samples_csv,
