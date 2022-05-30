@@ -10,22 +10,28 @@ from fooddata_vegattributes.reference_samples_csv import (
 )
 from fooddata_vegattributes.app.input_reference_samples import main
 
-from .conftest import FakeFoodDataJson
+from .conftest import FakeFoodDataJson, FakeFoodDataJsons
 
 
 @dataclass
 class PatchedPaths:
-  fake_fooddata_json: FakeFoodDataJson
+  fake_survey_fooddata_json: FakeFoodDataJson
   csv_path: Path
 
 @pytest.fixture
-def patched_paths(fake_fooddata_json: FakeFoodDataJson, tmp_path: Path):
+def patched_paths(fake_fooddata_jsons: FakeFoodDataJsons, tmp_path: Path):
   csv_path = tmp_path/"reference_samples.csv"
-  json_path = fake_fooddata_json.path
+  fake_survey_fooddata_json = fake_fooddata_jsons.survey
+  survey_json_path = fake_fooddata_jsons.survey.path
+  sr_legacy_json_path = fake_fooddata_jsons.sr_legacy.path
   with patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".survey_fooddata_json",
-    json_path,
+    survey_json_path,
+  ), patch(
+    "fooddata_vegattributes.app.default_paths.default_dir_paths"
+    ".sr_legacy_fooddata_json",
+    sr_legacy_json_path,
   ), patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".reference_samples_csv",
@@ -36,7 +42,7 @@ def patched_paths(fake_fooddata_json: FakeFoodDataJson, tmp_path: Path):
     tmp_path/"compressed_indexed_fooddata.json.tar.xz",
   ):
     yield PatchedPaths(
-      fake_fooddata_json=fake_fooddata_json,
+      fake_survey_fooddata_json=fake_survey_fooddata_json,
       csv_path=csv_path
     )
 
@@ -46,7 +52,7 @@ def test_input_reference_samples(
 ):
   # shortcuts
   csv_path = patched_paths.csv_path
-  fooddata_dict = patched_paths.fake_fooddata_json.food_data_dicts[0]
+  fooddata_dict = patched_paths.fake_survey_fooddata_json.food_data_dicts[0]
 
   # patches
   with patch(
