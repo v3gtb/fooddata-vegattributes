@@ -1,14 +1,11 @@
 import random
 
-from ..auto_indexed_fooddata_food_store import (
-  auto_compressed_indexed_fooddata_food_store
-)
-from ..csv_reference_sample_store import CsvReferenceSampleStore
 from ..category import Category
 from ..fdc_app import get_fdc_app_details_url
 from ..reference_sample import ReferenceSample
 
-from .default_paths import default_dir_paths
+from .with_default_paths import default_food_and_reference_sample_stores
+
 
 shortcut_to_category = {
   "veg": Category.VEGAN,
@@ -21,19 +18,9 @@ shortcut_to_category = {
 }
 
 def main():
-  with auto_compressed_indexed_fooddata_food_store(
-    compressed_indexed_json_path=(
-      default_dir_paths.compressed_indexed_fooddata_json
-    ),
-    survey_fooddata_json_path=default_dir_paths.survey_fooddata_json,
-    sr_legacy_fooddata_json_path=default_dir_paths.sr_legacy_fooddata_json,
-  ) as food_store, (
-    CsvReferenceSampleStore.from_path_and_food_store(
-      default_dir_paths.reference_samples_csv,
-      food_store,
-      create=True,
-    )
-  ) as reference_sample_store:
+  with default_food_and_reference_sample_stores(create_ref_store=True) as (
+    food_store, reference_sample_store
+  ):
     fdc_ids_with_ref = set(reference_sample_store.iter_all_fdc_ids())
     fdc_ids_without_ref = [
       fdc_id for fdc_id in
