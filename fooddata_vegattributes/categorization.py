@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import auto
-from typing import Dict, Optional
+from typing import Dict, Mapping, Optional
 
 from . import description_based_heuristic
 from .abstract_reference_sample_store import AbstractReferenceSampleStore
@@ -18,6 +18,9 @@ class CategorizationSource(AutoStrEnum):
 class Categorization:
   category: Category
   source: CategorizationSource
+  discrepancies: Mapping[CategorizationSource, Category] = field(
+    default_factory=dict
+  )
 
 @dataclass
 class Categorizer:
@@ -34,13 +37,23 @@ class Categorizer:
 
   def categorize(self, food: Food) -> Categorization:
     ref = self._reference_samples_by_fdc_id.get(food.fdc_id)
+    description_based_category = (
+      description_based_heuristic.categorize(food.description)
+    )
+    discrepancies = {}
     if ref is not None:
       category = ref.expected_category
       source = CategorizationSource.REFERENCE
+      if category != description_based_category:
+        discrepancies = {
+          CategorizationSource.HEURISTIC: description_based_category
+        }
     else:
       category = description_based_heuristic.categorize(food.description)
       source = CategorizationSource.HEURISTIC
-    return Categorization(category=category, source=source)
+    return Categorization(
+      category=category, source=source, discrepancies=discrepancies
+    )
 
   @property
   def _reference_samples_by_fdc_id(self):
