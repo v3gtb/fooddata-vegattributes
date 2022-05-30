@@ -1,12 +1,6 @@
 import pytest
 
-from fooddata_vegattributes.app.default_paths import default_dir_paths
-from fooddata_vegattributes.auto_indexed_fooddata_food_store import (
-  auto_compressed_indexed_fooddata_food_store
-)
-from fooddata_vegattributes.csv_reference_sample_store import (
-  CsvReferenceSampleStore
-)
+from fooddata_vegattributes.app.with_default_paths import default_food_and_reference_sample_stores
 from fooddata_vegattributes.description_based_heuristic import categorize
 from fooddata_vegattributes.food import Food
 from fooddata_vegattributes.reference_sample import ReferenceSample
@@ -21,18 +15,9 @@ def suitable_name(s: str):
   return s
 
 def pytest_generate_tests(metafunc):
-  with auto_compressed_indexed_fooddata_food_store(
-    compressed_indexed_json_path=(
-      default_dir_paths.compressed_indexed_fooddata_json
-    ),
-    survey_fooddata_json_path=default_dir_paths.survey_fooddata_json,
-    sr_legacy_fooddata_json_path=default_dir_paths.sr_legacy_fooddata_json,
-  ) as food_store, (
-    CsvReferenceSampleStore.from_path_and_food_store(
-      default_dir_paths.reference_samples_csv,
-      food_store,
-    )
-  ) as reference_sample_store:
+  with default_food_and_reference_sample_stores() as (
+    food_store, reference_sample_store
+  ):
     reference_samples_by_fdc_id = (
       reference_sample_store.get_all_mapped_by_fdc_ids()
     )
