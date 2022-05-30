@@ -3,10 +3,14 @@ name: Generate and deploy
 on: [push]
 
 env:
-  FOODDATA_ZIP_URL: 'https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_json_2021-10-28.zip'
-  FOODDATA_ZIP_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.zip'
-  FOODDATA_JSON_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.json'
+  SURVEY_FOODDATA_ZIP_URL: 'https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_json_2021-10-28.zip'
+  SURVEY_FOODDATA_ZIP_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.zip'
+  SURVEY_FOODDATA_JSON_FILENAME: 'FoodData_Central_survey_food_json_2021-10-28.json'
+  SR_LEGACY_FOODDATA_ZIP_URL: 'https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2021-10-28.zip'
+  SR_LEGACY_FOODDATA_ZIP_FILENAME: 'FoodData_Central_sr_legacy_food_json_2021-10-28.zip'
+  SR_LEGACY_FOODDATA_JSON_FILENAME: 'FoodData_Central_sr_legacy_food_json_2021-10-28.json'
   FOODDATA_DIR: fooddata
+  GENERATED_JSON_FILENAME: 'VegAttributes_for_FoodData_Central_survey_and_sr_legacy_food_json_2021-10-28.json'
 
 jobs:
   generate-and-test-and-publish:
@@ -22,27 +26,33 @@ jobs:
         with:
           path: |
             ${{ env.FOODDATA_DIR }}
-            indexed_FoodData_Central_survey_food_json_2021-10-28.jsons.tar.xz
-          key: v1-${{ env.FOODDATA_ZIP_URL }}
+            indexed_FoodData_Central_survey_and_sr_legacy_food_json_2021-10-28.jsons.tar.xz
+          key: v1-${{ env.SURVEY_FOODDATA_ZIP_URL }}-${{ env.SR_LEGACY_FOODDATA_ZIP_URL }}
       - name: Download USDA FDC FoodData
         if: steps.download.outputs.cache-hit != 'true'
         run: >
           (
             mkdir -p "$FOODDATA_DIR" &&
             cd "$FOODDATA_DIR" &&
-            if [ ! -f "$FOODDATA_ZIP_FILENAME" ]; then
-              curl "$FOODDATA_ZIP_URL" -o "$FOODDATA_ZIP_FILENAME" &&
-              unzip "$FOODDATA_ZIP_FILENAME";
+            if [ ! -f "$SURVEY_FOODDATA_ZIP_FILENAME" ]; then
+              curl "$SURVEY_FOODDATA_ZIP_URL" -o "$SURVEY_FOODDATA_ZIP_FILENAME" &&
+              unzip "$SURVEY_FOODDATA_ZIP_FILENAME";
+            fi
+            if [ ! -f "$SR_LEGACY_FOODDATA_ZIP_FILENAME" ]; then
+              curl "$SR_LEGACY_FOODDATA_ZIP_URL" -o "$SR_LEGACY_FOODDATA_ZIP_FILENAME" &&
+              unzip "$SR_LEGACY_FOODDATA_ZIP_FILENAME";
             fi
           )
       - name: Set up symlinks for input files
-        run: ln -s "$FOODDATA_DIR/$FOODDATA_JSON_FILENAME"
+        run: |
+          ln -s "$FOODDATA_DIR/$SURVEY_FOODDATA_JSON_FILENAME"
+          ln -s "$FOODDATA_DIR/$SR_LEGACY_FOODDATA_JSON_FILENAME"
       - name: Generate VegAttributes JSON
         run: fooddata-vegattributes generate
-      - name: Write file name of generated JSON to env
+      - name: Write file name of generated JSON to env (TODO fix: use cmd output)
         run: >
           echo
-          "GENERATED_JSON_FILENAME=VegAttributes_for_$FOODDATA_JSON_FILENAME"
+          "GENERATED_JSON_FILENAME=$GENERATED_JSON_FILENAME"
           >> $GITHUB_ENV
       - name: Upload generated JSON(s) as GitHub artifact
         uses: actions/upload-artifact@v3
