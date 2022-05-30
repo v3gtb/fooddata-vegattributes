@@ -1,6 +1,6 @@
 ## About
 
-The aim of this project is to provide free (as in freedom) add-on data for the
+The aim of this project is to provide free and open add-on data for the
 [USDA's FDC FoodData datasets](https://fdc.nal.usda.gov/download-datasets.html)
 containing attributes that categorize foods as vegan, vegetarian, or neither.
 
