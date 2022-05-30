@@ -7,7 +7,7 @@ from unittest.mock import patch
 from fooddata_vegattributes.app.generate import main
 from fooddata_vegattributes.fooddata import FoodDataDict
 
-from .conftest import FakeFoodDataJson, FakeReferenceSampleCsv
+from .conftest import FakeFoodDataJsons, FakeReferenceSampleCsv
 
 
 @pytest.fixture
@@ -29,18 +29,23 @@ def fake_reference_sample_dicts():
   ]
 
 def test_generate_vegattributes_json(
-  fake_fooddata_json: FakeFoodDataJson,
+  fake_fooddata_jsons: FakeFoodDataJsons,
   fake_reference_samples_csv: FakeReferenceSampleCsv,
   tmp_path: Path,
 ):
   # shortcuts
-  json_path = fake_fooddata_json.path
+  survey_json_path = fake_fooddata_jsons.survey.path
+  sr_legacy_json_path = fake_fooddata_jsons.sr_legacy.path
 
   # patches
   with patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".survey_fooddata_json",
-    json_path,
+    survey_json_path,
+  ), patch(
+    "fooddata_vegattributes.app.default_paths.default_dir_paths"
+    ".sr_legacy_fooddata_json",
+    sr_legacy_json_path,
   ), patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".compressed_indexed_fooddata_json",

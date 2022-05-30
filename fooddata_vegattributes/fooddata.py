@@ -20,3 +20,10 @@ def load_survey_fooddata_dicts(
   with open(path) as f:
     food_ds = json.load(f)["SurveyFoods"]
   return cast(List[FoodDataDict], food_ds)
+
+def load_sr_legacy_fooddata_dicts(
+  path: Union[PathLike, str, bytes]
+) -> List[FoodDataDict]:
+  with open(path) as f:
+    food_ds = json.load(f)["SRLegacyFoods"]
+  return cast(List[FoodDataDict], food_ds)

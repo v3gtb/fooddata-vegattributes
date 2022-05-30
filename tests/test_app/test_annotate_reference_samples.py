@@ -5,18 +5,19 @@ from unittest.mock import patch
 from fooddata_vegattributes.app.annotate_reference_samples import main
 from fooddata_vegattributes.reference_samples_csv import ReferenceSamplesCsv
 
-from .conftest import FakeFoodDataJson
+from .conftest import FakeFoodDataJsons
 
 
 def test_annotate_reference_samples(
-  fake_fooddata_json: FakeFoodDataJson,
+  fake_fooddata_jsons: FakeFoodDataJsons,
   fake_reference_samples_csv_no_description: Path,
   tmp_path: Path,
 ):
   # shortcuts
-  json_path = fake_fooddata_json.path
+  survey_json_path = fake_fooddata_jsons.survey.path
+  sr_legacy_json_path = fake_fooddata_jsons.sr_legacy.path
   csv_path = fake_reference_samples_csv_no_description.path
-  fooddata_dict = fake_fooddata_json.food_data_dicts[0]
+  fooddata_dict = fake_fooddata_jsons.survey.food_data_dicts[0]
   original_ref_sample_dict = (
     fake_reference_samples_csv_no_description.reference_sample_dicts[0]
   )
@@ -25,7 +26,11 @@ def test_annotate_reference_samples(
   with patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".survey_fooddata_json",
-    json_path,
+    survey_json_path,
+  ), patch(
+    "fooddata_vegattributes.app.default_paths.default_dir_paths"
+    ".sr_legacy_fooddata_json",
+    sr_legacy_json_path,
   ), patch(
     "fooddata_vegattributes.app.default_paths.default_dir_paths"
     ".reference_samples_csv",
