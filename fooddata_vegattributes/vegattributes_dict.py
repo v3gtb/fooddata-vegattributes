@@ -1,6 +1,7 @@
-from typing import cast, TypedDict
+from collections import ChainMap
+from typing import cast, Dict, TypedDict
 
-from .category import Category
+from .categorization import Categorization
 from .food import Food
 
 
@@ -8,18 +9,42 @@ class VegAttributesDict(TypedDict):
   fdcId: int
   vegCategory: str
 
+class VerboseVegAttributesDict(VegAttributesDict, total=False):
+  description: str
+  vegCategorySource: str
+  vegCategoryDiscrepancies: Dict[str, str]
+
 def vegattributes_dict_from_food(
   food: Food,
-  category: Category,
-  include_description=False
+  categorization: Categorization,
 ) -> VegAttributesDict:
   return cast(
     VegAttributesDict,
     {
-      **({
-        "description": food.description
-      } if include_description else {} ),
       "fdcId": food.fdc_id,
-      "vegCategory": category.name,
+      "vegCategory": categorization.category.name,
     },
+  )
+
+def verbose_vegattributes_dict_from_food(
+  food: Food,
+  categorization: Categorization,
+) -> VerboseVegAttributesDict:
+  return cast(
+    VerboseVegAttributesDict,
+    dict(ChainMap(
+      {
+        "description": food.description,
+        "vegCategorySource": categorization.source.name,
+        **(
+          {
+            "vegCategoryDiscrepancies": {
+              source.name: category.name
+              for source, category in categorization.discrepancies.items()
+            }
+          } if categorization.discrepancies else {}
+        ),
+      },
+      cast(dict, vegattributes_dict_from_food(food, categorization)),
+    ))
   )

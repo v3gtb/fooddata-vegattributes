@@ -33,10 +33,22 @@ def main():
       list_md_path = (lists_output_dir/md_name).with_suffix(".md")
       with list_md_path.open("w") as list_f:
         for food in sorted(foods, key=lambda x: x["description"]):
-          fdc_id, description = food["fdcId"], food["description"]
-          details_url = get_fdc_app_details_url(fdc_id)
+          fdc_id = food["fdcId"]
+          description = food["description"]
+          source = food["vegCategorySource"].lower()
+          comma_sep_discrepancies = ", ".join(
+            f"{disc_source.lower()}: {disc_category.lower()}"
+            for disc_source, disc_category in
+            food.get("vegCategoryDiscrepancies", {}).items()
+          )
+          optional_discrepancies = (
+            f'; <span style="color: red;">{comma_sep_discrepancies}</span>'
+            if comma_sep_discrepancies else ''
+          )
+          url = get_fdc_app_details_url(fdc_id)
           list_f.write(
-            f"- {description} (fdcId: [{fdc_id}]({details_url}))\n"
+            f"- {description} (fdcId: [{fdc_id}]({url}); "
+            f"via {source}{optional_discrepancies})\n"
           )
 
 
