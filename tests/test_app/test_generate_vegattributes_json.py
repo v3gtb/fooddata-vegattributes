@@ -13,8 +13,16 @@ from .conftest import FakeFoodDataJsons, FakeReferenceSampleCsv
 @pytest.fixture
 def fake_food_data() -> List[FoodDataDict]:
   return [
-    {"fdcId": 123456, "description": "Some food, unsalted"},
-    {"fdcId": 654321, "description": "Some m e a t y food, salted"},
+    {
+      "fdcId": 123456,
+      "description": "Some food, unsalted",
+      "inputFoods": [],
+    },
+    {
+      "fdcId": 654321,
+      "description": "Some m e a t y food, salted",
+      "inputFoods": [],
+    },
   ]
 
 @pytest.fixture

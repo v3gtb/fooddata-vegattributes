@@ -1,7 +1,12 @@
 import pytest
 
-from fooddata_vegattributes.app.with_default_paths import default_food_and_reference_sample_stores
-from fooddata_vegattributes.description_based_heuristic import categorize
+from fooddata_vegattributes.app.with_default_paths import (
+  default_food_and_reference_sample_stores
+)
+from fooddata_vegattributes import combined_heuristic
+from fooddata_vegattributes import description_based_heuristic
+from fooddata_vegattributes import ingredient_based_heuristic
+from fooddata_vegattributes.categorization import Categorizer
 from fooddata_vegattributes.food import Food
 from fooddata_vegattributes.reference_sample import ReferenceSample
 
@@ -49,7 +54,41 @@ def pytest_generate_tests(metafunc):
         ]
       )
 
-def test_categorization(reference_sample: ReferenceSample, food: Food):
-  category = categorize(food.description)
+def test_description_based_heuristic(
+  reference_sample: ReferenceSample, food: Food
+):
+  category = description_based_heuristic.categorize(food.description)
+  expected_category = reference_sample.expected_category
+  assert category == expected_category
+
+def test_ingredient_based_heuristic(
+  reference_sample: ReferenceSample, food: Food
+):
+  with default_food_and_reference_sample_stores() as (
+    food_store, reference_sample_store
+  ):
+    categorizer = Categorizer(
+      food_store=food_store,
+      reference_sample_store=reference_sample_store
+    )
+    category = ingredient_based_heuristic.categorize(
+      food, categorizer=categorizer, food_store=food_store
+    )
+  expected_category = reference_sample.expected_category
+  assert category == expected_category
+
+def test_combined_heuristic(
+  reference_sample: ReferenceSample, food: Food
+):
+  with default_food_and_reference_sample_stores() as (
+    food_store, reference_sample_store
+  ):
+    categorizer = Categorizer(
+      food_store=food_store,
+      reference_sample_store=reference_sample_store
+    )
+    category = combined_heuristic.categorize(
+      food, categorizer=categorizer, food_store=food_store
+    )
   expected_category = reference_sample.expected_category
   assert category == expected_category

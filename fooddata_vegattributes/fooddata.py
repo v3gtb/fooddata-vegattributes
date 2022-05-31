@@ -10,9 +10,14 @@ from typing import cast, List, TypedDict, Union
 # the specified keys and MAY contain any other extra keys. But to comply with
 # the current (inconsistent) definition of TypedDict, we'll just typing.cast()
 # back and forth to regular dict where required.
+class InputFoodDict(TypedDict):
+  id: int
+  foodDescription: str
+
 class FoodDataDict(TypedDict):
   fdcId: int
   description: str
+  inputFoods: List[InputFoodDict]
 
 def load_survey_fooddata_dicts(
   path: Union[PathLike, str, bytes]

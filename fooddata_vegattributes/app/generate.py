@@ -35,7 +35,10 @@ def main():
   with default_food_and_reference_sample_stores() as (
     food_store, reference_sample_store
   ):
-    categorizer = Categorizer(reference_sample_store=reference_sample_store)
+    categorizer = Categorizer(
+      reference_sample_store=reference_sample_store,
+      food_store=food_store,
+    )
     for food in foods:
       categorization = categorizer.categorize(food)
       foods_in_categories[categorization.category].append(food)
@@ -74,7 +77,7 @@ def main():
     category: select_n_random(
       foods_in_categories[category],
       n_samples,
-      pad=lambda: Food(fdc_id=-1, description="")
+      pad=lambda: Food(fdc_id=-1, description="", input_food_stubs=())
     )
     for category in Category
   }
