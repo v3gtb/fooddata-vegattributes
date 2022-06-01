@@ -16,24 +16,32 @@ def categorize(
   categorizer: "Categorizer",
   food_store: AbstractFoodStore,
 ):
+  logger.debug(
+    "begin ingredient-based heuristic for %r (%s)",
+    food.description,
+    food.fdc_id,
+  )
+
   input_food_categories: Set[Category] = set()
   for input_food_stub in food.input_food_stubs:
+    logger.debug(
+      "processing input food %r (%s)",
+      input_food_stub.description,
+      input_food_stub.fdc_id
+    )
     assert input_food_stub.fdc_id != food.fdc_id
 
     try:
       input_food = food_store.get_by_fdc_id(input_food_stub.fdc_id)
+      logger.debug("fooddata entry found for input food")
       input_food_category = categorizer.categorize(input_food).category
     except KeyError:
-      logger.debug(
-        f"no entry found for input food with ID {input_food_stub.fdc_id}"
-      )
+      logger.debug("no fooddata entry found for input food")
       input_food_category = description_based_heuristic.categorize(
         input_food_stub.description
       )
 
-    logger.debug(
-      f"input food {input_food_stub.description} => {input_food_category}"
-    )
+    logger.debug("input food categorized as %s", input_food_category.name)
 
     input_food_categories.add(input_food_category)
 
