@@ -1,3 +1,4 @@
+from collections import defaultdict
 import json
 from os import fspath, PathLike
 from pathlib import Path
@@ -12,6 +13,9 @@ Link = Tuple[str, str]
 LinksForSourceIndexName = Dict[str, Link]
 Links = Dict[str, LinksForSourceIndexName]
 
+# TODO so I gave up and put a manual cache in here that now clutters
+# everything... any other ideas?
+
 class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
   """
   Compressed, indexed JSON objects stored in a file.
@@ -21,6 +25,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
 
     # manual caching
     self._links: Links = {}
+    self._jsonables: Dict[str, Dict[str, T]] = defaultdict(lambda: {})
 
   @classmethod
   def from_path(
@@ -54,6 +59,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip, "w") as file_in_zip:
         file_in_zip.write(json_bytes)
+    self._jsonables[index_name].update(index_values_and_jsonables)
 
   def write_links(
     self,
@@ -69,10 +75,14 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
 
   def get_jsonable(self, index_name: str, index_value: str) -> T:
     index_name, index_value = self._resolve(index_name, index_value)
+    if index_value in self._jsonables[index_name]:
+      return self._jsonables[index_name][index_value]
     try:
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip) as file_in_zip:
-        return cast(T, json.load(file_in_zip))
+        jsonable = cast(T, json.load(file_in_zip))
+        self._jsonables[index_name][index_value] = jsonable
+        return jsonable
     except KeyError as e:
       raise KeyError(
         f"Entry for {index_name}={index_value} not in indexed JSON file"
@@ -88,12 +98,16 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
       return self._load_links(index_name).keys()
 
   def _is_data_index(self, index_name: str):
+    if index_name in self._jsonables:
+      return True
     return any(
       x.startswith(f"by-{index_name}/data/")
       for x in self.zipfile.namelist()
     )
 
   def _is_link_index(self, index_name: str):
+    if index_name in self._links:
+      return True
     return any(
       x.startswith(f"by-{index_name}/links.json")
       for x in self.zipfile.namelist()

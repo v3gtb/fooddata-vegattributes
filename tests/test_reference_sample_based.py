@@ -52,9 +52,8 @@ def pytest_generate_tests(metafunc):
       ]
     )
 
-def test_combined_heuristic(
-  reference_sample: ReferenceSample, food: Food
-):
+@pytest.fixture(scope="module")
+def categorizer_and_food_store():
   with default_food_and_reference_sample_stores() as (
     food_store, reference_sample_store
   ):
@@ -62,8 +61,14 @@ def test_combined_heuristic(
       food_store=food_store,
       reference_sample_store=reference_sample_store
     )
-    category = combined_heuristic.categorize(
-      food, categorizer=categorizer, food_store=food_store
-    )
+    yield categorizer, food_store
+
+def test_combined_heuristic(
+  categorizer_and_food_store, reference_sample: ReferenceSample, food: Food
+):
+  categorizer, food_store = categorizer_and_food_store
+  category = combined_heuristic.categorize(
+    food, categorizer=categorizer, food_store=food_store
+  )
   expected_category = reference_sample.expected_category
   assert category == expected_category
