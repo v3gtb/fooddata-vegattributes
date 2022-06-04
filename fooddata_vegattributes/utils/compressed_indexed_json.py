@@ -81,8 +81,8 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip) as file_in_zip:
         jsonable = cast(T, json.load(file_in_zip))
-        self._jsonables[index_name][index_value] = jsonable
-        return jsonable
+      self._jsonables[index_name][index_value] = jsonable
+      return jsonable
     except KeyError as e:
       raise KeyError(
         f"Entry for {index_name}={index_value} not in indexed JSON file"
@@ -127,7 +127,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     json_bytes = json.dumps(links_for_index).encode("utf-8")
     with self.zipfile.open("by-{index_name}/links.json", "w") as links_file:
       links_file.write(json_bytes)
-      self._links[index_name] = links_for_index
+    self._links[index_name] = links_for_index
 
   def _resolve(self, index_name: str, index_value: str) -> Tuple[str, str]:
     if self._is_data_index(index_name) or not self._is_link_index(index_name):
