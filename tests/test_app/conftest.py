@@ -26,7 +26,14 @@ class FakeFoodDataJsons:
 
 @pytest.fixture
 def fake_food_data():
-  return [{ "fdcId": 123456, "description": "A fake food, salted" }]
+  return [
+    {
+      "fdcId": 123456,
+      "description": "A fake food, salted",
+      "inputFoods": [],
+      "foodCode": 9876543,
+    }
+  ]
 
 @pytest.fixture
 def fake_survey_fooddata_json(

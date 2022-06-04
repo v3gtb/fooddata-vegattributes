@@ -27,7 +27,7 @@ jobs:
           path: |
             ${{ env.FOODDATA_DIR }}
             indexed_FoodData_Central_survey_and_sr_legacy_food_json_2021-10-28.jsons.zip
-          key: v2-${{ env.SURVEY_FOODDATA_ZIP_URL }}-${{ env.SR_LEGACY_FOODDATA_ZIP_URL }}
+          key: v3-${{ env.SURVEY_FOODDATA_ZIP_URL }}-${{ env.SR_LEGACY_FOODDATA_ZIP_URL }}
       - name: Download USDA FDC FoodData
         if: steps.download.outputs.cache-hit != 'true'
         run: >

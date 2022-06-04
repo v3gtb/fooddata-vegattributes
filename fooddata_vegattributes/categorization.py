@@ -2,7 +2,8 @@ from dataclasses import dataclass, field
 from enum import auto
 from typing import Dict, Mapping, Optional
 
-from . import description_based_heuristic
+from . import combined_heuristic
+from .abstract_food_store import AbstractFoodStore
 from .abstract_reference_sample_store import AbstractReferenceSampleStore
 from .category import Category
 from .food import Food
@@ -31,25 +32,26 @@ class Categorizer:
   be horribly inefficient).
   """
   reference_sample_store: AbstractReferenceSampleStore
+  food_store: AbstractFoodStore
   _cached_reference_samples_by_fdc_id: Optional[Dict[int, ReferenceSample]] = (
     None
   )
 
   def categorize(self, food: Food) -> Categorization:
     ref = self._reference_samples_by_fdc_id.get(food.fdc_id)
-    description_based_category = (
-      description_based_heuristic.categorize(food.description)
+    heuristic_based_category = combined_heuristic.categorize(
+      food, self, self.food_store
     )
     discrepancies = {}
     if ref is not None:
       category = ref.expected_category
       source = CategorizationSource.REFERENCE
-      if category != description_based_category:
+      if category != heuristic_based_category:
         discrepancies = {
-          CategorizationSource.HEURISTIC: description_based_category
+          CategorizationSource.HEURISTIC: heuristic_based_category
         }
     else:
-      category = description_based_heuristic.categorize(food.description)
+      category = heuristic_based_category
       source = CategorizationSource.HEURISTIC
     return Categorization(
       category=category, source=source, discrepancies=discrepancies

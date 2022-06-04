@@ -13,14 +13,33 @@ class AbstractIndexedFoodDataJson(CloseOnExit, metaclass=ABCMeta):
   def close(self): ...
 
   def write_fooddata_dicts(self, ds: Iterable[FoodDataDict]):
-    self.indexed_json.write_index_jsonable_tuples(
-      (str(d["fdcId"]), d) for d in ds
+    self.indexed_json.write_jsonables(
+      "fdc-id",
+      ((str(d["fdcId"]), d) for d in ds),
+    )
+    self.indexed_json.write_links(
+      "ingredient-code",
+      (
+        (str(optional_ingredient_code_any_type), ("fdc-id", str(fdc_id)))
+        for optional_ingredient_code_any_type, fdc_id in (
+          # TODO as mentioned elsewhere, split up into Survey/SR Legacy funcs
+          ((d.get("foodCode") or d.get("ndbNumber")), d["fdcId"]) for d in ds
+        )
+        if optional_ingredient_code_any_type is not None
+      ),
     )
 
   def get_fooddata_dict_by_fdc_id(
     self, fdc_id: Union[int, str]
   ) -> FoodDataDict:
-    return self.indexed_json.get_jsonable_by_index(str(fdc_id))
+    return self.indexed_json.get_jsonable("fdc-id", str(fdc_id))
+
+  def get_fooddata_dict_by_ingredient_code(
+    self, ingredient_code: Union[int, str]
+  ) -> FoodDataDict:
+    return self.indexed_json.get_jsonable(
+      "ingredient-code", str(ingredient_code)
+    )
 
   def get_all_fdc_ids(self) -> Iterable[int]:
-    return [int(x) for x in self.indexed_json.iter_all_indices()]
+    return [int(x) for x in self.indexed_json.iter_index("fdc-id")]

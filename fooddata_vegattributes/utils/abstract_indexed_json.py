@@ -11,12 +11,23 @@ class AbstractIndexedJson(Generic[T], CloseOnExit, metaclass=ABCMeta):
   def close(self): ...
 
   @abstractmethod
-  def write_index_jsonable_tuples(
-    self, index_jsonable_tuples: Iterable[Tuple[str, T]]
+  def write_jsonables(
+    self, index_name: str, index_values_and_jsonables: Iterable[Tuple[str, T]]
   ): ...
 
   @abstractmethod
-  def get_jsonable_by_index(self, index: str) -> T: ...
+  def write_links(
+    self,
+    index_name: str,
+    index_values_and_targets: Iterable[Tuple[str, Tuple[str, str]]]
+  ):
+    """
+    Targets have the semantics `(target_index_name, target_index_value)`.
+    """
+    ...
 
   @abstractmethod
-  def iter_all_indices(self) -> Iterable[str]: ...
+  def get_jsonable(self, index_name: str, index_value: str) -> T: ...
+
+  @abstractmethod
+  def iter_index(self, index_name: str) -> Iterable[str]: ...
