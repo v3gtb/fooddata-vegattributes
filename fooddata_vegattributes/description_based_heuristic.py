@@ -29,11 +29,17 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
   # e.g. fat which suggests animal or plant fat, whereas "fat free" doesn't tell
   # us anything about the category
   TokenCategory.BLOCK: {
+    "approx",
+    "defatted",
     "fat free",
+    "fate",
     "low fat",
+    "lowfat",
     "no added fat",
     "no fat added",
-    "nonfat"
+    "nonfat",
+    "reduced fat",
+    "% fat",
   },
 
   TokenCategory.NULLIFIES_OMNI: {
@@ -105,7 +111,8 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
 
   TokenCategory.SUGGESTS_VEGETARIAN: {
     'baklava', 'banana split', 'biscuit', 'borscht', 'butter',
-    'cake', 'cappuccino', 'caramel', 'chocolate', 'cheese', 'cobbler', 'cookie',
+    'cake', 'cappuccino', 'caramel', 'chocolate', 'cheese',
+    'cobbler', 'confection fat', 'cookie',
     'cream', 'creme', 'crepe', 'croissant', 'custard',
     'egg',
     'frost', 'french toast', 'fudge',
@@ -114,7 +121,8 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'icing',
     'kefir',
     'latte',
-    'macchiato', 'mayonnaise', 'milk', 'mocha', 'mousse', 'mozzarella', 'muffin',
+    'macchiato', 'mayonnaise', 'milk', 'milkfat',
+    'mocha', 'mousse', 'mozzarella', 'muffin',
     'paneer', 'pastry', 'pie', 'pizza', 'praline', 'pudding',
     'ranch',
     'tiramisu', 'toffee', 'trifle', 'tzatziki',
