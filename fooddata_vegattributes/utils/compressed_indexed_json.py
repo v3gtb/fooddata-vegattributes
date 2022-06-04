@@ -1,4 +1,3 @@
-from collections import defaultdict
 import json
 from os import fspath, PathLike
 from pathlib import Path
@@ -13,19 +12,12 @@ Link = Tuple[str, str]
 LinksForSourceIndexName = Dict[str, Link]
 Links = Dict[str, LinksForSourceIndexName]
 
-# TODO so I gave up and put a manual cache in here that now clutters
-# everything... any other ideas?
-
 class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
   """
   Compressed, indexed JSON objects stored in a file.
   """
   def __init__(self, zipfile: ZipFile):
     self.zipfile = zipfile
-
-    # manual caching
-    self._links: Links = {}
-    self._jsonables: Dict[str, Dict[str, T]] = defaultdict(lambda: {})
 
   @classmethod
   def from_path(
@@ -56,12 +48,11 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip, "w") as file_in_zip:
         file_in_zip.write(json_bytes)
-    self._jsonables[index_name].update(index_values_and_jsonables)
 
   def write_links(
     self,
     index_name: str,
-    index_values_and_targets: Iterable[Tuple[str, Tuple[str, str]]]
+    index_values_and_targets: Iterable[Tuple[str, Link]]
   ):
     try:
       links_for_index = self._load_links(index_name)
@@ -72,13 +63,13 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
 
   def get_jsonable(self, index_name: str, index_value: str) -> T:
     index_name, index_value = self._resolve(index_name, index_value)
-    if index_value in self._jsonables[index_name]:
-      return self._jsonables[index_name][index_value]
+    return self._get_jsonable_no_resolve(index_name, index_value)
+
+  def _get_jsonable_no_resolve(self, index_name: str, index_value: str) -> T:
     try:
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip) as file_in_zip:
         jsonable = cast(T, json.load(file_in_zip))
-      self._jsonables[index_name][index_value] = jsonable
       return jsonable
     except KeyError as e:
       raise KeyError(
@@ -87,34 +78,31 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
 
   def iter_index(self, index_name: str) -> Iterable[str]:
     if self._is_data_index(index_name):
-      return (
-        Path(x).name for x in self.zipfile.namelist()
-        if x.startswith(f"by-{index_name}/data/")
-      )
+      return self._iter_data_index(index_name)
     else:
       return self._load_links(index_name).keys()
 
-  def _is_data_index(self, index_name: str):
-    if index_name in self._jsonables:
-      return True
+  def _iter_data_index(self, index_name: str) -> Iterable[str]:
+    return (
+      Path(x).name for x in self.zipfile.namelist()
+      if x.startswith(f"by-{index_name}/data/")
+    )
+
+  def _is_data_index(self, index_name: str) -> bool:
     return any(
       x.startswith(f"by-{index_name}/data/")
       for x in self.zipfile.namelist()
     )
 
-  def _is_link_index(self, index_name: str):
-    if index_name in self._links:
-      return True
+  def _is_link_index(self, index_name: str) -> bool:
     return any(
       x.startswith(f"by-{index_name}/links.json")
       for x in self.zipfile.namelist()
     )
 
   def _load_links(self, index_name: str) -> LinksForSourceIndexName:
-    if index_name not in self._links:
-      with self.zipfile.open("by-{index_name}/links.json") as links_file:
-        self._links[index_name] = json.load(links_file)
-    return self._links[index_name]
+    with self.zipfile.open("by-{index_name}/links.json") as links_file:
+      return json.load(links_file)
 
   def _write_links(
     self,
@@ -124,7 +112,6 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     json_bytes = json.dumps(links_for_index).encode("utf-8")
     with self.zipfile.open("by-{index_name}/links.json", "w") as links_file:
       links_file.write(json_bytes)
-    self._links[index_name] = links_for_index
 
   def _resolve(self, index_name: str, index_value: str) -> Tuple[str, str]:
     if self._is_data_index(index_name) or not self._is_link_index(index_name):

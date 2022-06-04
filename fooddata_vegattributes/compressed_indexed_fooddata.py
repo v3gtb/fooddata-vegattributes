@@ -3,6 +3,7 @@ from typing import Union
 
 from .abstract_indexed_fooddata import AbstractIndexedFoodDataJson
 from .fooddata import FoodDataDict
+from .utils.caching_compressed_indexed_json import CachingCompressedIndexedJson
 from .utils.compressed_indexed_json import CompressedIndexedJson
 from .utils.close_via_stack import CloseViaStack
 
@@ -25,7 +26,9 @@ class CompressedIndexedFoodDataJson(CloseViaStack, AbstractIndexedFoodDataJson):
 
     See `CompressedIndexedJson` docs for possible modes.
     """
-    compressed_indexed_json = CompressedIndexedJson.from_path(path, mode)
+    compressed_indexed_json = CachingCompressedIndexedJson.from_path(
+      path, mode
+    )
     obj = cls(compressed_indexed_json=compressed_indexed_json)
     obj.close_stack.enter_context(compressed_indexed_json)
     return obj
