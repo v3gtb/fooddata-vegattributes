@@ -17,11 +17,13 @@ def fake_food_data() -> List[FoodDataDict]:
       "fdcId": 123456,
       "description": "Some food, unsalted",
       "inputFoods": [],
+      "foodCode": 3000,
     },
     {
       "fdcId": 654321,
       "description": "Some m e a t y food, salted",
       "inputFoods": [],
+      "foodCode": 9000,
     },
   ]
 

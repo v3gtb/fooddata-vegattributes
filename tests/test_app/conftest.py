@@ -31,6 +31,7 @@ def fake_food_data():
       "fdcId": 123456,
       "description": "A fake food, salted",
       "inputFoods": [],
+      "foodCode": 9876543,
     }
   ]
 

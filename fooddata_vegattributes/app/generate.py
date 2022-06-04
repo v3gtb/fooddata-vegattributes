@@ -77,7 +77,9 @@ def main():
     category: select_n_random(
       foods_in_categories[category],
       n_samples,
-      pad=lambda: Food(fdc_id=-1, description="", input_food_stubs=())
+      pad=lambda: Food(
+        fdc_id=-1, ingredient_code=-1, description="", input_food_stubs=()
+      )
     )
     for category in Category
   }

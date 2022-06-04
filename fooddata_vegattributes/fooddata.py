@@ -13,22 +13,29 @@ from typing import cast, List, TypedDict, Union
 class InputFoodDict(TypedDict):
   id: int
   foodDescription: str
+  ingredientCode: int
 
 class FoodDataDict(TypedDict):
   fdcId: int
   description: str
   inputFoods: List[InputFoodDict]
 
+class SurveyFoodDataDict(FoodDataDict):
+  foodCode: int
+
+class SrLegacyFoodDataDict(FoodDataDict):
+  ndbNumber: int
+
 def load_survey_fooddata_dicts(
   path: Union[PathLike, str, bytes]
-) -> List[FoodDataDict]:
+) -> List[SurveyFoodDataDict]:
   with open(path) as f:
     food_ds = json.load(f)["SurveyFoods"]
-  return cast(List[FoodDataDict], food_ds)
+  return cast(List[SurveyFoodDataDict], food_ds)
 
 def load_sr_legacy_fooddata_dicts(
   path: Union[PathLike, str, bytes]
-) -> List[FoodDataDict]:
+) -> List[SrLegacyFoodDataDict]:
   with open(path) as f:
     food_ds = json.load(f)["SRLegacyFoods"]
-  return cast(List[FoodDataDict], food_ds)
+  return cast(List[SrLegacyFoodDataDict], food_ds)

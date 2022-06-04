@@ -4,7 +4,6 @@ from fooddata_vegattributes.app.with_default_paths import (
   default_food_and_reference_sample_stores
 )
 from fooddata_vegattributes import combined_heuristic
-from fooddata_vegattributes import description_based_heuristic
 from fooddata_vegattributes.categorization import Categorizer
 from fooddata_vegattributes.food import Food
 from fooddata_vegattributes.reference_sample import ReferenceSample
@@ -32,26 +31,26 @@ def pytest_generate_tests(metafunc):
       (reference_sample, foods_by_fdc_id[fdc_id])
       for fdc_id, reference_sample in reference_samples_by_fdc_id.items()
     ]
-    if all(x in metafunc.fixturenames for x in ["reference_sample", "food"]):
-      metafunc.parametrize(
-        ("reference_sample", "food"),
-        [
-          pytest.param(
-            reference_sample,
-            food,
-            marks=(
-              [pytest.mark.xfail(strict=True)]
-              if reference_sample.known_failure
-              else []
-            ),
-          )
-          for reference_sample, food in reference_samples_and_foods
-        ],
-        ids=[
-          f"{reference_sample.fdc_id}-{suitable_name(food.description)}"
-          for reference_sample, food in reference_samples_and_foods
-        ]
-      )
+  if all(x in metafunc.fixturenames for x in ["reference_sample", "food"]):
+    metafunc.parametrize(
+      ("reference_sample", "food"),
+      [
+        pytest.param(
+          reference_sample,
+          food,
+          marks=(
+            [pytest.mark.xfail(strict=True)]
+            if reference_sample.known_failure
+            else []
+          ),
+        )
+        for reference_sample, food in reference_samples_and_foods
+      ],
+      ids=[
+        f"{reference_sample.fdc_id}-{suitable_name(food.description)}"
+        for reference_sample, food in reference_samples_and_foods
+      ]
+    )
 
 def test_combined_heuristic(
   reference_sample: ReferenceSample, food: Food

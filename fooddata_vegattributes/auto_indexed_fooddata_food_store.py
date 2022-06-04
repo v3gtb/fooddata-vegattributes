@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from functools import partial
 from os import PathLike
-from typing import List, Union
+from typing import cast, List, Union
 
 from .auto_indexed_fooddata import auto_compressed_indexed_fooddata_json
 from .fooddata import (
@@ -16,7 +16,10 @@ def load_all_fooddata_dicts(
   survey_fooddata_json_path: Union[PathLike, str, bytes],
   sr_legacy_fooddata_json_path: Union[PathLike, str, bytes],
 ) -> List[FoodDataDict]:
-  l = load_survey_fooddata_dicts(survey_fooddata_json_path)
+  l = cast(
+    List[FoodDataDict],
+    load_survey_fooddata_dicts(survey_fooddata_json_path)
+  )
   l.extend(load_sr_legacy_fooddata_dicts(sr_legacy_fooddata_json_path))
   return l
 

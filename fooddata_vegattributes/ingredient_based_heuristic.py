@@ -17,7 +17,7 @@ def categorize(
   food_store: AbstractFoodStore,
 ):
   logger.debug(
-    "begin ingredient-based heuristic for %r (%s)",
+    "begin ingredient-based heuristic for %r (fdc ID: %s)",
     food.description,
     food.fdc_id,
   )
@@ -25,14 +25,16 @@ def categorize(
   input_food_categories: Set[Category] = set()
   for input_food_stub in food.input_food_stubs:
     logger.debug(
-      "processing input food %r (%s)",
+      "processing input food %r (ingredient code: %s)",
       input_food_stub.description,
-      input_food_stub.fdc_id
+      input_food_stub.ingredient_code,
     )
     assert input_food_stub.fdc_id != food.fdc_id
 
     try:
-      input_food = food_store.get_by_fdc_id(input_food_stub.fdc_id)
+      input_food = food_store.get_by_ingredient_code(
+        input_food_stub.ingredient_code
+      )
       logger.debug("fooddata entry found for input food")
       input_food_category = categorizer.categorize(input_food).category
     except KeyError:
