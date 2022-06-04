@@ -48,9 +48,6 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     obj.close_stack.enter_context(zipfile)
     return obj
 
-  def close(self):
-    super().close()
-
   def write_jsonables(
     self, index_name: str, index_values_and_jsonables: Iterable[Tuple[str, T]]
   ):
