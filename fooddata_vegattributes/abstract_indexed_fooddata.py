@@ -20,7 +20,12 @@ class AbstractIndexedFoodDataJson(CloseOnExit, metaclass=ABCMeta):
     self.indexed_json.write_links(
       "ingredient-code",
       (
-        (str(optional_ingredient_code_any_type), ("fdc-id", str(fdc_id)))
+        (
+          str(optional_ingredient_code_any_type),
+          [
+            ("fdc-id", str(fdc_id))
+          ],
+        )
         for optional_ingredient_code_any_type, fdc_id in (
           # TODO as mentioned elsewhere, split up into Survey/SR Legacy funcs
           ((d.get("foodCode") or d.get("ndbNumber")), d["fdcId"]) for d in ds

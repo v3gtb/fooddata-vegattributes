@@ -2,13 +2,9 @@ from collections import defaultdict
 from zipfile import ZipFile
 from typing import Dict, Generic, Iterable, Tuple
 
-from .compressed_indexed_json import (
-  CompressedIndexedJson,
-  Links,
-  LinksForSourceIndexName,
-  T,
-)
 
+from .abstract_indexed_json import Links, LinksForSourceIndexName
+from .compressed_indexed_json import CompressedIndexedJson, T
 
 class CachingCompressedIndexedJson(CompressedIndexedJson, Generic[T]):
   def __init__(self, zipfile: ZipFile):

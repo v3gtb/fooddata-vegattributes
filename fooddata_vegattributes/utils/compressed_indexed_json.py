@@ -1,16 +1,17 @@
 import json
 from os import fspath, PathLike
 from pathlib import Path
-from typing import cast, Dict, Generic, Iterable, Tuple, Union
+from typing import cast, Generator, Generic, Iterable, Tuple, Union
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from .abstract_indexed_json import AbstractIndexedJson, T
+from .abstract_indexed_json import (
+  AbstractIndexedJson,
+  LinkTargets,
+  LinksForSourceIndexName,
+  T,
+)
 from .close_via_stack import CloseViaStack
 
-
-Link = Tuple[str, str]
-LinksForSourceIndexName = Dict[str, Link]
-Links = Dict[str, LinksForSourceIndexName]
 
 class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
   """
@@ -52,7 +53,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
   def write_links(
     self,
     index_name: str,
-    index_values_and_targets: Iterable[Tuple[str, Link]]
+    index_values_and_targets: Iterable[Tuple[str, LinkTargets]]
   ):
     try:
       links_for_index = self._load_links(index_name)
@@ -61,9 +62,25 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     links_for_index.update(index_values_and_targets)
     self._write_links(index_name, links_for_index)
 
+  def get_jsonables(
+    self, index_name: str, index_value: str
+  ) -> Generator[T, None, None]:
+    for index_name, index_value in self._resolve(index_name, index_value):
+      yield self._get_jsonable_no_resolve(index_name, index_value)
+
   def get_jsonable(self, index_name: str, index_value: str) -> T:
-    index_name, index_value = self._resolve(index_name, index_value)
-    return self._get_jsonable_no_resolve(index_name, index_value)
+    jsonables_iter = self.get_jsonables(index_name, index_value)
+    try:
+      result = next(jsonables_iter)
+    except StopIteration as e:
+      raise KeyError(f"no entry found for {index_name}={index_value}") from e
+    try:
+      next(jsonables_iter)
+    except StopIteration:
+      pass
+    else:
+      raise ValueError(f"more than one result for {index_name}={index_value}")
+    return result
 
   def _get_jsonable_no_resolve(self, index_name: str, index_value: str) -> T:
     try:
@@ -113,8 +130,13 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     with self.zipfile.open("by-{index_name}/links.json", "w") as links_file:
       links_file.write(json_bytes)
 
-  def _resolve(self, index_name: str, index_value: str) -> Tuple[str, str]:
+  def _resolve(
+    self, index_name: str, index_value: str
+  ) -> Iterable[Tuple[str, str]]:
     if self._is_data_index(index_name) or not self._is_link_index(index_name):
-      return index_name, index_value
+      yield (index_name, index_value)
+      return
     links_for_index = self._load_links(index_name)
-    return self._resolve(*links_for_index[index_value])
+    for target in links_for_index[index_value]:
+      for resolved_target in self._resolve(*target):
+        yield resolved_target
