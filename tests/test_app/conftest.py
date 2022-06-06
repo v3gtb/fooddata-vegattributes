@@ -32,6 +32,9 @@ def fake_food_data():
       "description": "A fake food, salted",
       "inputFoods": [],
       "foodCode": 9876543,
+      "wweiaFoodCategory": {
+        "wweiaFoodCategoryDescription": "Somesuch and other miscellany",
+      },
     }
   ]
 

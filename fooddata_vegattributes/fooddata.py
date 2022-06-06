@@ -22,9 +22,11 @@ class FoodDataDict(TypedDict):
 
 class SurveyFoodDataDict(FoodDataDict):
   foodCode: int
+  wweiaFoodCategory: dict
 
 class SrLegacyFoodDataDict(FoodDataDict):
   ndbNumber: int
+  foodCategory: dict
 
 def load_survey_fooddata_dicts(
   path: Union[PathLike, str, bytes]

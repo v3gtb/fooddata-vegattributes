@@ -1,3 +1,4 @@
+from collections import defaultdict
 import json
 from typing import Dict
 
@@ -31,6 +32,9 @@ def main():
   foods_in_categories = {
     category: [] for category in Category
   }
+  fdc_categories_to_foods_in_veg_categories = defaultdict(
+    lambda: { veg_category: [] for veg_category in Category }
+  )
   food_categorizations: Dict[Food, Categorization] = {}
   with default_food_and_reference_sample_stores() as (
     food_store, reference_sample_store
@@ -41,14 +45,33 @@ def main():
     )
     for food in foods:
       categorization = categorizer.categorize(food)
-      foods_in_categories[categorization.category].append(food)
       food_categorizations[food] = categorization
+      foods_in_categories[categorization.category].append(food)
+      fdc_categories_to_foods_in_veg_categories[
+        food.fdc_category_description
+      ][categorization.category].append(food)
 
   # stats
   print("numbers:")
   for category in Category:
     n_foods = len(foods_in_categories[category])
     print(f"{n_foods} {category.name}.")
+  print("\n")
+
+  # stats per FDC category
+  print("numbers by FDC category:\n")
+  for fdc_category, veg_categories_items in sorted(
+    fdc_categories_to_foods_in_veg_categories.items(),
+    key=lambda x: x[0]
+  ):
+    print(f"  {fdc_category}")
+    for veg_category, items in veg_categories_items.items():
+      n_foods = len(items)
+      if not n_foods:
+        continue
+      print(f"    {n_foods} {veg_category.name}.")
+    print("")
+  print("")
 
   # export JSON
   for debug in ['debug_', '']:
@@ -78,7 +101,8 @@ def main():
       foods_in_categories[category],
       n_samples,
       pad=lambda: Food(
-        fdc_id=-1, ingredient_code=-1, description="", input_food_stubs=()
+        fdc_id=-1, ingredient_code=-1, description="", input_food_stubs=(),
+        fdc_category_description="",
       )
     )
     for category in Category
