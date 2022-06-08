@@ -36,4 +36,9 @@ class AbstractIndexedJson(Generic[T], CloseOnExit, metaclass=ABCMeta):
   def get_jsonable(self, index_name: str, index_value: str) -> T: ...
 
   @abstractmethod
+  def get_jsonables(
+    self, index_name: str, index_value: str
+  ) -> Iterable[T]: ...
+
+  @abstractmethod
   def iter_index(self, index_name: str) -> Iterable[str]: ...

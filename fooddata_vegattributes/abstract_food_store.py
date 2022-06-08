@@ -19,3 +19,8 @@ class AbstractFoodStore(AbstractContextManager, metaclass=ABCMeta):
 
   @abstractmethod
   def get_all_fdc_ids(self) -> Iterable[int]: ...
+
+  @abstractmethod
+  def get_mapped_by_fdc_category(
+    self, fdc_category_description: str
+  ) -> Mapping[int, Food]: ...

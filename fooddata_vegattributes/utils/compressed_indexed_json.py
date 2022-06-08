@@ -73,13 +73,15 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     try:
       result = next(jsonables_iter)
     except StopIteration as e:
-      raise KeyError(f"no entry found for {index_name}={index_value}") from e
+      raise KeyError(f"no entry found for {index_name}='{index_value}'") from e
     try:
       next(jsonables_iter)
     except StopIteration:
       pass
     else:
-      raise ValueError(f"more than one result for {index_name}={index_value}")
+      raise ValueError(
+        f"more than one result for {index_name}='{index_value}'"
+      )
     return result
 
   def _get_jsonable_no_resolve(self, index_name: str, index_value: str) -> T:
@@ -118,7 +120,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     )
 
   def _load_links(self, index_name: str) -> LinksForSourceIndexName:
-    with self.zipfile.open("by-{index_name}/links.json") as links_file:
+    with self.zipfile.open(f"by-{index_name}/links.json") as links_file:
       return json.load(links_file)
 
   def _write_links(
@@ -127,7 +129,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     links_for_index: LinksForSourceIndexName,
   ):
     json_bytes = json.dumps(links_for_index).encode("utf-8")
-    with self.zipfile.open("by-{index_name}/links.json", "w") as links_file:
+    with self.zipfile.open(f"by-{index_name}/links.json", "w") as links_file:
       links_file.write(json_bytes)
 
   def _resolve(
