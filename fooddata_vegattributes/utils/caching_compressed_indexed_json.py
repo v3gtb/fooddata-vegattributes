@@ -2,9 +2,9 @@ from collections import defaultdict
 from zipfile import ZipFile
 from typing import Dict, Generic, Iterable, Tuple
 
-
 from .abstract_indexed_json import Links, LinksForSourceIndexName
 from .compressed_indexed_json import CompressedIndexedJson, T
+
 
 class CachingCompressedIndexedJson(CompressedIndexedJson, Generic[T]):
   def __init__(self, zipfile: ZipFile):
@@ -17,6 +17,9 @@ class CachingCompressedIndexedJson(CompressedIndexedJson, Generic[T]):
   def write_jsonables(
     self, index_name: str, index_values_and_jsonables: Iterable[Tuple[str, T]]
   ):
+    # iterables don't have to be re-entrant (and in this case actually aren't)
+    # TODO better way?
+    index_values_and_jsonables = list(index_values_and_jsonables)
     super().write_jsonables(index_name, index_values_and_jsonables)
     self._jsonables[index_name].update(index_values_and_jsonables)
 

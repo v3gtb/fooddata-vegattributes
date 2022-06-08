@@ -46,3 +46,15 @@ class IndexedFoodDataFoodStore(CloseViaStack, AbstractFoodStore, CloseOnExit):
 
   def get_all_fdc_ids(self) -> Iterable[int]:
     return self.indexed_fooddata_json.get_all_fdc_ids()
+
+  def get_mapped_by_fdc_category(
+    self, fdc_category_description: str
+  ) -> Mapping[int, Food]:
+    return {
+      food.fdc_id: food for food in [
+        Food.from_fdc_food_dict(d) for d in
+        self.indexed_fooddata_json.get_fooddata_dicts_by_fdc_category(
+          fdc_category_description
+        )
+      ]
+    }
