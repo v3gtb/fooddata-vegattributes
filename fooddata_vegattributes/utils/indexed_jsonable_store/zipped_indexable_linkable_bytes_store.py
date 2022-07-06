@@ -1,21 +1,22 @@
 import json
 from os import fspath, PathLike
 from pathlib import Path
-from typing import cast, Generator, Generic, Iterable, Tuple, Union
+from typing import Iterable, Tuple, Union
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from .abstract_indexed_json import (
-  AbstractIndexedJson,
+from .abstract_indexable_linkable_bytes_store import (
+  AbstractIndexableLinkableBytesStore,
   LinkTargets,
   LinksForSourceIndexName,
-  T,
 )
-from .close_via_stack import CloseViaStack
+from ..close_via_stack import CloseViaStack
 
 
-class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
+class ZippedIndexableLinkableBytesStore(
+  CloseViaStack, AbstractIndexableLinkableBytesStore,
+):
   """
-  Compressed, indexed JSON objects stored in a file.
+  Compressed, indexed bytes stored in a ZIP file.
   """
   def __init__(self, zipfile: ZipFile):
     self.zipfile = zipfile
@@ -27,7 +28,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     mode="r",
     compression=ZIP_DEFLATED,
     compresslevel=None,
-  ) -> "CompressedIndexedJson":
+  ) -> "ZippedIndexableLinkableBytesStore":
     """
     Opens archive for reading or writing depending on the given mode.
     """
@@ -41,16 +42,17 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     obj.close_stack.enter_context(zipfile)
     return obj
 
-  def write_jsonables(
-    self, index_name: str, index_values_and_jsonables: Iterable[Tuple[str, T]]
+  def put_entries(
+    self,
+    index_name: str,
+    index_values_and_entries: Iterable[Tuple[str, bytes]],
   ):
-    for index_value, jsonable in index_values_and_jsonables:
-      json_bytes = json.dumps(jsonable).encode("utf-8")
+    for index_value, entry in index_values_and_entries:
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip, "w") as file_in_zip:
-        file_in_zip.write(json_bytes)
+        file_in_zip.write(entry)
 
-  def write_links(
+  def put_links(
     self,
     index_name: str,
     index_values_and_targets: Iterable[Tuple[str, LinkTargets]]
@@ -60,22 +62,22 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     except KeyError:
       links_for_index = {}
     links_for_index.update(index_values_and_targets)
-    self._write_links(index_name, links_for_index)
+    self._put_links(index_name, links_for_index)
 
-  def get_jsonables(
+  def iter_entries(
     self, index_name: str, index_value: str
-  ) -> Generator[T, None, None]:
+  ) -> Iterable[bytes]:
     for index_name, index_value in self._resolve(index_name, index_value):
-      yield self._get_jsonable_no_resolve(index_name, index_value)
+      yield self._get_entry_no_resolve(index_name, index_value)
 
-  def get_jsonable(self, index_name: str, index_value: str) -> T:
-    jsonables_iter = self.get_jsonables(index_name, index_value)
+  def get_entry(self, index_name: str, index_value: str) -> bytes:
+    entries_iter = self.iter_entries(index_name, index_value)
     try:
-      result = next(jsonables_iter)
+      result = next(entries_iter)
     except StopIteration as e:
       raise KeyError(f"no entry found for {index_name}='{index_value}'") from e
     try:
-      next(jsonables_iter)
+      next(entries_iter)
     except StopIteration:
       pass
     else:
@@ -84,12 +86,11 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
       )
     return result
 
-  def _get_jsonable_no_resolve(self, index_name: str, index_value: str) -> T:
+  def _get_entry_no_resolve(self, index_name: str, index_value: str) -> bytes:
     try:
       path_in_zip = f"by-{index_name}/data/{index_value}"
       with self.zipfile.open(path_in_zip) as file_in_zip:
-        jsonable = cast(T, json.load(file_in_zip))
-      return jsonable
+        return file_in_zip.read()
     except KeyError as e:
       raise KeyError(
         f"Entry for {index_name}={index_value} not in indexed JSON file"
@@ -123,7 +124,7 @@ class CompressedIndexedJson(CloseViaStack, AbstractIndexedJson, Generic[T]):
     with self.zipfile.open(f"by-{index_name}/links.json") as links_file:
       return json.load(links_file)
 
-  def _write_links(
+  def _put_links(
     self,
     index_name: str,
     links_for_index: LinksForSourceIndexName,

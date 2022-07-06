@@ -3,8 +3,7 @@ from typing import Union
 
 from .abstract_indexed_fooddata import AbstractIndexedFoodDataJson
 from .fooddata import FoodDataDict
-from .utils.caching_compressed_indexed_json import CachingCompressedIndexedJson
-from .utils.compressed_indexed_json import CompressedIndexedJson
+from .utils.indexed_jsonable_store import IndexedJsonableStore, IndexSpec
 from .utils.close_via_stack import CloseViaStack
 
 
@@ -13,7 +12,7 @@ class CompressedIndexedFoodDataJson(CloseViaStack, AbstractIndexedFoodDataJson):
   Compressed, indexed (by FDC ID) FoodData JSON entries stored in a file.
   """
   def __init__(
-    self, compressed_indexed_json: CompressedIndexedJson[FoodDataDict]
+    self, compressed_indexed_json: IndexedJsonableStore[FoodDataDict]
   ):
     self.indexed_json = compressed_indexed_json
 
@@ -26,8 +25,23 @@ class CompressedIndexedFoodDataJson(CloseViaStack, AbstractIndexedFoodDataJson):
 
     See `CompressedIndexedJson` docs for possible modes.
     """
-    compressed_indexed_json = CachingCompressedIndexedJson.from_path(
-      path, mode
+    compressed_indexed_json = IndexedJsonableStore.from_path(
+      path,
+      primary_index=IndexSpec("fdc-id", lambda d: str(d["fdcId"])),
+      secondary_indices=[
+        IndexSpec(
+          "ingredient-code",
+          lambda d: str(d.get("foodCode") or d.get("ndbNumber")),
+        ),
+        IndexSpec(
+          "fdc-category-description",
+          lambda d: (
+            d.get("wweiaFoodCategory", {}).get("wweiaFoodCategoryDescription")
+            or d.get("foodCategory", {}).get("description")
+          ),
+        ),
+      ],
+      mode=mode,
     )
     obj = cls(compressed_indexed_json=compressed_indexed_json)
     obj.close_stack.enter_context(compressed_indexed_json)

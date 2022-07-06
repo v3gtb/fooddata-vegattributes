@@ -1,10 +1,8 @@
 from abc import ABCMeta, abstractmethod
-from typing import Dict, Generic, Iterable, List, Tuple, TypeVar
+from typing import Dict, Iterable, List, Tuple
 
-from .close_on_exit import CloseOnExit
+from ..close_on_exit import CloseOnExit
 
-
-T = TypeVar("T")
 
 # links are (confusingly) 1-to-n; should probably be named tags or secondary
 # indices or something like that
@@ -12,20 +10,22 @@ LinkTargets = List[Tuple[str, str]]  # TODO rename
 LinksForSourceIndexName = Dict[str, LinkTargets]
 Links = Dict[str, LinksForSourceIndexName]
 
-class AbstractIndexedJson(Generic[T], CloseOnExit, metaclass=ABCMeta):
+class AbstractIndexableLinkableBytesStore(
+  CloseOnExit, metaclass=ABCMeta
+):
   @abstractmethod
   def close(self): ...
 
   @abstractmethod
-  def write_jsonables(
-    self, index_name: str, index_values_and_jsonables: Iterable[Tuple[str, T]]
+  def put_entries(
+    self, index_name: str, index_values_and_data: Iterable[Tuple[str, bytes]]
   ): ...
 
   @abstractmethod
-  def write_links(
+  def put_links(
     self,
     index_name: str,
-    index_values_and_targets: Iterable[Tuple[str, LinkTargets]]
+    index_values_and_targets: Iterable[Tuple[str, LinkTargets]],
   ):
     """
     Targets have the semantics `(target_index_name, target_index_value)`.
@@ -33,12 +33,12 @@ class AbstractIndexedJson(Generic[T], CloseOnExit, metaclass=ABCMeta):
     ...
 
   @abstractmethod
-  def get_jsonable(self, index_name: str, index_value: str) -> T: ...
+  def get_entry(self, index_name: str, index_value: str) -> bytes: ...
 
   @abstractmethod
-  def get_jsonables(
+  def iter_entries(
     self, index_name: str, index_value: str
-  ) -> Iterable[T]: ...
+  ) -> Iterable[bytes]: ...
 
   @abstractmethod
   def iter_index(self, index_name: str) -> Iterable[str]: ...
