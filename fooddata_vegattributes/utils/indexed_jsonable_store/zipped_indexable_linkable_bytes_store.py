@@ -71,7 +71,7 @@ class ZippedIndexableLinkableBytesStore(
       yield self._get_entry_no_resolve(index_name, index_value)
 
   def get_entry(self, index_name: str, index_value: str) -> bytes:
-    entries_iter = self.iter_entries(index_name, index_value)
+    entries_iter = iter(self.iter_entries(index_name, index_value))
     try:
       result = next(entries_iter)
     except StopIteration as e:

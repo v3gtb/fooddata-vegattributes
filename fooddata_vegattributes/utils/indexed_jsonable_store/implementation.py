@@ -81,7 +81,7 @@ class IndexedJsonableStore(
     secondary_indices: Sequence[IndexSpec]
   ):
     self.indexable_jsonable_store = indexable_jsonable_store
-    self.auto_indexing_writer = (
+    self.auto_indexing_writer: AutoIndexingJsonableWriter[T] = (
       AutoIndexingJsonableWriter(
         indexable_jsonable_store,
         primary_index,
@@ -94,7 +94,7 @@ class IndexedJsonableStore(
     cls,
     path: Union[PathLike, str, bytes],
     primary_index: IndexSpec[T],
-    secondary_indices: IndexSpec[T],
+    secondary_indices: Sequence[IndexSpec[T]],
     mode="r",
     compression=ZIP_DEFLATED,
     compresslevel=None,
