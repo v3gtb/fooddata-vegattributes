@@ -21,14 +21,17 @@ from .with_default_paths import default_food_and_reference_sample_stores
 
 
 def main():
+  print("loading foods from JSON... ", end="")
   food_ds = (
     load_survey_fooddata_dicts(default_dir_paths.survey_fooddata_json) +
     load_sr_legacy_fooddata_dicts(default_dir_paths.sr_legacy_fooddata_json)
   )
+  print("done")
 
   foods = [Food.from_fdc_food_dict(food_d) for food_d in food_ds]
 
   # go through all foods and assign categories
+  print("categorizing foods... ", end="")
   foods_in_categories = {
     category: [] for category in Category
   }
@@ -43,13 +46,16 @@ def main():
       reference_sample_store=reference_sample_store,
       food_store=food_store,
     )
-    for food in foods:
+    print("    ", end="")
+    for i, food in enumerate(foods):
+      print(f"\b\b\b\b{i/len(foods)*100:>3.0f}%", end="")
       categorization = categorizer.categorize(food)
       food_categorizations[food] = categorization
       foods_in_categories[categorization.category].append(food)
       fdc_categories_to_foods_in_veg_categories[
         food.fdc_category_description
       ][categorization.category].append(food)
+    print("done")
 
   # stats
   print("numbers:")
