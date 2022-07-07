@@ -61,11 +61,21 @@ class CachingZippedIndexableLinkableBytesStore(
   def _is_data_index(self, index_name: str) -> bool:
     if index_name in self._data or index_name in self._data_index_values:
       return True
-    return super()._is_data_index(index_name)
+    elif index_name in self._links:
+      return False
+    result = super()._is_data_index(index_name)
+    if result:
+      if index_name not in self._data:
+        self._data[index_name] = {}
+      if index_name not in self._data_index_values:
+        self._data_index_values[index_name] = set()
+    return result
 
   def _is_link_index(self, index_name: str) -> bool:
     if index_name in self._links:
       return True
+    elif index_name in self._data or index_name in self._data_index_values:
+      return False
     return super()._is_link_index(index_name)
 
   def _load_links(self, index_name: str) -> LinksForSourceIndexName:
