@@ -18,12 +18,18 @@ def fake_food_data() -> List[FoodDataDict]:
       "description": "Some food, unsalted",
       "inputFoods": [],
       "foodCode": 3000,
+      "wweiaFoodCategory": {
+        "wweiaFoodCategoryDescription": "Somesuch and other miscellany",
+      },
     },
     {
       "fdcId": 654321,
       "description": "Some m e a t y food, salted",
       "inputFoods": [],
       "foodCode": 9000,
+      "wweiaFoodCategory": {
+        "wweiaFoodCategoryDescription": "Somesuch and other miscellany",
+      },
     },
   ]
 
