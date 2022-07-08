@@ -86,6 +86,7 @@ jobs:
         with:
           files: ${{ env.PUBLISHABLE_GENERATED_JSON_FILENAME }}
           fail_on_unmatched_files: true
+          generate_release_notes: true
   deploy-pages:
     needs: generate-and-test-and-publish
     runs-on: ubuntu-latest
