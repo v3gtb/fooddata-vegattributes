@@ -38,7 +38,9 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     "no added fat",
     "no fat added",
     "nonfat",
+    "oxidant",
     "reduced fat",
+    "spray",
     "% fat",
   },
 
@@ -60,7 +62,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'berries', 'berry', 'beer', 'black russian', 'bread',
     'broccoli', 'bulgur', 'bruschetta',
     'cabbage', 'cactus', 'canola', 'cantaloupe', 'carrot', 'cashew', 'celery',
-    'chard', 'cherry', 'cherries', 'chive', 'cider', 'cilantro',
+    'chamomile', 'chard', 'cherry', 'cherries', 'chive', 'cider', 'cilantro',
     'cocoa', 'coffee', 'cola', 'collard', 'corn', 'couscous',
     'cress', 'cucumber', 'currant',
     'daiquiri', 'dasheen', 'date', 'dill',
