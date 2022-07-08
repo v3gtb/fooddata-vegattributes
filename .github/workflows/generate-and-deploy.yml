@@ -76,7 +76,7 @@ jobs:
       - name: Append Git tag to generated JSON filename
         run: >
           filename="${{ env.GENERATED_JSON_FILENAME }}";
-          new_filename="${filename%%.*}-$(git describe --tags).${filename#*.}";
+          new_filename="${filename%%.*}-${{github.ref_name}}.${filename#*.}";
           mv "$filename" "$new_filename";
           echo "PUBLISHABLE_GENERATED_JSON_FILENAME=$new_filename"
           >> $GITHUB_ENV
