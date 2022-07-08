@@ -73,11 +73,16 @@ jobs:
         run: ./codecov
       - name: Typecheck
         run: mypy -p fooddata_vegattributes
+      - name: Append Git tag to generated JSON filename
+        run: >
+          filename=${{ env.GENERATED_JSON_FILENAME }};
+          mv "$filename" ${filename%%.*}-$(git describe --tags).${filename#*.};
+          echo "PUBLISHABLE_GENERATED_JSON_FILENAME=$filename" >> $GITHUB_ENV
       - name: Publish generated JSON as GitHub release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ${{ env.GENERATED_JSON_FILENAME }}
+          files: ${{ env.PUBLISHABLE_GENERATED_JSON_FILENAME }}
   deploy-pages:
     needs: generate-and-test-and-publish
     runs-on: ubuntu-latest
