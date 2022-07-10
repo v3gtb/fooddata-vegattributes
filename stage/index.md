@@ -1,7 +1,4 @@
-{% if site.data.env.env == "stage" %}
-  **NOTE:** This is the staging version of the docs! Nothing here constitutes
-  official documentation.
-{% endif %}
+**NOTE:** This is the staging version of the docs! Nothing here constitutes official documentation.
 ## About
 
 The aim of this project is to provide free and open add-on data for the
