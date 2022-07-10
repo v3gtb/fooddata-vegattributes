@@ -67,7 +67,7 @@ IDs for each category can be viewed here:
 ## License
 
 Like the USDA FDC datasets themselves, the data published by this project is
-hereby released into the public domain or, in jurisdiction where this is not
+hereby released into the public domain or, in jurisdictions where this is not
 possible, the closest legal equivalent.
 
 The script to generate the data is provided under the MIT license.
