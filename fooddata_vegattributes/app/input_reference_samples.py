@@ -1,6 +1,8 @@
 import random
 
+from ..abstract_food_store import AbstractFoodStore
 from ..category import Category
+from ..food import Food
 from ..fdc_app import get_fdc_app_details_url
 from ..reference_sample import ReferenceSample
 
@@ -16,6 +18,22 @@ shortcut_to_category = {
   "vto": Category.VEGETARIAN_OR_OMNI,
   "o": Category.OMNI,
 }
+
+def print_ingredients(food_store: AbstractFoodStore, food: Food, indent=1):
+  for input_food_stub in food.input_food_stubs:
+    assert input_food_stub.fdc_id != food.fdc_id
+    try:
+      input_food = food_store.get_by_ingredient_code(
+        input_food_stub.ingredient_code
+      )
+    except KeyError:
+      input_food = None
+    print(f"{'  '*indent}{input_food_stub.description} ", end="")
+    if input_food is not None:
+      print(f"(FDC ID: {input_food.fdc_id})")
+      print_ingredients(food_store, input_food, indent+1)
+    else:
+      print(f"(ingredient code: {input_food_stub.ingredient_code})")
 
 def main():
   with default_food_and_reference_sample_stores(create_ref_store=True) as (
@@ -34,6 +52,9 @@ def main():
       print(f"FDC ID: {food.fdc_id}")
       print(f"Description: {food.description}")
       print(f"URL: {get_fdc_app_details_url(food.fdc_id)}")
+      if food.input_food_stubs:
+        print("Ingredients:")
+        print_ingredients(food_store, food)
       print("Category shortcuts:")
       for shortcut, category in shortcut_to_category.items():
         print(f"- {shortcut}: {category.name}")
