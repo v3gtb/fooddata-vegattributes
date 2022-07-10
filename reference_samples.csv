@@ -166,3 +166,8 @@ fdc_id,expected_category,known_failure,description
 1104410,VEGAN,N,Daiquiri
 1097900,VEGETARIAN,N,"Coffee creamer,powder, fat free, flavored"
 169903,OMNI,N,"Pheasant, cooked, total edible"
+1101731,VEGAN_VEGETARIAN_OR_OMNI,Y,Cereal (Kellogg's Froot Loops)
+1101691,VEGAN_VEGETARIAN_OR_OMNI,Y,Cereal (Kellogg's All-Bran)
+1101712,VEGAN_VEGETARIAN_OR_OMNI,Y,Cereal (Post Cocoa Pebbles)
+1101762,VEGAN_VEGETARIAN_OR_OMNI,Y,Cereal (Quaker Life)
+1101807,VEGAN_VEGETARIAN_OR_OMNI,Y,Cereal (Kellogg's Special K Red Berries)
