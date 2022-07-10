@@ -6,6 +6,7 @@ from pathlib import Path
 from fooddata_vegattributes.app.default_paths import default_dir_paths
 from fooddata_vegattributes.category import Category
 from fooddata_vegattributes.fdc_app import get_fdc_app_details_url
+from fooddata_vegattributes.reference_samples_csv import ReferenceSamplesCsv
 
 json_path = (
   f"debug_{default_dir_paths.generated_vegattributes_json}"
@@ -51,6 +52,23 @@ def main():
             f"- {description} (fdcId: [{fdc_id}]({url}); "
             f"via {source}{optional_discrepancies})\n"
           )
+
+  data_dir = output_dir/"_data"
+  data_dir.mkdir(exist_ok=True)
+  with ReferenceSamplesCsv.from_path(
+    default_dir_paths.reference_samples_csv
+  ) as reference_samples_csv, (
+    data_dir/"stats.yml"
+  ).open("w") as stats_file:
+    reference_sample_dicts = list(
+      reference_samples_csv.read_all_reference_sample_dicts()
+    )
+    n_known_failures = sum(
+      1 for r in reference_sample_dicts if r["known_failure"]
+    )
+    failure_fraction = n_known_failures / len(reference_sample_dicts)
+    stats_file.write(f"failure_percentage: {failure_fraction*100:.1f}\n")
+
 
 
 if __name__ == "__main__":

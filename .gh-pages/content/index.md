@@ -20,6 +20,14 @@ incorrectly categorized foods that will hopefully become fewer over time. At
 some point, I might extend the heuristic to use category data provided by the
 USDA in addition to the descriptions, which could improve the accuracy a bit.
 
+A rough estimate for a lower bound on the percentage of errors is the
+percentage of known failures in the [reference
+data](https://github.com/v3gtb/fooddata-vegattributes/blob/main/reference_samples.csv)
+used for tests, which is currently {{ site.data.stats.failure_percentage }}%.
+The real percentage of errors will be larger than that as known failures are
+likely to be fixed, after which the lines in question remain in the reference
+data with the known failure mark removed to serve as regression tests.
+
 ## Supported datasets
 
 Attributes are provided for foods in the FNDDS ("Survey") and SR Legacy
