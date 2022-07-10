@@ -87,8 +87,57 @@ jobs:
           files: ${{ env.PUBLISHABLE_GENERATED_JSON_FILENAME }}
           fail_on_unmatched_files: true
           generate_release_notes: true
+  deploy-pages-staging:
+    needs: generate-and-test-and-publish
+    if: "github.ref_type != 'tag' && github.ref_name != 'main'"
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages-stage
+      url: https://v3gtb.github.io/fooddata-vegattributes/stage/
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Install project's Python package
+        run: pip install -e .
+      - name: Download generated JSON(s) artifact from generate step
+        uses: actions/download-artifact@v3
+        with:
+          name: generated-json
+      - name: Generate GitHub Pages contents
+        run: python .gh-pages/generate-pages.py
+      - name: Copy GitHub Pages (staging) contents to temporary directory
+        run: |
+          PAGES_TMPDIR="$(mktemp -d)"
+          cp -r .gh-pages/content/* "$PAGES_TMPDIR"
+          echo "PAGES_TMPDIR=$PAGES_TMPDIR" >> "$GITHUB_ENV"
+      - name: Check out GitHub Pages branch (gh-pages)
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          clean: true
+      - name: Clear stage working tree and copy Pages contents over it
+        run: |
+          shopt -s dotglob
+          shopt -s extglob
+          mkdir -p stage
+          cd stage
+          git clean -xfd
+          git rm -rf !(..|.|.git|.gitignore) || true
+          cp -r "$PAGES_TMPDIR"/* ./
+      - name: Commit and push changes for GitHub Pages
+        run: |
+          git config user.name 'github-actions-wf'
+          shopt -s globstar
+          git add -A .
+          if git diff --cached --exit-code; then
+            echo "no updates to GH pages contents"
+          else
+            git commit -m 'Update GH pages contents'
+            git push
+          fi
   deploy-pages:
     needs: generate-and-test-and-publish
+    if: "github.ref_type == 'tag' || github.ref_name == 'main'"
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
@@ -104,7 +153,8 @@ jobs:
       - name: Copy GitHub Pages contents to temporary directory
         run: |
           PAGES_TMPDIR="$(mktemp -d)"
-          cp -r .gh-pages/content/* "$PAGES_TMPDIR"/
+          mkdir -p "$PAGES_TMPDIR"
+          cp -r .gh-pages/content/* "$PAGES_TMPDIR"
           echo "PAGES_TMPDIR=$PAGES_TMPDIR" >> "$GITHUB_ENV"
       - name: Check out GitHub Pages branch (gh-pages)
         uses: actions/checkout@v3
