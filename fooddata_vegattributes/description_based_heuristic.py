@@ -141,7 +141,11 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
   TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI: {
     'dumpling',
     'fat',
+    'general mills',
+    'kellogg',
     'kimchi',
+    'post',
+    'quaker',
     'ravioli, ns',
     'sandwich, nfs', 'soup, nfs', 'stew, nfs', 'sushi, nfs',
   },
