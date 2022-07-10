@@ -2,8 +2,6 @@ title: fooddata-vegattributes
 description: >-
   Attributes specifying whether a food is vegan or vegetarian for certain USDA
   FDC FoodData datasets.
-url: "http://v3gtb.github.io/fooddata-vegattributes"
-baseUrl: "/"
 github_username: v3gtb
 
 # Build settings
