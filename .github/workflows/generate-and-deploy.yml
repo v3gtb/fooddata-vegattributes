@@ -105,6 +105,12 @@ jobs:
           name: generated-json
       - name: Generate GitHub Pages contents
         run: python .gh-pages/generate-pages.py
+      - name: Write the fact that this is for stage into index page
+        run: >
+          ( echo '**NOTE:** This is the staging version of the docs!'
+          'Nothing here constitutes official documentation.';
+          cat .gh-pages/content/index.md ) > index2.md;
+          mv index2.md .gh-pages/content/index.md
       - name: Copy GitHub Pages (staging) contents to temporary directory
         run: |
           PAGES_TMPDIR="$(mktemp -d)"
