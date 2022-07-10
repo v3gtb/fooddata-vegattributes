@@ -329,7 +329,6 @@
 - Spices, savory, ground (fdcId: [170936](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170936); via heuristic)
 - Spices, tarragon, dried (fdcId: [170937](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170937); via heuristic)
 - Spices, thyme, dried (fdcId: [170938](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170938); via heuristic)
-- Spices, turmeric, ground (fdcId: [172231](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172231); via heuristic)
 - Stew, hominy with mutton (Navajo) (fdcId: [168043](https://fdc.nal.usda.gov/fdc-app.html#/food-details/168043); via heuristic)
 - Sweet and sour sauce (fdcId: [1103971](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103971); via heuristic)
 - Sweeteners, tabletop, aspartame, EQUAL, packets (fdcId: [169657](https://fdc.nal.usda.gov/fdc-app.html#/food-details/169657); via heuristic)
