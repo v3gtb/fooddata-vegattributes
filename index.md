@@ -44,9 +44,9 @@ in which it's impossible to tell from the available information whether
 something is vegan/vegetarian or not. Although this meaning is technically
 different from the strictness-dependent categorization above, in practice these
 cases tend to overlap almost perfectly. Returning e.g. to the example above,
-there do exist strictly vegan wines made without animal products in any step of
-the process, but a description saying just "wine" could refer to either these
-or the non-vegan variants.
+there do exist strictly vegan wines made without resorting to animal products
+in any step of the process, but a description saying just "wine" could refer to
+either these or the non-vegan variants.
 
 ## Supported datasets
 
