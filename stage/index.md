@@ -38,7 +38,7 @@ composite category. E.g., wines should ideally all be categorized as
 the winemaking process involve animal
 products](https://www.peta.org/about-peta/faq/is-wine-vegan/), some of which
 require killing the animal to extract, although it's plausible that a subset of
-vegans would consider them vegan regardless.
+vegans/vegetarians would consider them vegan/vegetarian regardless.
 
 Note that these same composite categories are also used more generally in cases
 in which it's impossible to tell from the available information whether
