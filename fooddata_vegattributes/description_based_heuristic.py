@@ -135,7 +135,6 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
 
   TokenCategory.SUGGESTS_VEGAN_OR_OMNI: {
     'jelly',
-    'wine',
   },
 
   TokenCategory.SUGGESTS_VEGAN_VEGETARIAN_OR_OMNI: {
@@ -148,6 +147,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'quaker',
     'ravioli, ns',
     'sandwich, nfs', 'soup, nfs', 'stew, nfs', 'sushi, nfs',
+    'wine',
   },
 
   TokenCategory.SUGGESTS_VEGETARIAN_OR_OMNI: set(),
