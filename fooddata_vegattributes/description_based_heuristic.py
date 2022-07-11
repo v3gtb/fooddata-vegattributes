@@ -159,7 +159,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'caribou', 'carp', 'casserole', 'chicken', 'chorizo', 'clam',
     'cod', 'crab', 'croaker',
     'deer', 'dog', 'dove', 'duck',
-    'eel',
+    'eel', 'emu',
     'fish', 'flounder', 'frog',
     'gelatin', 'gizzard', 'goat', 'goulash', 'gravy', 'ground hog',
     'haddock', 'halibut', 'herring', 'ham', 'jerky',
