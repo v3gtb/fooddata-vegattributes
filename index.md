@@ -28,6 +28,26 @@ The real percentage of errors will be larger than that as known failures are
 likely to be fixed, after which the lines in question remain in the reference
 data with the known failure mark removed to serve as regression tests.
 
+## Strictness
+
+For those foods whose categorization as vegan/vegetarian/omni depends on one's
+level of "strictness", an attempt is made to classify them as an appropriate
+composite category. E.g., wines should ideally all be categorized as
+`VEGAN_VEGETARIAN_OR_OMNI` because [certain filtration methods normally used in
+the winemaking process involve animal
+products](https://www.peta.org/about-peta/faq/is-wine-vegan/), some of which
+require killing the animal to extract, although it's plausible that a subset of
+vegans/vegetarians would consider them vegan/vegetarian regardless.
+
+Note that these same composite categories are also used more generally in cases
+in which it's impossible to tell from the available information whether
+something is vegan/vegetarian or not. Although this meaning is technically
+different from the strictness-dependent categorization above, in practice these
+cases tend to overlap almost perfectly. Returning e.g. to the example above,
+there do exist strictly vegan wines made without animal products in any step of
+the process, but a description saying just "wine" could refer to either these
+or the non-vegan variants.
+
 ## Supported datasets
 
 Attributes are provided for foods in the FNDDS ("Survey") and SR Legacy
