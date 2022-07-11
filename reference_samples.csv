@@ -171,3 +171,41 @@ fdc_id,expected_category,known_failure,description
 1101712,VEGAN_VEGETARIAN_OR_OMNI,N,Cereal (Post Cocoa Pebbles)
 1101762,VEGAN_VEGETARIAN_OR_OMNI,N,Cereal (Quaker Life)
 1101807,VEGAN_VEGETARIAN_OR_OMNI,N,Cereal (Kellogg's Special K Red Berries)
+173742,VEGAN,N,"Beans, kidney, california red, mature seeds, raw"
+172436,VEGAN,N,"Pigeon peas (red gram), mature seeds, raw"
+1099098,OMNI,N,"Abalone, cooked, NS as to cooking method"
+172834,OMNI,N,"Emu, full rump, cooked, broiled"
+1100555,VEGAN,N,Almond butter
+1100609,VEGAN,N,Tahini
+1100060,OMNI,N,"Meatballs, Swedish, in gravy, with noodles, diet frozen meal"
+174312,OMNI,N,"Lamb, leg, whole (shank and sirloin), separable lean and fat, trimmed to 1/4"" fat, choice, cooked, roasted"
+173363,OMNI,N,"Beef, round, knuckle, tip center, steak, separable lean and fat, trimmed to 0"" fat, select, raw"
+167755,VEGAN,N,"Raspberries, raw"
+1102248,OMNI,N,"Pasta with cream sauce and meat, ready-to-heat"
+170465,VEGAN,N,"Turnips, raw"
+1101176,VEGETARIAN,N,"Strudel, cheese"
+1102389,VEGAN,N,"Rice, white, with peas, no added fat"
+168525,VEGAN,N,"Corn, sweet, yellow, cooked, boiled, drained, with salt"
+1102424,VEGAN,N,Black beans and brown rice
+170926,VEGAN,N,"Spices, ginger, ground"
+1104162,VEGAN,N,"Frozen coffee drink, with non-dairy milk"
+1098370,OMNI,N,"Veal chop, fried, lean and fat eaten"
+170286,VEGAN,N,Buckwheat
+174426,OMNI,N,"Game meat, elk, ground, cooked, pan-broiled"
+1100883,VEGETARIAN,N,"Bread, pumpkin"
+168311,OMNI,N,"Pork, fresh, loin, sirloin (roasts), boneless, separable lean only, cooked, roasted"
+168849,VEGAN,N,"Snacks, banana chips"
+170232,OMNI,N,"Beef, round, tip round, roast, separable lean and fat, trimmed to 0"" fat, select, cooked, roasted"
+1098349,OMNI,N,"Lamb, shoulder chop, cooked, lean only eaten"
+1103118,VEGAN,N,"Kale, frozen, cooked, no added fat"
+1098542,OMNI,N,"Chicken thigh, fried, coated, skin / coating not eaten, from restaurant"
+171562,OMNI,N,"Soup, chicken broth or bouillon, dry"
+1103178,VEGETARIAN,N,"Broccoli, fresh, cooked with butter or margarine"
+1098033,VEGETARIAN,N,"Cheese, Swiss"
+1101870,VEGETARIAN,N,"Burrito with beans, meatless, from fast food"
+1100894,VEGETARIAN,N,"Cake or cupcake, applesauce, with icing or filling"
+1102574,OMNI,N,"Noodle soup, with fish ball, shrimp, and dark green leafy vegetable"
+1100978,VEGETARIAN,N,"Cookie, chocolate, with chocolate filling or coating, fat free"
+172716,VEGETARIAN,N,"Cookies, chocolate chip, commercially prepared, regular, higher fat, enriched"
+170906,VEGETARIAN,N,"Yogurt, vanilla, non-fat"
+1103912,VEGETARIAN,N,"Salad dressing, fat free, NFS"
