@@ -105,6 +105,8 @@
 - Crackers, rye, wafers, plain (fdcId: [172744](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172744); via heuristic)
 - Crackers, rye, wafers, seasoned (fdcId: [172745](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172745); via heuristic)
 - Crackers, saltine, multigrain (fdcId: [1101312](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101312); via heuristic)
+- Crackers, saltine, reduced fat (fdcId: [1101311](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101311); via heuristic)
+- Crackers, saltines, fat-free, low-sodium (fdcId: [175068](https://fdc.nal.usda.gov/fdc-app.html#/food-details/175068); via heuristic)
 - Crackers, saltines, whole wheat (includes multi-grain) (fdcId: [167942](https://fdc.nal.usda.gov/fdc-app.html#/food-details/167942); via heuristic)
 - Crackers, sandwich (fdcId: [1101314](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101314); via heuristic)
 - Crackers, sandwich, peanut butter filled (fdcId: [1101315](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101315); via heuristic)
