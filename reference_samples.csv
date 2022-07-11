@@ -205,3 +205,7 @@ fdc_id,expected_category,known_failure,description
 1101870,VEGETARIAN,N,"Burrito with beans, meatless, from fast food"
 1100894,VEGETARIAN,N,"Cake or cupcake, applesauce, with icing or filling"
 1102574,OMNI,N,"Noodle soup, with fish ball, shrimp, and dark green leafy vegetable"
+1100978,VEGETARIAN,N,"Cookie, chocolate, with chocolate filling or coating, fat free"
+172716,VEGETARIAN,N,"Cookies, chocolate chip, commercially prepared, regular, higher fat, enriched"
+170906,VEGETARIAN,N,"Yogurt, vanilla, non-fat"
+1103912,VEGETARIAN,N,"Salad dressing, fat free, NFS"
