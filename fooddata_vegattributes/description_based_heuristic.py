@@ -56,7 +56,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
   },
 
   TokenCategory.SUGGESTS_VEGAN: {
-    'agave', 'almond', 'almond milk', 'amaranth',
+    'agave', 'almond', 'almond butter', 'almond milk', 'amaranth',
     'apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'avocado',
     'banana', 'barley', 'basil', 'bean', 'beans, kidney', 'beet',
     'berries', 'berry', 'beer', 'black russian', 'bread',
@@ -89,8 +89,8 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'quinoa',
     'radicchio', 'radish', 'raisin', 'rhubarb', 'rice', 'rice cake',
     'roll', 'root', 'rum',
-    'sauerkraut', 'screwdriver', 'seed', 'seitan', 'sesame', 'shoot',
-    'soy', 'soy milk', 'soymilk', 'spinach',
+    'sauerkraut', 'screwdriver', 'seed', 'seitan', 'sesame', 'sesame butter',
+    'shoot', 'soy', 'soy milk', 'soymilk', 'spinach',
     'soda', 'soft drink', 'sports drink', 'sprout', 'squash', 'sugar', 'syrup',
     'tabbouleh', 'tahini', 'tamarind', 'tangerine', 'tannier', 'tea', 'tequila',
     'tempeh', 'tofu', 'tomato', 'tortilla', 'truffle', 'turnip',

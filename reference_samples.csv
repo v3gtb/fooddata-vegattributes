@@ -175,3 +175,5 @@ fdc_id,expected_category,known_failure,description
 172436,VEGAN,N,"Pigeon peas (red gram), mature seeds, raw"
 1099098,OMNI,N,"Abalone, cooked, NS as to cooking method"
 172834,OMNI,N,"Emu, full rump, cooked, broiled"
+1100555,VEGAN,N,Almond butter
+1100609,VEGAN,N,Tahini
