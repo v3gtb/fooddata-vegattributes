@@ -166,7 +166,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'kidney',
     'lamb', 'lard', 'liver', 'lobster',
     'mackerel', 'marshmallow', 'matzo', 'meat', 'meringue',
-    'moose', 'mortadella', 'mullet', 'mussel',
+    'mollusk', 'moose', 'mortadella', 'mullet', 'mussel',
     'nacho',
     'octopus', 'okra', 'opossum', 'ostrich', 'oyster', 'ox',
     'pad thai', 'pastrami', 'pepperoni', 'pepperpot', 'perch',

@@ -173,3 +173,4 @@ fdc_id,expected_category,known_failure,description
 1101807,VEGAN_VEGETARIAN_OR_OMNI,N,Cereal (Kellogg's Special K Red Berries)
 173742,VEGAN,N,"Beans, kidney, california red, mature seeds, raw"
 172436,VEGAN,N,"Pigeon peas (red gram), mature seeds, raw"
+1099098,OMNI,N,"Abalone, cooked, NS as to cooking method"
