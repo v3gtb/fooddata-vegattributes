@@ -58,7 +58,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
   TokenCategory.SUGGESTS_VEGAN: {
     'agave', 'almond', 'almond milk', 'amaranth',
     'apple', 'apricot', 'artichoke', 'asparagus', 'aubergine', 'avocado',
-    'banana', 'barley', 'basil', 'bean', 'beet',
+    'banana', 'barley', 'basil', 'bean', 'beans, kidney', 'beet',
     'berries', 'berry', 'beer', 'black russian', 'bread',
     'broccoli', 'bulgur', 'bruschetta',
     'cabbage', 'cactus', 'canola', 'cantaloupe', 'carrot', 'cashew', 'celery',
@@ -83,7 +83,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     'oat', 'oat milk', 'old fashioned', 'olive', 'onion', 'orange',
     'pakora', 'papaya', 'parsley', 'parsnip', 'pasta',
     'pea', 'pecan', 'peel', 'pepper', 'persimmon',
-    'pickle', 'pimiento', 'pita',
+    'pickle', 'pigeon peas', 'pimiento', 'pita',
     'plant', 'plantain', 'plum', 'pomegranate', 'potato',
     'pretzel', 'prune', 'pumpkin',
     'quinoa',
