@@ -3253,6 +3253,7 @@
 - Yogurt, vanilla or lemon flavor, nonfat milk, sweetened with low-calorie sweetener, fortified with vitamin D (fdcId: [172220](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172220); via heuristic)
 - Yogurt, vanilla, low fat, fortified with vitamin D (fdcId: [172219](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172219); via heuristic)
 - Yogurt, vanilla, low fat. (fdcId: [170888](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170888); via heuristic)
+- Yogurt, vanilla, non-fat (fdcId: [170906](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170906); via reference)
 - Yogurt, whole milk, baby food (fdcId: [1097603](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097603); via heuristic)
 - Yogurt, whole milk, baby food, with fruit and multigrain cereal puree, NFS (fdcId: [1097604](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097604); via heuristic)
 - Yogurt, whole milk, baby food, with fruit and multigrain cereal puree, plus DHA (fdcId: [1097606](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097606); via heuristic)

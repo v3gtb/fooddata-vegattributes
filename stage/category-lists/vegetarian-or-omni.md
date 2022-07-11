@@ -113,4 +113,3 @@
 - Sour dressing, non-butterfat, cultured, filled cream-type (fdcId: [171259](https://fdc.nal.usda.gov/fdc-app.html#/food-details/171259); via heuristic)
 - Yogurt, Greek, 2%fat, coconut blend, CHOBANI (fdcId: [171260](https://fdc.nal.usda.gov/fdc-app.html#/food-details/171260); via heuristic)
 - Yogurt, Greek, with oats (fdcId: [1097581](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097581); via heuristic)
-- Yogurt, vanilla, non-fat (fdcId: [170906](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170906); via heuristic)
