@@ -34,6 +34,9 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     "fat free",
     "fat-free",
     "fate",
+    "full fat",
+    "fullfat",
+    "full-fat",
     "higher fat",
     "low fat",
     "lower fat",
@@ -46,6 +49,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     "reduced fat",
     "spray",
     "% fat",
+    "%fat",
   },
 
   TokenCategory.NULLIFIES_OMNI: {
