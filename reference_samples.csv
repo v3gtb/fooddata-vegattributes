@@ -209,3 +209,4 @@ fdc_id,expected_category,known_failure,description
 172716,VEGETARIAN,N,"Cookies, chocolate chip, commercially prepared, regular, higher fat, enriched"
 170906,VEGETARIAN,N,"Yogurt, vanilla, non-fat"
 1103912,VEGETARIAN,N,"Salad dressing, fat free, NFS"
+174273,VEGAN,N,"Soy flour, full-fat, raw"
