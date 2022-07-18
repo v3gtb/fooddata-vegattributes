@@ -16,9 +16,7 @@ The data are generated using a naive heuristic based only on the descriptions
 of each food and those of its ingredients, which are compared to hardcoded
 lists of phrases and the most likely categories they suggest. Neither this
 approach nor the lists of phrases are perfect, so there are still many
-incorrectly categorized foods that will hopefully become fewer over time. At
-some point, I might extend the heuristic to use category data provided by the
-USDA in addition to the descriptions, which could improve the accuracy a bit.
+incorrectly categorized foods that will hopefully become fewer over time.
 
 A rough estimate for a lower bound on the percentage of errors is the
 percentage of known failures in the [reference
