@@ -3574,7 +3574,7 @@
 - Soy based sauce, for use with vegetables (fdcId: [1103921](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103921); via heuristic)
 - Soy chips (fdcId: [1100448](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1100448); via heuristic)
 - Soy flour, defatted (fdcId: [174275](https://fdc.nal.usda.gov/fdc-app.html#/food-details/174275); via heuristic)
-- Soy flour, full-fat, raw (fdcId: [174273](https://fdc.nal.usda.gov/fdc-app.html#/food-details/174273); via heuristic)
+- Soy flour, full-fat, raw (fdcId: [174273](https://fdc.nal.usda.gov/fdc-app.html#/food-details/174273); via reference)
 - Soy flour, full-fat, roasted (fdcId: [174274](https://fdc.nal.usda.gov/fdc-app.html#/food-details/174274); via heuristic)
 - Soy meal, defatted, raw (fdcId: [172445](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172445); via heuristic)
 - Soy milk (fdcId: [1097542](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097542); via heuristic)
