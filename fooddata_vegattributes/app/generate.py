@@ -107,7 +107,7 @@ def main():
       foods_in_categories[category],
       n_samples,
       pad=lambda: Food(
-        fdc_id=-1, ingredient_code=-1, description="", input_food_stubs=(),
+        fdc_id=-1, food_code=-1, description="", input_food_stubs=(),
         fdc_category_description="",
       )
     )
