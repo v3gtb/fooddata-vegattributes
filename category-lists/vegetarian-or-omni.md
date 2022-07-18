@@ -93,5 +93,4 @@
 - Snacks, KELLOGG, KELLOGG'S RICE KRISPIES TREATS Squares (fdcId: [169687](https://fdc.nal.usda.gov/fdc-app.html#/food-details/169687); via heuristic)
 - Snacks, granola bar, GENERAL MILLS, NATURE VALLEY, with yogurt coating (fdcId: [174802](https://fdc.nal.usda.gov/fdc-app.html#/food-details/174802); via heuristic)
 - Sour dressing, non-butterfat, cultured, filled cream-type (fdcId: [171259](https://fdc.nal.usda.gov/fdc-app.html#/food-details/171259); via heuristic)
-- Yogurt, Greek, 2%fat, coconut blend, CHOBANI (fdcId: [171260](https://fdc.nal.usda.gov/fdc-app.html#/food-details/171260); via heuristic)
 - Yogurt, Greek, with oats (fdcId: [1097581](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097581); via heuristic)

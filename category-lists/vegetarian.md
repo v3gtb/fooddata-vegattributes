@@ -3202,6 +3202,7 @@
 - Yogurt, Greek, 2% fat, pineapple, CHOBANI (fdcId: [170909](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170909); via heuristic)
 - Yogurt, Greek, 2% fat, strawberry banana, CHOBANI (fdcId: [170912](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170912); via heuristic)
 - Yogurt, Greek, 2% fat,mixed berry blend, CHOBANI (fdcId: [170891](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170891); via heuristic)
+- Yogurt, Greek, 2%fat, coconut blend, CHOBANI (fdcId: [171260](https://fdc.nal.usda.gov/fdc-app.html#/food-details/171260); via reference)
 - Yogurt, Greek, Blueberry, CHOBANI (fdcId: [170914](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170914); via heuristic)
 - Yogurt, Greek, NS as to type of milk or flavor (fdcId: [1097555](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097555); via heuristic)
 - Yogurt, Greek, NS as to type of milk, flavors other than fruit (fdcId: [1097577](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1097577); via heuristic)
