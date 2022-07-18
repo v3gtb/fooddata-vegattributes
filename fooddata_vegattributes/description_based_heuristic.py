@@ -49,6 +49,7 @@ categories_to_tokens: Dict[TokenCategory, Set[str]] = {
     "reduced fat",
     "spray",
     "% fat",
+    "%fat",
   },
 
   TokenCategory.NULLIFIES_OMNI: {
