@@ -26,6 +26,9 @@ The real percentage of errors will be larger than that as known failures are
 likely to be fixed, after which the lines in question remain in the reference
 data with the known failure mark removed to serve as regression tests.
 
+If you find any mistakes, feel free to
+[open an issue](https://github.com/v3gtb/fooddata-vegattributes/issues/new).
+
 ## Strictness
 
 For those foods whose categorization as vegan/vegetarian/omni depends on one's
@@ -89,3 +92,7 @@ hereby released into the public domain or, in jurisdictions where this is not
 possible, the closest legal equivalent.
 
 The script to generate the data is provided under the MIT license.
+
+## Development
+
+Some incomplete notes on development can be found [here](dev-notes.html).
