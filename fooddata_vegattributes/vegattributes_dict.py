@@ -1,18 +1,36 @@
 from collections import ChainMap
-from typing import cast, Dict, TypedDict
+from typing import cast, Dict, TypedDict, Union
 
 from .categorization import Categorization
 from .food import Food
 
 
-class VegAttributesDict(TypedDict):
+class VegAttributesBaseDict(TypedDict, total=False):
   fdcId: int
   vegCategory: str
 
-class VerboseVegAttributesDict(VegAttributesDict, total=False):
+class SurveyVegAttributesDict(VegAttributesBaseDict):
+  foodCode: int
+
+class SrLegacyVegAttributesDict(VegAttributesBaseDict):
+  ndbNumber: int
+
+VegAttributesDict = Union[SurveyVegAttributesDict, SrLegacyVegAttributesDict]
+
+class VerboseVegAttributesDict(VegAttributesBaseDict, total=False):
   description: str
   vegCategorySource: str
   vegCategoryDiscrepancies: Dict[str, str]
+  # ... and also the same foodCode/ndbNumber thing as above but I'm too lazy to
+  # create 2 more subclasses... TODO
+
+def appropriate_code_dict_from_food(food: Food) -> Dict[str, int]:
+  if food.food_code is not None:
+    return { "foodCode": food.food_code }
+  elif food.ndb_number is not None:
+    return { "ndbNumber": food.ndb_number }
+  else:
+    raise ValueError("invalid food with neither FoodCode nor NDB Number")
 
 def vegattributes_dict_from_food(
   food: Food,
@@ -20,10 +38,13 @@ def vegattributes_dict_from_food(
 ) -> VegAttributesDict:
   return cast(
     VegAttributesDict,
-    {
-      "fdcId": food.fdc_id,
-      "vegCategory": categorization.category.name,
-    },
+    dict(ChainMap(
+      appropriate_code_dict_from_food(food),
+      {
+        "fdcId": food.fdc_id,
+        "vegCategory": categorization.category.name,
+      },
+    ))
   )
 
 def verbose_vegattributes_dict_from_food(
@@ -33,6 +54,7 @@ def verbose_vegattributes_dict_from_food(
   return cast(
     VerboseVegAttributesDict,
     dict(ChainMap(
+      appropriate_code_dict_from_food(food),
       {
         "description": food.description,
         "vegCategorySource": categorization.source.name,

@@ -26,9 +26,9 @@ def fake_food_data() -> List[FoodDataDict]:
       "fdcId": 654321,
       "description": "Some m e a t y food, salted",
       "inputFoods": [],
-      "foodCode": 9000,
-      "wweiaFoodCategory": {
-        "wweiaFoodCategoryDescription": "Somesuch and other miscellany",
+      "ndbNumber": 9000,
+      "foodCategory": {
+        "description": "Somesuch and other miscellany",
       },
     },
   ]
@@ -88,9 +88,11 @@ def test_generate_vegattributes_json(
     {
       "fdcId": 123456,
       "vegCategory": "UNCATEGORIZED",
+      "foodCode": 3000,
     },
     {
       "fdcId": 654321,
       "vegCategory": "OMNI",
+      "ndbNumber": 9000,
     },
   ]

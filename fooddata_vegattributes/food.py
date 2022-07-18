@@ -15,20 +15,30 @@ class Food:
   description: str
   fdc_id: int
 
-  ingredient_code: Optional[int]
-  """
-  ID that is most likely to be used to refer to this food as an ingredient.
-
-  Not actually present on the data, we just take the FoodCode for entries in
-  FNDDS ("Survey"), NDB Number for entries in SR Legacy.
-  """
-
   input_food_stubs: Tuple[InputFoodStub, ...]
 
   fdc_category_description: str
   """
   Not to be confused with "category" in our sense (vegan/vegetarian/omni)!
   """
+
+  # different numbers identifying foods across FDC dataset releases
+  food_code: Optional[int] = None
+  'Identifies foods in the FNDDS ("Survey") dataset'
+
+  ndb_number: Optional[int] = None
+  "Identifies foods in the SR Legacy dataset"
+
+  @property
+  def ingredient_code(self) -> int:
+    """
+    ID that is most likely to be used to refer to this food as an ingredient.
+
+    Not actually present under this name on the original data; we just take the
+    FoodCode for entries in FNDDS ("Survey") and NDB Number for entries in SR
+    Legacy.
+    """
+    return self.food_code if self.food_code is not None else self.ndb_number
 
   @classmethod
   def from_fdc_food_dict(cls, d: FoodDataDict) -> "Food":
@@ -47,7 +57,7 @@ class Food:
   def from_fdc_survey_food_dict(cls, d: SurveyFoodDataDict) -> "Food":
     return cls(
       **cls._kwargs_from_fdc_common_food_dict(d),
-      ingredient_code=d["foodCode"],
+      food_code=d["foodCode"],
       fdc_category_description=(
         d["wweiaFoodCategory"]["wweiaFoodCategoryDescription"]
       ),
@@ -57,7 +67,7 @@ class Food:
   def from_fdc_sr_legacy_food_dict(cls, d: SrLegacyFoodDataDict) -> "Food":
     return cls(
       **cls._kwargs_from_fdc_common_food_dict(d),
-      ingredient_code=d["ndbNumber"],
+      ndb_number=d["ndbNumber"],
       fdc_category_description=d["foodCategory"]["description"],
     )
 
