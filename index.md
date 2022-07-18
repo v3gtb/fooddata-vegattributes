@@ -43,18 +43,18 @@ vegans/vegetarians would consider them vegan/vegetarian regardless.
 Note that these same composite categories are also used more generally in cases
 in which it's impossible to tell from the available information whether
 something is vegan/vegetarian or not. Although this meaning is technically
-different from the strictness-dependent categorization above, in practice these
-cases tend to overlap almost perfectly. Returning e.g. to the example above,
-there do exist strictly vegan wines made without resorting to animal products
-in any step of the process, but a description saying just "wine" could refer to
-either these or the non-vegan variants.
+distinct from the strictness-dependent categorization above, in practice they
+tend to overlap almost perfectly. Returning e.g. to the example above, there do
+exist strictly vegan wines made without resorting to animal products in any
+step of the process, but a description saying just "wine" could refer to either
+these or the non-vegan variants.
 
 ## Supported datasets
 
 Attributes are provided for foods in the FNDDS ("Survey") and SR Legacy
 datasets. Data for both datasets are provided together in one file as foods are
-uniquely identified by their FDC ID and the file size is small anyway. As of
-now there are no plans to extend this project to the other FDC datasets, but
+uniquely identified by e.g. their FDC ID and the file size is small anyway. As
+of now there are no plans to extend this project to the other FDC datasets, but
 who knows.
 
 ## Download and file format
@@ -67,16 +67,33 @@ It is shipped as a JSON file containing a list of entries of the form
 ```json
 {
   "fdcId": "some-fdc-id",
-  "vegCategory": "CATEGORY"
+  "vegCategory": "CATEGORY",
+
+  # either:
+  "foodCode": 123456,
+  # or:
+  "ndbNumber": 654321
 }
 ```
 
 where `CATEGORY` is one of the categories listed in the section below and
-`fdcId` corresponds to the field of the same name in the FDC datasets.
+`fdcId`, `foodCode` and `ndbNumber` correspond to the fields of the same name
+in the FDC datasets. `foodCode` only appears in the FNDDS data and `ndbNumber`
+only in the SR Legacy data, so which one of these will be present in a given
+entry depends on which dataset the food entry came from.
 
-The script used to generate this data via the aforementioned heuristic can be
-found in the [GitHub
-repository](https://github.com/v3gtb/fooddata-vegattributes).
+The FDC ID by itself is enough to uniquely identify foods, but it is my
+understanding that a new FDC ID is assigned to "the same" food on every release
+of a FDC dataset, while IDs like the Food Code and NDB Number remain the same,
+the idea being that the FDC ID identifies not just a food but also the specific
+properties (e.g. determined nutrients) associated with it in that release.
+So for easier cross-FDC-release compatibility, Food Code or NDB Number are
+included here as well. Note, however, that I'm not sure whether e.g. the
+ingredient list or description can be updated as well between releases, which
+would have the potential to change the categorization as determined by this
+project. In that case, it might be more correct to use only on the FDC ID,
+although the number of errors caused by updated descriptions or ingredients is
+expected to be much, much lower than that caused by failures of the heuristic.
 
 ## Web preview
 
@@ -85,6 +102,14 @@ IDs for each category can be viewed here:
 
 {% include_relative categories-toc.md %}
 
+## Source code and development
+
+The script used to generate the data released by this project from FDC data via
+the heuristic explained above can be found in the project's
+[GitHub repository](https://github.com/v3gtb/fooddata-vegattributes).
+
+Some incomplete notes on development can be found [here](dev-notes.html).
+
 ## License
 
 Like the USDA FDC datasets themselves, the data published by this project is
@@ -92,7 +117,3 @@ hereby released into the public domain or, in jurisdictions where this is not
 possible, the closest legal equivalent.
 
 The script to generate the data is provided under the MIT license.
-
-## Development
-
-Some incomplete notes on development can be found [here](dev-notes.html).
