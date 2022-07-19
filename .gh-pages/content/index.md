@@ -20,11 +20,15 @@ incorrectly categorized foods that will hopefully become fewer over time.
 
 A rough estimate for a lower bound on the percentage of errors is the
 percentage of known failures in the [reference
-data](https://github.com/v3gtb/fooddata-vegattributes/blob/main/reference_samples.csv)
-used for tests, which is currently {{ site.data.stats.failure_percentage }}%.
+data](https://github.com/v3gtb/fooddata-vegattributes/blob/main/reference_samples.csv),
+which is currently {{ site.data.stats.failure_percentage }}%.
 The real percentage of errors will be larger than that as known failures are
 likely to be fixed, after which the lines in question remain in the reference
 data with the known failure mark removed to serve as regression tests.
+
+Note that categories listed in the reference data override those determined by
+the heuristic in the final exported data, so any individual known failure
+listed there has already been corrected.
 
 If you find any mistakes, feel free to
 [open an issue](https://github.com/v3gtb/fooddata-vegattributes/issues/new).
@@ -76,7 +80,7 @@ It is shipped as a JSON file containing a list of entries of the form
 ```
 
 where `CATEGORY` is one of the categories listed in the section below and
-`fdcId`, `foodCode` and `ndbNumber` correspond to the fields of the same name
+`fdcId`, `foodCode` and `ndbNumber` correspond to the fields of the same names
 in the FDC datasets. `foodCode` only appears in the FNDDS data and `ndbNumber`
 only in the SR Legacy data, so which one of these will be present in a given
 entry depends on which dataset the food entry came from.
@@ -96,8 +100,8 @@ expected to be much, much lower than that caused by failures of the heuristic.
 
 ## Web preview
 
-For debugging and demoing purposes, the current lists of foods and their FDC
-IDs for each category can be viewed here:
+For debugging and demoing purposes, the current lists of foods in each category
+can be viewed here:
 
 {% include_relative categories-toc.md %}
 
