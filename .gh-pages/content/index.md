@@ -1,3 +1,7 @@
+---
+title: fooddata-vegattributes
+---
+
 ## About
 
 The aim of this project is to provide free and open add-on data for the
