@@ -66,13 +66,12 @@ It is shipped as a JSON file containing a list of entries of the form
 
 ```json
 {
-  "fdcId": "some-fdc-id",
+  "fdcId": 123,
   "vegCategory": "CATEGORY",
-
   # either:
-  "foodCode": 123456,
+  "foodCode": 456,
   # or:
-  "ndbNumber": 654321
+  "ndbNumber": 789
 }
 ```
 
