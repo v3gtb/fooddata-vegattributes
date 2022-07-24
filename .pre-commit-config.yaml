@@ -1,0 +1,10 @@
+repos:
+- repo: local
+  hooks:
+  - id: generate-readme-from-gh-pages
+    name: Generate README from GitHub Pages markdown
+    language: script
+    entry: ./dev/generate-readme.py
+    pass_filenames: false
+    stages: [commit]
+    always_run: true
