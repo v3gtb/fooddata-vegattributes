@@ -51,9 +51,9 @@ def render_readme_into_file(f):
 
 def is_repo_readme_changed():
   r = run(["git", "diff", "--exit-code", "HEAD", "--", "README.md"])
-  if r == 0:
+  if r.returncode == 0:
     return False
-  elif r == 1:
+  elif r.returncode == 1:
     return True
   else:
     r.check_returncode()
@@ -70,9 +70,9 @@ if __name__ == "__main__":
       if is_repo_readme_changed():
         print(
           "Not doing anything because the README in the repo has changed in "
-          "an unexpected manner. It should only be modified by changing the "
-          "GH Pages files and then running this utility. Move your changes "
-          "there or restore the unmodified file from Git."
+          "an unexpected manner (see above). It should only be modified by "
+          "changing the GH Pages files and then running this utility. "
+          "Move your changes there or restore the unmodified file from Git."
         )
         exit(2)
       else:
