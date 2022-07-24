@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Terrible script to generate a README.md from the GH Pages index.md.
+Terrible pre-commit hook to generate a README.md from the GH Pages index.md.
 
 Must be run from the project root dir.
 """
@@ -51,9 +51,9 @@ def render_readme_into_file(f):
 
 def is_repo_readme_changed():
   r = run(["git", "diff", "--exit-code", "HEAD", "--", "README.md"])
-  if r == 0:
+  if r.returncode == 0:
     return False
-  elif r == 1:
+  elif r.returncode == 1:
     return True
   else:
     r.check_returncode()
@@ -69,12 +69,16 @@ if __name__ == "__main__":
     if r.returncode == 1:
       if is_repo_readme_changed():
         print(
-          "Not doing anything because the README in the repo has changed. "
-          "It should only be modified by changing the GH Pages files. "
+          "Not doing anything because the README in the repo has changed in "
+          "an unexpected manner (see above). It should only be modified by "
+          "changing the GH Pages files and then running this utility. "
           "Move your changes there or restore the unmodified file from Git."
         )
-        exit(1)
+        exit(2)
       else:
         move(tmp_readme_path, "README.md")
+        # this was actually successful but pre-commit should fail anyway the
+        # first time round so it can double as a check in CI
+        exit(1)
     else:
       r.check_returncode()

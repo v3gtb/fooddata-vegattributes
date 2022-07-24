@@ -61,8 +61,8 @@ jobs:
           path: |
             ${{ env.GENERATED_JSON_FILENAME }}
             debug_${{ env.GENERATED_JSON_FILENAME }}
-      - name: Install test dependencies
-        run: pip install -e .[test]
+      - name: Install test and dev dependencies
+        run: pip install -e .[test,dev]
       - name: Install codecov uploader
         run: >
           curl -Os https://uploader.codecov.io/latest/linux/codecov;
@@ -73,6 +73,8 @@ jobs:
         run: ./codecov
       - name: Typecheck
         run: mypy -p fooddata_vegattributes
+      - name: Check that README.md is up to date
+        run: pre-commit run --all-files
       - name: Append Git tag to generated JSON filename and zip it
         run: >
           filename="${{ env.GENERATED_JSON_FILENAME }}";
