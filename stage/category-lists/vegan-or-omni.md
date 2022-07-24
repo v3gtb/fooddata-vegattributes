@@ -1,4 +1,0 @@
-- Candies, jellybeans (fdcId: [167991](https://fdc.nal.usda.gov/fdc-app.html#/food-details/167991); via heuristic)
-- Doughnuts, yeast-leavened, with jelly filling (fdcId: [172759](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172759); via heuristic)
-- Jelly, all flavors (fdcId: [1103974](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103974); via heuristic)
-- Licorice (fdcId: [1104076](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1104076); via heuristic)
