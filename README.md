@@ -1,8 +1,4 @@
 # fooddata-vegattributes
-
-## About
-
-The aim of this project is to provide free and open add-on data for the
 [USDA's FDC FoodData datasets](https://fdc.nal.usda.gov/download-datasets.html)
 containing attributes that categorize foods as vegan, vegetarian, or neither.
 
@@ -23,7 +19,7 @@ incorrectly categorized foods that will hopefully become fewer over time.
 A rough estimate for a lower bound on the percentage of errors is the
 percentage of known failures in the [reference
 data](https://github.com/v3gtb/fooddata-vegattributes/blob/main/reference_samples.csv),
-which is currently {{ site.data.stats.failure_percentage }}%.
+which is currently 3.8%.
 The real percentage of errors will be larger than that as known failures are
 likely to be fixed, after which the lines in question remain in the reference
 data with the known failure mark removed to serve as regression tests.
@@ -113,6 +109,7 @@ can be viewed here:
 - [VEGETARIAN_OR_OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegetarian-or-omni) (96 entries)
 - [OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/omni) (6103 entries)
 - [UNCATEGORIZED](https://v3gtb.github.io/fooddata-vegattributes/category-lists/uncategorized) (335 entries)
+
 
 ## Source code and development
 

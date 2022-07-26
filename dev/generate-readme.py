@@ -7,31 +7,36 @@ Must be run from the project root dir.
 from tempfile import TemporaryDirectory
 import os
 from pathlib import Path
+import re
 from shutil import move
 from subprocess import Popen, PIPE, run
 
-def write_categories_toc(fout):
-  with open(".gh-pages/content/categories-toc.md") as fin:
-    for line in fin:
-      fout.write(
-        line.replace(
-          "category-lists",
-          "https://v3gtb.github.io/fooddata-vegattributes/category-lists",
-        )
-      )
+def make_urls_absolute(md_content, base_url):
+  return re.sub(r"\]\((?!http)", f"]({base_url}", md_content)
+
+"https://v3gtb.github.io/fooddata-vegattributes/category-lists",
 
 def render_readme_into_file(f):
   # generate category lists & categories TOC
   run(
     ["python3", "./.gh-pages/generate-pages.py"],
-    env={'PYTHONPATH': os.getcwd()}
+    env={'PYTHONPATH': os.getcwd()},
+    check=True,
+  )
+
+  # template out index.md
+  run(r'''(
+    cd .gh-pages/content && bundle exec ../../dev/template-out-pages-index.rb
+    )''',
+    shell=True,
+    check=True,
   )
 
   # filter index.md -> README.md
   proc = Popen(r'''(
     echo -n '# '
     grep 'name = ' setup.cfg | awk '{ print $3 }'
-    tail -n +4 .gh-pages/content/index.md
+    tail -n +4 .gh-pages/content/_index-liquid-rendered.md
     )''',
     encoding="utf-8",
     shell=True,
@@ -39,15 +44,11 @@ def render_readme_into_file(f):
   )
 
   for line in proc.stdout:
-    if line.strip() == "{% include_relative categories-toc.md %}":
-      write_categories_toc(f)
-    else:
-      f.write(
-        line.replace(
-          "(dev-notes",
-          "(https://v3gtb.github.io/fooddata-vegattributes/dev-notes",
-        )
+    f.write(
+      make_urls_absolute(
+        line, "https://v3gtb.github.io/fooddata-vegattributes/"
       )
+    )
 
 def is_repo_readme_changed():
   r = run(["git", "diff", "--exit-code", "HEAD", "--", "README.md"])
