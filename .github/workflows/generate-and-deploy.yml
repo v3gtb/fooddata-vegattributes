@@ -73,6 +73,11 @@ jobs:
         run: ./codecov
       - name: Typecheck
         run: mypy -p fooddata_vegattributes
+      - name: Install Ruby/Jekyll requirements for README check
+        run: sudo apt install -y bundler
+      - name: Install bundle for Pages (also for README check)
+        run: >
+          cd .gh-pages/content && bundle install
       - name: Check that README.md is up to date
         run: pre-commit run --all-files
       - name: Append Git tag to generated JSON filename and zip it
