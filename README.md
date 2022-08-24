@@ -19,7 +19,7 @@ incorrectly categorized foods that will hopefully become fewer over time.
 A rough estimate for a lower bound on the percentage of errors is the
 percentage of known failures in the [reference
 data](https://github.com/v3gtb/fooddata-vegattributes/blob/main/reference_samples.csv),
-which is currently 3.8%.
+which is currently 4.7%.
 The real percentage of errors will be larger than that as known failures are
 likely to be fixed, after which the lines in question remain in the reference
 data with the known failure mark removed to serve as regression tests.
