@@ -561,6 +561,8 @@
 - Squash, winter, hubbard, raw (fdcId: [168475](https://fdc.nal.usda.gov/fdc-app.html#/food-details/168475); via heuristic)
 - Strudel, apple (fdcId: [1101173](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1101173); via heuristic)
 - Strudel, apple (fdcId: [175032](https://fdc.nal.usda.gov/fdc-app.html#/food-details/175032); via heuristic)
+- Sweet potato, NFS (fdcId: [1103233](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103233); via reference; <span style="color: red;">heuristic: vegetarian</span>)
+- Sweet potato, baked, peel not eaten, fat added, NS as to fat type (fdcId: [1103242](https://fdc.nal.usda.gov/fdc-app.html#/food-details/1103242); via reference; <span style="color: red;">heuristic: vegetarian</span>)
 - Toddler formula, MEAD JOHNSON, ENFAGROW PREMIUM (formerly ENFAMIL, LIPIL, NEXT STEP), ready-to-feed (fdcId: [170993](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170993); via heuristic)
 - Toddler formula, MEAD JOHNSON, ENFAGROW, Toddler Transitions, with ARA and DHA, powder (fdcId: [170992](https://fdc.nal.usda.gov/fdc-app.html#/food-details/170992); via heuristic)
 - Toddler formula, MEAD JOHNSON, Nutramigen Toddler with LGG Powder, with ARA and DHA, not reconstituted (fdcId: [173526](https://fdc.nal.usda.gov/fdc-app.html#/food-details/173526); via heuristic)

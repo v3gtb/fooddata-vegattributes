@@ -160,7 +160,6 @@
 - Oil, cupu assu (fdcId: [173563](https://fdc.nal.usda.gov/fdc-app.html#/food-details/173563); via heuristic)
 - Oil, palm (fdcId: [171015](https://fdc.nal.usda.gov/fdc-app.html#/food-details/171015); via heuristic)
 - Oil, spotted seal (Alaska Native) (fdcId: [167641](https://fdc.nal.usda.gov/fdc-app.html#/food-details/167641); via heuristic)
-- Oil, walrus (Alaska Native) (fdcId: [168032](https://fdc.nal.usda.gov/fdc-app.html#/food-details/168032); via heuristic)
 - Oil, whale, bowhead (Alaska Native) (fdcId: [167625](https://fdc.nal.usda.gov/fdc-app.html#/food-details/167625); via heuristic)
 - Okara (fdcId: [172452](https://fdc.nal.usda.gov/fdc-app.html#/food-details/172452); via heuristic)
 - Owl, horned, flesh, raw (Alaska Native) (fdcId: [167613](https://fdc.nal.usda.gov/fdc-app.html#/food-details/167613); via heuristic)
