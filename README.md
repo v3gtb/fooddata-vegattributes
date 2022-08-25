@@ -102,13 +102,13 @@ For debugging and demoing purposes, the current lists of foods in each category
 can be viewed here:
 
 - [VEGAN](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegan) (4250 entries)
-- [VEGAN_OR_VEGETARIAN](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegan-or-vegetarian) (567 entries)
-- [VEGETARIAN](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegetarian) (3283 entries)
+- [VEGAN_OR_VEGETARIAN](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegan-or-vegetarian) (569 entries)
+- [VEGETARIAN](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegetarian) (3281 entries)
 - [VEGAN_OR_OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegan-or-omni) (4 entries)
 - [VEGAN_VEGETARIAN_OR_OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegan-vegetarian-or-omni) (238 entries)
 - [VEGETARIAN_OR_OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/vegetarian-or-omni) (96 entries)
-- [OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/omni) (6103 entries)
-- [UNCATEGORIZED](https://v3gtb.github.io/fooddata-vegattributes/category-lists/uncategorized) (335 entries)
+- [OMNI](https://v3gtb.github.io/fooddata-vegattributes/category-lists/omni) (6104 entries)
+- [UNCATEGORIZED](https://v3gtb.github.io/fooddata-vegattributes/category-lists/uncategorized) (334 entries)
 
 
 ## Source code and development
