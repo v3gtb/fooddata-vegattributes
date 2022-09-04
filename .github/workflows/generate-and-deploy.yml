@@ -83,15 +83,16 @@ jobs:
       - name: Prepare release forms of generated JSON
         run: |
           filename="${{ env.GENERATED_JSON_FILENAME }}"
+          version="${{github.ref_name}}"
           # ZIP with full version in filename ("proper")
-          new_filename="${filename%%.*}-${{github.ref_name}}.${filename#*.}"
+          new_filename="${filename%%.*}-$version.${filename#*.}"
           cp "$filename" "$new_filename"
           zipped_new_filename="${new_filename%.*}".zip
           zip "$zipped_new_filename" "$new_filename"
           echo "PUBLISHABLE_GENERATED_JSON_FILENAME=$zipped_new_filename" \
           >> $GITHUB_ENV
           # unzipped JSON with only major version in filename
-          new_filename="${filename%%.*}-${${{github.ref_name}}%%.*}.${filename#*.}"
+          new_filename="${filename%%.*}-${version%%.*}.${filename#*.}"
           cp "$filename" "$new_filename"
       - name: Publish generated JSON as GitHub release
         uses: softprops/action-gh-release@v1
