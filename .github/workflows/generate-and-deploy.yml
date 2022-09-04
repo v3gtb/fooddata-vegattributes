@@ -89,26 +89,30 @@ jobs:
           cp "$filename" "$new_filename"
           zipped_new_filename="${new_filename%.*}".zip
           zip "$zipped_new_filename" "$new_filename"
-          echo "PUBLISHABLE_GENERATED_JSON_FILENAME=$zipped_new_filename" \
+          echo "PUBLISHABLE_ZIPPED_JSON_FILENAME=$zipped_new_filename" \
           >> $GITHUB_ENV
           # unzipped JSON with only major version in filename
-          new_filename="${filename%%.*}-${version%%.*}.${filename#*.}"
-          cp "$filename" "$new_filename"
+          raw_new_filename="${filename%%.*}-${version%%.*}.${filename#*.}"
+          cp "$filename" "$raw_new_filename"
+          echo "PUBLISHABLE_RAW_JSON_FILENAME=$raw_new_filename" \
+          >> $GITHUB_ENV
       - name: Publish generated JSON as GitHub release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ${{ env.PUBLISHABLE_GENERATED_JSON_FILENAME }}
+          files: |
+            ${{ env.PUBLISHABLE_ZIPPED_JSON_FILENAME }}
+            ${{ env.PUBLISHABLE_RAW_JSON_FILENAME }}
           fail_on_unmatched_files: true
           generate_release_notes: true
           append_body: true
           body: >
-            The ZIP and JSON file contain the same contents, the only purpose
-            of the latter is to have the data accessible as directly as
-            possible, e.g. for JSON-handling services that don't support
-            fetching a file by glob pattern from the GitHub API (hence only the
-            major version in the filename) or unzipping JSON before processing
-            it further.
+            **Note for every release:** The ZIP and JSON file contain the same
+            contents, the only purpose of the latter is to have the data
+            accessible as directly as possible, e.g. for JSON-handling services
+            that don't support fetching a file by glob pattern from the GitHub
+            API (hence only the major version in the filename) or unzipping
+            JSON before processing it further.
   deploy-pages-staging:
     needs: generate-and-test-and-publish
     if: "github.ref_type != 'tag' && github.ref_name != 'main'"
