@@ -76,7 +76,7 @@ It is shipped as a JSON file containing a list of entries of the form
 {
   "fdcId": 123,
   "vegCategory": "CATEGORY",
-  "description": "USDA FDC description/name of the food",
+  "description": "FDC description/name of the food",
   # either:
   "foodCode": 456,
   # or:
