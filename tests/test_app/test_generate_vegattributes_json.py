@@ -89,10 +89,12 @@ def test_generate_vegattributes_json(
       "fdcId": 123456,
       "vegCategory": "UNCATEGORIZED",
       "foodCode": 3000,
+      "description": "Some food, unsalted",
     },
     {
       "fdcId": 654321,
       "vegCategory": "OMNI",
       "ndbNumber": 9000,
+      "description": "Some m e a t y food, salted"
     },
   ]

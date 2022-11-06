@@ -70,6 +70,7 @@ It is shipped as a JSON file containing a list of entries of the form
 {
   "fdcId": 123,
   "vegCategory": "CATEGORY",
+  "description": "USDA FDC description/name of the food",
   # either:
   "foodCode": 456,
   # or:
@@ -78,10 +79,13 @@ It is shipped as a JSON file containing a list of entries of the form
 ```
 
 where `CATEGORY` is one of the categories listed in the section below and
-`fdcId`, `foodCode` and `ndbNumber` correspond to the fields of the same names
-in the FDC datasets. `foodCode` only appears in the FNDDS data and `ndbNumber`
-only in the SR Legacy data, so which one of these will be present in a given
-entry depends on which dataset the food entry came from.
+`fdcId`, `foodCode`, `ndbNumber` and `description` correspond to the fields of
+the same names in the FDC datasets. `foodCode` only appears in the FNDDS data
+and `ndbNumber` only in the SR Legacy data, so which one of these will be
+present in a given entry depends on which dataset the food entry came from.
+The `description` is only included as a debugging help - the proper way to find
+it or any other properties of a given food is to perform a lookup in the FDC
+datasets by the given IDs.
 
 The FDC ID by itself is enough to uniquely identify foods, but it is my
 understanding that a new FDC ID is assigned to "the same" food on every release
