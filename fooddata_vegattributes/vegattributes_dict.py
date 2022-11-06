@@ -8,6 +8,7 @@ from .food import Food
 class VegAttributesBaseDict(TypedDict, total=False):
   fdcId: int
   vegCategory: str
+  description: str
 
 class SurveyVegAttributesDict(VegAttributesBaseDict):
   foodCode: int
@@ -18,7 +19,6 @@ class SrLegacyVegAttributesDict(VegAttributesBaseDict):
 VegAttributesDict = Union[SurveyVegAttributesDict, SrLegacyVegAttributesDict]
 
 class VerboseVegAttributesDict(VegAttributesBaseDict, total=False):
-  description: str
   vegCategorySource: str
   vegCategoryDiscrepancies: Dict[str, str]
   # ... and also the same foodCode/ndbNumber thing as above but I'm too lazy to
@@ -45,6 +45,7 @@ def vegattributes_dict_from_food(
         {
           "fdcId": food.fdc_id,
           "vegCategory": categorization.category.name,
+          "description": food.description,
         },
       ),
     ))
