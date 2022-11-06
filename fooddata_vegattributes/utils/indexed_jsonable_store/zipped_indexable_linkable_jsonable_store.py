@@ -1,6 +1,6 @@
 import json
 from os import PathLike
-from typing import Iterable, Tuple, Union
+from typing import Iterable, Generic, Tuple, Union
 
 from ..close_via_stack import CloseViaStack
 
@@ -19,7 +19,7 @@ from .zipped_indexable_linkable_bytes_store import (
 
 
 class ZippedIndexableLinkableJsonableStore(
-  CloseViaStack, AbstractIndexableLinkableJsonableStore
+  CloseViaStack, AbstractIndexableLinkableJsonableStore, Generic[T]
 ):
   def __init__(self, bytes_store: AbstractIndexableLinkableBytesStore):
     self.bytes_store = bytes_store
